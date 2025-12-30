@@ -7,25 +7,26 @@
      · optimizePackageImports
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 8.6s
+ ✓ Compiled successfully in 4.2s
    Linting and checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/6) ...
-   Generating static pages (1/6) 
-   Generating static pages (2/6) 
-   Generating static pages (4/6) 
- ✓ Generating static pages (6/6)
+   Generating static pages (0/7) ...
+   Generating static pages (1/7) 
+   Generating static pages (3/7) 
+   Generating static pages (5/7) 
+ ✓ Generating static pages (7/7)
    Finalizing page optimization ...
    Collecting build traces ...
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                      138 B         102 kB
+┌ ○ /                                      140 B         102 kB
 ├ ○ /_not-found                            988 B         103 kB
-├ ƒ /[sport]                               138 B         102 kB
-├ ƒ /[sport]/[marketId]                   2.2 kB         115 kB
-├ ƒ /[sport]/markets                       138 B         102 kB
-├ ƒ /api/chainlink/markets                 138 B         102 kB
-└ ƒ /api/x402/place-bet                    138 B         102 kB
+├ ƒ /api/chainlink/markets                 140 B         102 kB
+├ ƒ /api/x402/place-bet                    140 B         102 kB
+├ ○ /live                                  140 B         102 kB
+├ ƒ /live/[sport]                          140 B         102 kB
+├ ƒ /live/[sport]/[marketId]              2.2 kB         115 kB
+└ ƒ /live/[sport]/markets                  140 B         102 kB
 + First Load JS shared by all             102 kB
   ├ chunks/18-a0e0267f22a67d87.js        45.8 kB
   ├ chunks/87c73c54-beb8c3352f017ae5.js  54.2 kB
