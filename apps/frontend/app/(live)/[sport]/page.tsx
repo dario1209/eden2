@@ -1,3 +1,5 @@
+'use client'
+
 export default async function SportDashboard({ params }: { params: Promise<{ sport: string }> }) {
     const { sport } = await params
     return (
