@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Frontend Debug",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/apps/frontend/node_modules/.bin/next",
+            "args": [
+                "dev"
+            ],
+            "console": "integratedTerminal",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "localhost:3000",
+                "uriFormat": "http://localhost:3000"
+            }
+        },
+        {
+            "name": "Backend Debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/apps/backend/main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/apps/backend",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/apps/backend"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack Dev",
+            "configurations": [
+                "Frontend Debug",
+                "Backend Debug"
+            ]
+        }
+    ]
+}

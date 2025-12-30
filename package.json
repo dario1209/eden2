@@ -1,0 +1,28 @@
+{
+    "name": "sportsbook-monorepo",
+    "private": true,
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "concurrently \"turbo run dev\" \"npm run contracts:dev\"",
+        "build": "turbo run build",
+        "lint": "turbo run lint",
+        "type-check": "turbo run type-check",
+        "sync-abis": "turbo run sync-abis",
+        "frontend": "turbo run dev --filter=frontend",
+        "backend": "turbo run dev --filter=backend",
+        "contracts": "turbo run dev --filter=contracts",
+        "contracts:dev": "cd packages/contracts && npx hardhat node",
+        "deploy:contracts": "cd packages/contracts && npx hardhat deploy --network cronos-testnet"
+    },
+    "devDependencies": {
+        "@turbo/gen": "^2.1.3",
+        "concurrently": "^8.2.2",
+        "turbo": "latest",
+        "typescript": "^5.5.3"
+    },
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "packageManager": "npm@10.2.3"
+}

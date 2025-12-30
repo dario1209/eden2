@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "JuanBlanco.solidity",
+        "tintinweb.solidity-vscode-extensions",
+        "esbenp.prettier-vscode"
+    ]
+}

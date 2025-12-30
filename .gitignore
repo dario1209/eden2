@@ -1,0 +1,39 @@
+# See https://github.com/github/gitignore/blob/main/Next.js.gitignore
+# See https://github.com/github/gitignore/blob/main/Python.gitignore
+
+# Monorepo
+apps/frontend/.env.local
+apps/frontend/.next/
+apps/backend/__pycache__/
+apps/backend/.venv/
+apps/backend/venv/
+packages/contracts/cache/
+packages/contracts/artifacts/
+
+# Dependencies
+node_modules/
+.npm/
+.pnp/
+.yarn/install-state.gz
+
+# Production
+.next/
+out/
+build/
+dist/
+.env*.local
+
+# Testing
+coverage/
+.coverage/
+.pytest_cache/
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

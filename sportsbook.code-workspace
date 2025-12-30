@@ -1,0 +1,28 @@
+{
+    "folders": [
+        {
+            "path": "./apps/frontend"
+        },
+        {
+            "path": "./apps/backend"
+        },
+        {
+            "path": "./packages/contracts"
+        },
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "terminal.integrated.cwd": ".",
+        "typescript.preferences.includePackageJsonAutoImports": "on"
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.vscode-typescript-next",
+            "bradlc.vscode-tailwindcss",
+            "ms-python.python",
+            "ms-python.black-formatter"
+        ]
+    }
+}
