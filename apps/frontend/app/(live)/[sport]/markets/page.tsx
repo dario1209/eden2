@@ -1,8 +1,9 @@
-export default function Markets({ params }: { params: { sport: string } }) {
+export default async function Markets({ params }: { params: Promise<{ sport: string }> }) {
+    const { sport } = await params
     return (
         <div className="container mx-auto px-4 py-12">
             <h1 className="text-4xl font-black text-white mb-12">
-                {params.sport.toUpperCase()} Markets
+                {sport.toUpperCase()} Markets
             </h1>
             <div className="grid gap-4">
                 <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20">

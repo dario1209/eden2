@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    typedRoutes: true,
     experimental: {
-        typedRoutes: true,
         optimizePackageImports: ['viem', 'wagmi']
     },
     transpilePackages: ['@sportsbook/types']
