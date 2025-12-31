@@ -86,39 +86,53 @@ export default function Home() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0612] text-white overflow-hidden">
-            {/* Animated background */}
+        <div className="min-h-screen text-slate-800 overflow-hidden" style={{ background: '#FEF9F3' }}>
+            {/* Subtle background texture */}
             <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a2e] via-[#0a0612] to-[#0d1a2d]" />
-                <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#ff00ff]/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#00ffff]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-                <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-[#ff6b00]/5 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }} />
-                {/* Grid overlay */}
+                {/* Warm gradient overlay */}
                 <div
-                    className="absolute inset-0 opacity-[0.03]"
+                    className="absolute inset-0"
                     style={{
-                        backgroundImage: `
-              linear-gradient(#ff00ff 1px, transparent 1px),
-              linear-gradient(90deg, #ff00ff 1px, transparent 1px)
-            `,
-                        backgroundSize: '50px 50px'
+                        background: 'linear-gradient(135deg, #FEF9F3 0%, #FDF2E9 50%, #F5EBE0 100%)'
+                    }}
+                />
+                {/* Soft decorative shapes */}
+                <div
+                    className="absolute top-20 right-20 w-96 h-96 rounded-full opacity-30 blur-3xl"
+                    style={{ background: 'linear-gradient(135deg, #14B8A6, #06B6D4)' }}
+                />
+                <div
+                    className="absolute bottom-20 left-20 w-80 h-80 rounded-full opacity-20 blur-3xl"
+                    style={{ background: 'linear-gradient(135deg, #F97373, #FB923C)' }}
+                />
+                {/* Subtle wave pattern at bottom */}
+                <div
+                    className="absolute bottom-0 left-0 right-0 h-64 opacity-5"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2314B8A6' d='M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E")`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'bottom'
                     }}
                 />
             </div>
 
             {/* Header */}
-            <header className="relative z-10 border-b border-white/5 bg-black/20 backdrop-blur-xl">
+            <header className="relative z-10 border-b border-slate-200/60 bg-white/70 backdrop-blur-xl">
                 <div className="flex items-center justify-between px-6 h-16">
                     <div className="flex items-center gap-8">
                         <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#ff00ff] to-[#00ffff] flex items-center justify-center text-xl font-black shadow-lg shadow-[#ff00ff]/25 group-hover:shadow-[#ff00ff]/50 transition-shadow">
+                            <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center text-xl font-black text-white shadow-lg transition-transform group-hover:scale-105"
+                                style={{
+                                    background: 'linear-gradient(135deg, #14B8A6, #0D9488)',
+                                    boxShadow: '0 4px 14px rgba(20, 184, 166, 0.35)'
+                                }}
+                            >
                                 μ
                             </div>
                             <span className="text-xl font-black tracking-tight">
-                                <span className="bg-gradient-to-r from-[#ff00ff] via-[#ff6ec7] to-[#00ffff] bg-clip-text text-transparent">
-                                    MICRO
-                                </span>
-                                <span className="text-white/80">BETS</span>
+                                <span style={{ color: '#0D9488' }}>MICRO</span>
+                                <span className="text-slate-400">BETS</span>
                             </span>
                         </Link>
                         <nav className="hidden md:flex items-center gap-1">
@@ -126,23 +140,33 @@ export default function Home() {
                                 <Link
                                     key={item}
                                     href={item === 'Live' ? '/live' : '#'}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${i === 0
-                                            ? 'bg-gradient-to-r from-[#ff00ff]/20 to-[#00ffff]/20 text-white border border-[#ff00ff]/30'
-                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${i === 0
+                                            ? 'text-white shadow-md'
+                                            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
                                         }`}
+                                    style={i === 0 ? {
+                                        background: 'linear-gradient(135deg, #14B8A6, #0D9488)',
+                                        boxShadow: '0 2px 10px rgba(20, 184, 166, 0.3)'
+                                    } : {}}
                                 >
-                                    {i === 0 && <span className="inline-block w-2 h-2 bg-[#00ff88] rounded-full mr-2 animate-pulse" />}
+                                    {i === 0 && <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />}
                                     {item}
                                 </Link>
                             ))}
                         </nav>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-all">
-                            <span className="text-[#00ffff]">🔍</span>
+                        <button className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-sm font-medium hover:bg-slate-200 transition-all">
+                            <span>🔍</span>
                             Search
                         </button>
-                        <button className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#ff00ff] to-[#ff6ec7] text-sm font-bold shadow-lg shadow-[#ff00ff]/25 hover:shadow-[#ff00ff]/40 hover:scale-105 transition-all">
+                        <button
+                            className="px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg hover:scale-105 transition-all"
+                            style={{
+                                background: 'linear-gradient(135deg, #F97373, #F87171)',
+                                boxShadow: '0 4px 14px rgba(249, 115, 115, 0.35)'
+                            }}
+                        >
                             Connect Wallet
                         </button>
                     </div>
@@ -151,25 +175,38 @@ export default function Home() {
 
             <div className="relative z-10 flex">
                 {/* Sidebar */}
-                <aside className="hidden lg:flex flex-col w-20 border-r border-white/5 bg-black/20 backdrop-blur-xl min-h-[calc(100vh-64px)]">
+                <aside className="hidden lg:flex flex-col w-20 border-r border-slate-200/60 bg-white/50 backdrop-blur-xl min-h-[calc(100vh-64px)]">
                     <div className="flex flex-col items-center py-4 gap-1">
                         {sports.map((sport) => (
                             <button
                                 key={sport.name}
                                 onClick={() => setSelectedSport(sport.name)}
                                 className={`group relative w-14 h-14 rounded-xl flex flex-col items-center justify-center transition-all ${selectedSport === sport.name
-                                        ? 'bg-gradient-to-br from-[#ff00ff]/30 to-[#00ffff]/30 border border-[#ff00ff]/50 shadow-lg shadow-[#ff00ff]/20'
-                                        : 'hover:bg-white/5'
+                                        ? 'bg-white shadow-lg'
+                                        : 'hover:bg-white/60'
                                     }`}
+                                style={selectedSport === sport.name ? {
+                                    boxShadow: '0 4px 20px rgba(20, 184, 166, 0.15)'
+                                } : {}}
                             >
                                 <span className="text-2xl">{sport.icon}</span>
-                                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#ff00ff] text-[10px] font-bold flex items-center justify-center shadow-lg shadow-[#ff00ff]/50">
+                                <span
+                                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center text-white shadow-md"
+                                    style={{ background: '#14B8A6' }}
+                                >
                                     {sport.count > 99 ? '99+' : sport.count}
                                 </span>
                                 {/* Tooltip */}
-                                <div className="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-black/90 border border-white/10 text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                                <div className="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                                     {sport.name}
                                 </div>
+                                {/* Active indicator */}
+                                {selectedSport === sport.name && (
+                                    <div
+                                        className="absolute -left-[1px] top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full"
+                                        style={{ background: '#14B8A6' }}
+                                    />
+                                )}
                             </button>
                         ))}
                     </div>
@@ -178,45 +215,48 @@ export default function Home() {
                 {/* Main Content */}
                 <main className="flex-1 p-6 overflow-auto">
                     {/* Hero Banner */}
-                    <div className="relative rounded-2xl overflow-hidden mb-6 group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#ff00ff]/40 via-[#7b2fff]/40 to-[#00ffff]/40" />
+                    <div
+                        className="relative rounded-3xl overflow-hidden mb-6 shadow-xl"
+                        style={{
+                            background: 'linear-gradient(135deg, #14B8A6 0%, #0D9488 50%, #0F766E 100%)'
+                        }}
+                    >
+                        {/* Decorative pattern */}
                         <div
-                            className="absolute inset-0 opacity-20"
+                            className="absolute inset-0 opacity-10"
                             style={{
-                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
                             }}
                         />
                         <div className="relative p-8 md:p-12">
                             <div className="max-w-2xl">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold mb-4">
-                                    <span className="w-2 h-2 bg-[#00ff88] rounded-full animate-pulse" />
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white/90 text-xs font-semibold mb-4 backdrop-blur-sm">
+                                    <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
                                     NEW SEASON
                                 </div>
-                                <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
-                                    <span className="bg-gradient-to-r from-white via-[#ff6ec7] to-white bg-clip-text text-transparent">
-                                        Micro-Bets Live
-                                    </span>
+                                <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight text-white">
+                                    Micro-Bets Live
                                 </h1>
-                                <p className="text-lg text-white/70 mb-6 max-w-xl">
+                                <p className="text-lg text-white/80 mb-6 max-w-xl">
                                     x402 payments + Chainlink oracles on Cronos. Bet on every point, kill, corner.
-                                    <span className="text-[#00ffff]"> Sub-second settlement.</span>
+                                    <span className="text-white font-semibold"> Sub-second settlement.</span>
                                 </p>
                                 <div className="flex flex-wrap gap-3">
                                     <Link
                                         href="/live"
-                                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#ff00ff] to-[#ff6ec7] font-bold shadow-lg shadow-[#ff00ff]/30 hover:shadow-[#ff00ff]/50 hover:scale-105 transition-all"
+                                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-teal-700 bg-white shadow-lg hover:shadow-xl hover:scale-105 transition-all"
                                     >
                                         <span>⚡</span>
                                         Enter Live Arena
                                     </Link>
-                                    <button className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 border border-white/20 font-semibold hover:bg-white/20 transition-all">
+                                    <button className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/20 text-white font-semibold hover:bg-white/30 backdrop-blur-sm transition-all">
                                         How It Works
                                     </button>
                                 </div>
                             </div>
                             {/* Decorative elements */}
-                            <div className="absolute top-4 right-4 md:top-8 md:right-8 text-6xl md:text-8xl opacity-20 group-hover:opacity-30 transition-opacity">
-                                🎰
+                            <div className="absolute top-4 right-4 md:top-8 md:right-8 text-6xl md:text-8xl opacity-20">
+                                🌴
                             </div>
                         </div>
                     </div>
@@ -224,18 +264,23 @@ export default function Home() {
                     {/* Feature Pills */}
                     <div className="flex flex-wrap gap-3 mb-6">
                         {[
-                            { icon: '⚡', label: '402 Tickets', desc: 'HTTP 402 Payments' },
-                            { icon: '🔗', label: 'Chainlink', desc: 'Oracle Settlement' },
-                            { icon: '⚫', label: 'Cronos', desc: 'Sub-second Blocks' },
+                            { icon: '⚡', label: '402 Tickets', desc: 'HTTP 402 Payments', color: '#F97373' },
+                            { icon: '🔗', label: 'Chainlink', desc: 'Oracle Settlement', color: '#14B8A6' },
+                            { icon: '⚫', label: 'Cronos', desc: 'Sub-second Blocks', color: '#6366F1' },
                         ].map((feature) => (
                             <div
                                 key={feature.label}
-                                className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-[#ff00ff]/30 transition-colors"
+                                className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
                             >
-                                <span className="text-xl">{feature.icon}</span>
+                                <div
+                                    className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
+                                    style={{ background: `${feature.color}15` }}
+                                >
+                                    {feature.icon}
+                                </div>
                                 <div>
-                                    <div className="text-sm font-bold">{feature.label}</div>
-                                    <div className="text-xs text-white/50">{feature.desc}</div>
+                                    <div className="text-sm font-bold text-slate-800">{feature.label}</div>
+                                    <div className="text-xs text-slate-400">{feature.desc}</div>
                                 </div>
                             </div>
                         ))}
@@ -245,21 +290,28 @@ export default function Home() {
                     <div className="mb-6">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
-                                <h2 className="text-xl font-bold">Live Matches</h2>
-                                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ff00ff]/20 border border-[#ff00ff]/30 text-xs font-semibold text-[#ff6ec7]">
-                                    <span className="w-1.5 h-1.5 bg-[#00ff88] rounded-full animate-pulse" />
+                                <h2 className="text-xl font-bold text-slate-800">Live Matches</h2>
+                                <span
+                                    className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white"
+                                    style={{ background: '#F97373' }}
+                                >
+                                    <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                                     {liveMatches.length} LIVE
                                 </span>
                             </div>
-                            <Link href="/live" className="text-sm text-[#00ffff] hover:text-white font-medium transition-colors">
+                            <Link
+                                href="/live"
+                                className="text-sm font-semibold transition-colors"
+                                style={{ color: '#14B8A6' }}
+                            >
                                 View All →
                             </Link>
                         </div>
 
                         {/* Matches Table */}
-                        <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/30 backdrop-blur-xl">
+                        <div className="rounded-2xl overflow-hidden bg-white shadow-lg border border-slate-100">
                             {/* Table Header */}
-                            <div className="grid grid-cols-12 gap-4 px-4 py-3 bg-white/5 border-b border-white/10 text-xs font-semibold text-white/50 uppercase tracking-wider">
+                            <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
                                 <div className="col-span-5">Match</div>
                                 <div className="col-span-3 text-center">Result (1 X 2)</div>
                                 <div className="col-span-2 text-center">Over/Under 2.5</div>
@@ -270,23 +322,36 @@ export default function Home() {
                             {liveMatches.map((match, index) => (
                                 <div
                                     key={match.id}
-                                    className={`grid grid-cols-12 gap-4 px-4 py-4 items-center transition-colors hover:bg-white/5 ${index !== liveMatches.length - 1 ? 'border-b border-white/5' : ''
+                                    className={`grid grid-cols-12 gap-4 px-5 py-4 items-center transition-colors hover:bg-slate-50 ${index !== liveMatches.length - 1 ? 'border-b border-slate-100' : ''
                                         }`}
                                 >
                                     {/* Match Info */}
                                     <div className="col-span-5">
-                                        <div className="text-[10px] text-[#ff6ec7] font-semibold uppercase tracking-wider mb-1">
+                                        <div
+                                            className="text-[10px] font-bold uppercase tracking-wider mb-1"
+                                            style={{ color: '#F97373' }}
+                                        >
                                             {match.league}
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between gap-2">
-                                                    <span className="font-semibold truncate">{match.homeTeam}</span>
-                                                    <span className="text-xl font-black text-[#00ffff]">{match.homeScore}</span>
+                                                    <span className="font-semibold text-slate-700 truncate">{match.homeTeam}</span>
+                                                    <span
+                                                        className="text-xl font-black"
+                                                        style={{ color: '#14B8A6' }}
+                                                    >
+                                                        {match.homeScore}
+                                                    </span>
                                                 </div>
                                                 <div className="flex items-center justify-between gap-2 mt-1">
-                                                    <span className="font-semibold truncate">{match.awayTeam}</span>
-                                                    <span className="text-xl font-black text-[#ff6ec7]">{match.awayScore}</span>
+                                                    <span className="font-semibold text-slate-700 truncate">{match.awayTeam}</span>
+                                                    <span
+                                                        className="text-xl font-black"
+                                                        style={{ color: '#F97373' }}
+                                                    >
+                                                        {match.awayScore}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -307,10 +372,15 @@ export default function Home() {
                                                         odd.label === '1' ? match.homeTeam : odd.label === '2' ? match.awayTeam : 'Draw',
                                                         odd.value
                                                     )}
-                                                    className="group relative px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-[#ff00ff]/50 hover:bg-[#ff00ff]/10 transition-all min-w-[52px]"
+                                                    className="group relative px-3 py-2 rounded-xl bg-slate-50 border-2 border-slate-100 hover:border-teal-400 hover:bg-teal-50 transition-all min-w-[52px]"
                                                 >
-                                                    <div className="text-[10px] text-white/40 font-medium">{odd.label}</div>
-                                                    <div className="text-sm font-bold text-[#00ffff] group-hover:text-white">{odd.value.toFixed(2)}</div>
+                                                    <div className="text-[10px] text-slate-400 font-medium">{odd.label}</div>
+                                                    <div
+                                                        className="text-sm font-bold group-hover:text-teal-600 transition-colors"
+                                                        style={{ color: '#0D9488' }}
+                                                    >
+                                                        {odd.value.toFixed(2)}
+                                                    </div>
                                                 </button>
                                             ))}
                                     </div>
@@ -319,25 +389,46 @@ export default function Home() {
                                     <div className="col-span-2 flex justify-center gap-2">
                                         <button
                                             onClick={() => addToBetSlip(`${match.homeTeam} vs ${match.awayTeam}`, 'Over 2.5', match.overUnder.over)}
-                                            className="group px-2 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-[#00ffff]/50 hover:bg-[#00ffff]/10 transition-all"
+                                            className="group px-2 py-2 rounded-xl bg-slate-50 border-2 border-slate-100 hover:border-teal-400 hover:bg-teal-50 transition-all"
                                         >
-                                            <div className="text-[10px] text-white/40">O</div>
-                                            <div className="text-sm font-bold text-[#00ff88] group-hover:text-white">{match.overUnder.over.toFixed(2)}</div>
+                                            <div className="text-[10px] text-slate-400">O</div>
+                                            <div
+                                                className="text-sm font-bold group-hover:text-teal-600"
+                                                style={{ color: '#14B8A6' }}
+                                            >
+                                                {match.overUnder.over.toFixed(2)}
+                                            </div>
                                         </button>
                                         <button
                                             onClick={() => addToBetSlip(`${match.homeTeam} vs ${match.awayTeam}`, 'Under 2.5', match.overUnder.under)}
-                                            className="group px-2 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-[#ff6ec7]/50 hover:bg-[#ff6ec7]/10 transition-all"
+                                            className="group px-2 py-2 rounded-xl bg-slate-50 border-2 border-slate-100 hover:border-coral-400 hover:bg-red-50 transition-all"
                                         >
-                                            <div className="text-[10px] text-white/40">U</div>
-                                            <div className="text-sm font-bold text-[#ff6ec7] group-hover:text-white">{match.overUnder.under.toFixed(2)}</div>
+                                            <div className="text-[10px] text-slate-400">U</div>
+                                            <div
+                                                className="text-sm font-bold group-hover:text-red-500"
+                                                style={{ color: '#F97373' }}
+                                            >
+                                                {match.overUnder.under.toFixed(2)}
+                                            </div>
                                         </button>
                                     </div>
 
                                     {/* Time */}
                                     <div className="col-span-2 text-center">
-                                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00ff88]/10 border border-[#00ff88]/30">
-                                            <span className="w-1.5 h-1.5 bg-[#00ff88] rounded-full animate-pulse" />
-                                            <span className="text-sm font-bold text-[#00ff88]">{match.time}</span>
+                                        <div
+                                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
+                                            style={{ background: 'rgba(20, 184, 166, 0.1)' }}
+                                        >
+                                            <span
+                                                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                                                style={{ background: '#14B8A6' }}
+                                            />
+                                            <span
+                                                className="text-sm font-bold"
+                                                style={{ color: '#0D9488' }}
+                                            >
+                                                {match.time}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -348,19 +439,19 @@ export default function Home() {
                     {/* Quick Stats */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {[
-                            { label: 'Total Volume', value: '$2.4M', change: '+12%', color: '#00ffff' },
-                            { label: 'Active Bets', value: '8,432', change: '+5%', color: '#ff00ff' },
-                            { label: 'Avg Settlement', value: '0.8s', change: '-15%', color: '#00ff88' },
-                            { label: 'Oracle Updates', value: '1.2K/min', change: '', color: '#ff6ec7' },
+                            { label: 'Total Volume', value: '$2.4M', change: '+12%', color: '#14B8A6', positive: true },
+                            { label: 'Active Bets', value: '8,432', change: '+5%', color: '#F97373', positive: true },
+                            { label: 'Avg Settlement', value: '0.8s', change: '-15%', color: '#6366F1', positive: true },
+                            { label: 'Oracle Updates', value: '1.2K/min', change: '', color: '#FB923C', positive: true },
                         ].map((stat) => (
                             <div
                                 key={stat.label}
-                                className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-colors"
+                                className="p-5 rounded-2xl bg-white shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
                             >
-                                <div className="text-xs text-white/50 font-medium mb-1">{stat.label}</div>
+                                <div className="text-xs text-slate-400 font-medium mb-1">{stat.label}</div>
                                 <div className="text-2xl font-black" style={{ color: stat.color }}>{stat.value}</div>
                                 {stat.change && (
-                                    <div className={`text-xs font-semibold ${stat.change.startsWith('+') ? 'text-[#00ff88]' : 'text-[#ff6ec7]'}`}>
+                                    <div className={`text-xs font-semibold ${stat.positive ? 'text-teal-500' : 'text-red-400'}`}>
                                         {stat.change} this week
                                     </div>
                                 )}
@@ -370,11 +461,14 @@ export default function Home() {
                 </main>
 
                 {/* Bet Slip Sidebar */}
-                <aside className="hidden xl:block w-80 border-l border-white/5 bg-black/20 backdrop-blur-xl min-h-[calc(100vh-64px)]">
+                <aside className="hidden xl:block w-80 border-l border-slate-200/60 bg-white/70 backdrop-blur-xl min-h-[calc(100vh-64px)]">
                     <div className="p-4">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-bold">Bet Slip</h3>
-                            <span className="w-6 h-6 rounded-full bg-[#ff00ff] text-xs font-bold flex items-center justify-center">
+                            <h3 className="font-bold text-slate-800">Bet Slip</h3>
+                            <span
+                                className="w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center text-white"
+                                style={{ background: '#F97373' }}
+                            >
                                 {betSlip.length}
                             </span>
                         </div>
@@ -382,47 +476,61 @@ export default function Home() {
                         {betSlip.length === 0 ? (
                             <div className="text-center py-12">
                                 <div className="text-4xl mb-3 opacity-50">🎫</div>
-                                <div className="text-sm text-white/50">Click odds to add bets</div>
+                                <div className="text-sm text-slate-400">Click odds to add bets</div>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 {betSlip.map((bet, index) => (
                                     <div
                                         key={index}
-                                        className="p-3 rounded-xl bg-white/5 border border-white/10"
+                                        className="p-3 rounded-xl bg-slate-50 border border-slate-100"
                                     >
                                         <div className="flex items-start justify-between gap-2">
                                             <div className="flex-1 min-w-0">
-                                                <div className="text-xs text-white/50 truncate">{bet.match}</div>
-                                                <div className="font-semibold">{bet.selection}</div>
+                                                <div className="text-xs text-slate-400 truncate">{bet.match}</div>
+                                                <div className="font-semibold text-slate-700">{bet.selection}</div>
                                             </div>
                                             <button
                                                 onClick={() => removeBet(index)}
-                                                className="text-white/30 hover:text-[#ff6ec7] transition-colors"
+                                                className="text-slate-300 hover:text-red-400 transition-colors"
                                             >
                                                 ✕
                                             </button>
                                         </div>
-                                        <div className="mt-2 text-lg font-bold text-[#00ffff]">{bet.odds.toFixed(2)}</div>
+                                        <div
+                                            className="mt-2 text-lg font-bold"
+                                            style={{ color: '#14B8A6' }}
+                                        >
+                                            {bet.odds.toFixed(2)}
+                                        </div>
                                     </div>
                                 ))}
 
-                                <div className="pt-3 border-t border-white/10">
+                                <div className="pt-3 border-t border-slate-200">
                                     <div className="flex items-center justify-between text-sm mb-3">
-                                        <span className="text-white/50">Total Odds</span>
-                                        <span className="font-bold text-[#ff00ff]">
+                                        <span className="text-slate-400">Total Odds</span>
+                                        <span
+                                            className="font-bold"
+                                            style={{ color: '#F97373' }}
+                                        >
                                             {betSlip.reduce((acc, bet) => acc * bet.odds, 1).toFixed(2)}
                                         </span>
                                     </div>
                                     <input
                                         type="number"
                                         placeholder="Stake (CRO)"
-                                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-[#ff00ff]/50 outline-none text-white placeholder-white/30 mb-3"
+                                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-teal-400 outline-none text-slate-700 placeholder-slate-300 mb-3"
                                         defaultValue="0.01"
                                         step="0.01"
                                         min="0.01"
                                     />
-                                    <button className="w-full py-4 rounded-xl bg-gradient-to-r from-[#ff00ff] to-[#00ffff] font-bold text-lg shadow-lg shadow-[#ff00ff]/30 hover:shadow-[#ff00ff]/50 hover:scale-[1.02] transition-all">
+                                    <button
+                                        className="w-full py-4 rounded-xl font-bold text-lg text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+                                        style={{
+                                            background: 'linear-gradient(135deg, #14B8A6, #0D9488)',
+                                            boxShadow: '0 4px 20px rgba(20, 184, 166, 0.35)'
+                                        }}
+                                    >
                                         Place Bet ⚡
                                     </button>
                                 </div>
