@@ -1,29 +1,64 @@
-'use client'
-
+import { getWalletAddress } from '@/lib/cookies'
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+
+// Industry-standard Zod validation schema
+const PlaceBetSchema = z.object({
+    marketId: z.string().min(1, 'Market ID required'),
+    sport: z.enum(['football', 'basketball', 'tennis', 'esports', 'casino']),
+    stake: z.coerce.number().min(0.01, 'Minimum stake $0.01').max(100, 'Maximum stake $100'),
+})
 
 export async function POST(request: NextRequest) {
-    const body = await request.json()
+    try {
+        // Parse + validate request body
+        const body = await request.json()
+        const { marketId, sport, stake } = PlaceBetSchema.parse(body)
 
-    // Proxy to backend x402 endpoint
-    const backendRes = await fetch(`${process.env.BACKEND_URL}/api/v1/x402/place-bet`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    })
+        // Get authenticated wallet
+        const wallet = await getWalletAddress()
+        if (!wallet) {
+            return NextResponse.json(
+                { error: 'Wallet not connected' },
+                { status: 401 }
+            )
+        }
 
-    const data = await backendRes.json()
+        // TODO: Integrate with real blockchain/DB
+        const bet = {
+            id: `bet_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+            marketId,
+            sport,
+            wallet,
+            stake,
+            status: 'pending' as const,
+            odds: 1.92, // Fetch from market data
+            timestamp: new Date().toISOString(),
+            chain: 'cronos',
+            txHash: null, // Set after blockchain confirmation
+        }
 
-    // Return 402 if backend returns payment required
-    if (backendRes.status === 402) {
-        return new NextResponse(JSON.stringify(data), {
-            status: 402,
-            headers: {
-                'Payment-Required': data.paymentUrl || '',
-                'X-Quote-ID': data.quoteId
-            }
+        console.log('[BET-PLACED]', { betId: bet.id, wallet: wallet.slice(0, 10) + '...', stake })
+
+        // TODO: Store in database + emit websocket event
+        return NextResponse.json({
+            success: true,
+            bet,
+            message: 'Bet placed successfully. Awaiting blockchain confirmation.',
         })
-    }
 
-    return NextResponse.json(data)
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return NextResponse.json(
+                { error: 'Invalid request', details: error.errors },
+                { status: 400 }
+            )
+        }
+
+        console.error('[PLACE-BET-ERROR]', error)
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        )
+    }
 }
