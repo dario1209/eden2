@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -59,7 +57,7 @@
 
     body {
         @apply bg-[#0a0612] text-white antialiased;
-        font-family: 'Space Grotesk', system-ui, sans-serif;
+        font-family: var(--font-space-grotesk), system-ui, sans-serif;
     }
 
     h1,
@@ -68,7 +66,7 @@
     h4,
     h5,
     h6 {
-        font-family: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+        font-family: var(--font-orbitron), var(--font-space-grotesk), system-ui, sans-serif;
     }
 
     /* Custom scrollbar */

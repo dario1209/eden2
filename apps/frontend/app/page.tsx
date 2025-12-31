@@ -127,8 +127,8 @@ export default function Home() {
                                     key={item}
                                     href={item === 'Live' ? '/live' : '#'}
                                     className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${i === 0
-                                            ? 'bg-gradient-to-r from-[#ff00ff]/20 to-[#00ffff]/20 text-white border border-[#ff00ff]/30'
-                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                        ? 'bg-gradient-to-r from-[#ff00ff]/20 to-[#00ffff]/20 text-white border border-[#ff00ff]/30'
+                                        : 'text-white/60 hover:text-white hover:bg-white/5'
                                         }`}
                                 >
                                     {i === 0 && <span className="inline-block w-2 h-2 bg-[#00ff88] rounded-full mr-2 animate-pulse" />}
@@ -158,8 +158,8 @@ export default function Home() {
                                 key={sport.name}
                                 onClick={() => setSelectedSport(sport.name)}
                                 className={`group relative w-14 h-14 rounded-xl flex flex-col items-center justify-center transition-all ${selectedSport === sport.name
-                                        ? 'bg-gradient-to-br from-[#ff00ff]/30 to-[#00ffff]/30 border border-[#ff00ff]/50 shadow-lg shadow-[#ff00ff]/20'
-                                        : 'hover:bg-white/5'
+                                    ? 'bg-gradient-to-br from-[#ff00ff]/30 to-[#00ffff]/30 border border-[#ff00ff]/50 shadow-lg shadow-[#ff00ff]/20'
+                                    : 'hover:bg-white/5'
                                     }`}
                             >
                                 <span className="text-2xl">{sport.icon}</span>

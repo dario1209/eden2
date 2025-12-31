@@ -1,15 +1,21 @@
-import { Navbar } from '@/components/Navbar'
-import { Toaster } from '@/components/ui/sonner'
-import { Providers } from './providers'
-import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Orbitron, Space_Grotesk } from 'next/font/google'
+import './globals.css'
+import { Providers } from './providers'
 
-const inter = Inter({ subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({
+    subsets: ['latin'],
+    variable: '--font-space-grotesk',
+})
+
+const orbitron = Orbitron({
+    subsets: ['latin'],
+    variable: '--font-orbitron',
+})
 
 export const metadata: Metadata = {
-    title: 'Chainlink Sportsbook',
-    description: 'Micro-bets with x402 + Chainlink on Cronos',
+    title: 'MicroBets - Live Sports Betting',
+    description: 'x402 payments + Chainlink settlement on Cronos. Bet on every point, kill, corner. Real-time, on-chain, sub-second.',
 }
 
 export default function RootLayout({
@@ -18,12 +24,10 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
-            <body className={inter.className}>
+        <html lang="en" className={`${spaceGrotesk.variable} ${orbitron.variable}`}>
+            <body className="font-sans antialiased">
                 <Providers>
-                    <Navbar />
-                    <main className="min-h-screen">{children}</main>
-                    <Toaster />
+                    {children}
                 </Providers>
             </body>
         </html>
