@@ -1,6 +1,6 @@
 'use client'
 
-import { ConnectButton } from '@/components/wallet/ConnectButton'
+import { ConnectButton } from '@/app/components/wallet/ConnectButton'
 import Link from 'next/link'
 
 export function Navbar() {

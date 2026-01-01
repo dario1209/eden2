@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/app/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
+import { Input } from '@/app/components/ui/input'
 import { useX402Pay } from '@/lib/x402'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
