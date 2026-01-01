@@ -243,10 +243,10 @@ function validateRequest(body: any): {
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
     const startTime = Date.now();
-    const { id: marketId } = params;
+    const { id: marketId } = await params;
 
     try {
         // ====== STEP 1: Check if admin endpoints are enabled ======
