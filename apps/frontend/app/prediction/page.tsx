@@ -11,7 +11,9 @@
 
 "use client";
 
+import type { Route } from 'next';
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // ============================================================================
@@ -48,7 +50,7 @@ interface ScoreboardData {
 const MARKETS: Market[] = [
     {
         id: "microbets-hackathon",
-        slug: "markets", // This links to /prediction/markets
+        slug: "markets",
         question: "Will MicroBets win the Cronos x402 Hackathon?",
         shortTitle: "MicroBets Hackathon Win",
         odds: 2.38,
@@ -97,6 +99,14 @@ const SCOREBOARD: ScoreboardData = {
     possession: 55,
     isLive: true,
 };
+
+const navItems: { name: string; path: Route }[] = [
+    { name: 'Live', path: '/' as Route },
+    { name: 'Sports', path: '/sports' as Route },
+    { name: 'Esports', path: '/esports' as Route },
+    { name: 'Casino', path: '/casino' as Route },
+    { name: 'Prediction', path: '/prediction' as Route }
+]
 
 // ============================================================================
 // COMPONENTS
@@ -200,76 +210,235 @@ const Scoreboard = ({ data }: { data: ScoreboardData }) => (
 // ============================================================================
 
 export default function PredictionPage() {
-    const [currentTime, setCurrentTime] = useState(SCOREBOARD.time);
+    const pathname = usePathname()
+    const [currentTime, setCurrentTime] = useState('')
+    const [currentDate, setCurrentDate] = useState('')
+    const [scoreboardTime, setScoreboardTime] = useState(SCOREBOARD.time);
 
-    // Simulate live timer
+    // Update time and date
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const now = new Date()
+            setCurrentTime(now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            }))
+            setCurrentDate(now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric'
+            }))
+        }, 1000)
+        return () => clearInterval(timer)
+    }, [])
+
+    // Simulate live timer for scoreboard
     useEffect(() => {
         const interval = setInterval(() => {
-            const [mins, secs] = currentTime.split(":").map(Number);
+            const [mins, secs] = scoreboardTime.split(":").map(Number);
             const totalSecs = mins * 60 + secs + 1;
             const newMins = Math.floor(totalSecs / 60);
             const newSecs = totalSecs % 60;
-            setCurrentTime(`${newMins}:${newSecs.toString().padStart(2, "0")}`);
+            setScoreboardTime(`${newMins}:${newSecs.toString().padStart(2, "0")}`);
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [currentTime]);
+    }, [scoreboardTime]);
 
     return (
-        <div className="min-h-screen pb-12">
-            {/* Floating decorative elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-20 left-10 w-4 h-4 text-[#FF6B9D] opacity-40 sparkle">✦</div>
-                <div className="absolute top-40 right-20 w-3 h-3 text-[#7EC8E3] opacity-50 sparkle" style={{ animationDelay: "0.5s" }}>✦</div>
-                <div className="absolute bottom-40 left-1/4 w-5 h-5 text-[#E0BBE4] opacity-30 float">◇</div>
-                <div className="absolute top-1/3 right-1/3 w-4 h-4 text-[#FFB6C1] opacity-40 float" style={{ animationDelay: "2s" }}>✧</div>
-                <div className="absolute bottom-20 right-10 w-4 h-4 text-[#957DAD] opacity-30 sparkle" style={{ animationDelay: "1s" }}>✦</div>
+        <div className="min-h-screen overflow-hidden relative">
+            {/* Dreamy Vaporwave Background - Prediction Theme */}
+            <div className="fixed inset-0">
+                {/* Main gradient - soft prediction pastels */}
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        background: 'linear-gradient(180deg, #E6E6FA 0%, #DDA0DD 15%, #FFB6C1 30%, #FFDAB9 50%, #B0E0E6 70%, #98D8C8 85%, #E6E6FA 100%)'
+                    }}
+                />
+
+                {/* Secondary overlay for depth */}
+                <div
+                    className="absolute inset-0 opacity-50"
+                    style={{
+                        background: 'radial-gradient(ellipse at 30% 20%, rgba(230, 230, 250, 0.4) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(255, 182, 193, 0.4) 0%, transparent 50%)'
+                    }}
+                />
+
+                {/* Retro grid overlay */}
+                <div
+                    className="absolute inset-0 opacity-25"
+                    style={{
+                        backgroundImage: `
+                            linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '40px 40px'
+                    }}
+                />
+
+                {/* Floating clouds */}
+                <div className="absolute top-16 left-[8%] text-5xl opacity-70 animate-bounce" style={{ animationDuration: '6s' }}>☁️</div>
+                <div className="absolute top-32 right-[12%] text-4xl opacity-60 animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}>☁️</div>
+                <div className="absolute top-48 left-[25%] text-3xl opacity-50 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>☁️</div>
+
+                {/* Sparkles */}
+                <div className="absolute top-24 right-[30%] text-2xl opacity-60 animate-pulse">✦</div>
+                <div className="absolute top-40 left-[15%] text-xl opacity-50 animate-pulse" style={{ animationDelay: '0.5s' }}>✧</div>
+                <div className="absolute bottom-32 right-[20%] text-2xl opacity-60 animate-pulse" style={{ animationDelay: '1s' }}>✦</div>
+                <div className="absolute bottom-48 left-[35%] text-xl opacity-50 animate-pulse" style={{ animationDelay: '1.5s' }}>✧</div>
+                <div className="absolute top-[60%] right-[8%] text-lg opacity-40 animate-pulse" style={{ animationDelay: '2s' }}>⭐</div>
+
+                {/* Prediction-themed floating elements */}
+                <div className="absolute bottom-24 right-[15%] text-3xl opacity-40 animate-bounce" style={{ animationDuration: '5s' }}>🔮</div>
+                <div className="absolute top-[45%] left-[5%] text-2xl opacity-30 animate-bounce" style={{ animationDuration: '6s', animationDelay: '1s' }}>📊</div>
+                <div className="absolute bottom-[40%] right-[5%] text-2xl opacity-35 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>🎯</div>
             </div>
 
-            {/* Navigation Breadcrumb */}
-            <div className="max-w-7xl mx-auto px-4 py-4">
-                <nav className="flex items-center gap-2 text-sm">
+            {/* Windows 95 Style Taskbar */}
+            <div
+                className="fixed top-0 left-0 right-0 z-50 h-14"
+                style={{
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,232,248,0.95) 100%)',
+                    borderBottom: '3px solid #D8BFD8',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                }}
+            >
+                <div className="h-full px-4 flex items-center justify-between max-w-[1800px] mx-auto">
+                    {/* Left - Logo */}
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+                            style={{
+                                background: 'linear-gradient(135deg, #957DAD 0%, #6B4C7A 100%)',
+                                boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
+                            }}
+                        >
+                            🔮
+                        </div>
+                        <span
+                            className="text-xl font-black tracking-tight"
+                            style={{
+                                background: 'linear-gradient(135deg, #957DAD, #6B4C7A)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                color: 'transparent'
+                            }}
+                        >
+                            MicroBets
+                        </span>
+                    </div>
+
+                    {/* Center - Navigation */}
+                    <nav className="hidden md:flex items-center gap-1">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.path}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${pathname === item.path
+                                        ? 'text-white'
+                                        : 'hover:scale-105'
+                                    }`}
+                                style={
+                                    pathname === item.path
+                                        ? {
+                                            background: 'linear-gradient(135deg, #957DAD 0%, #6B4C7A 100%)',
+                                            boxShadow: '0 4px 15px rgba(149, 125, 173, 0.3)'
+                                        }
+                                        : { color: '#6B4C7A' }
+                                }
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                    </nav>
+
+                    {/* Right - Time, Date & Connect Wallet */}
+                    <div className="flex items-center gap-4">
+                        <div className="hidden sm:flex flex-col items-end">
+                            <span className="text-sm font-black" style={{ color: '#6B4C7A' }}>
+                                {currentTime}
+                            </span>
+                            <span className="text-xs font-medium" style={{ color: '#957DAD' }}>
+                                {currentDate}
+                            </span>
+                        </div>
+                        <button
+                            className="px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:scale-105"
+                            style={{
+                                background: 'linear-gradient(135deg, #7EC8E3 0%, #5BA4C9 100%)',
+                                boxShadow: '0 4px 15px rgba(126, 200, 227, 0.4)'
+                            }}
+                        >
+                            Connect Wallet
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="relative z-10 pt-20 pb-12 px-4 max-w-7xl mx-auto">
+                {/* Navigation Breadcrumb */}
+                <nav className="flex items-center gap-2 text-sm mb-6">
                     <Link href="/" className="text-[#957DAD] hover:text-[#6B4C7A] transition-colors">
                         Home
                     </Link>
                     <span className="text-[#E0BBE4]">›</span>
-                    <Link href="/live" className="text-[#957DAD] hover:text-[#6B4C7A] transition-colors">
-                        Live
-                    </Link>
-                    <span className="text-[#E0BBE4]">›</span>
-                    <span className="text-[#6B4C7A] font-medium">PREDICTION</span>
+                    <span className="text-[#6B4C7A] font-medium">Prediction Markets</span>
                 </nav>
-            </div>
-
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4">
 
                 {/* Hero Header */}
-                <div className="window-card mb-8">
-                    <div className="window-titlebar window-titlebar-pink flex items-center justify-between">
+                <div
+                    className="rounded-xl overflow-hidden mb-8"
+                    style={{
+                        background: 'rgba(255,255,255,0.9)',
+                        border: '3px solid #D8BFD8',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+                    }}
+                >
+                    <div
+                        className="px-4 py-2 flex items-center justify-between"
+                        style={{
+                            background: 'linear-gradient(90deg, #FF6B9D 0%, #957DAD 50%, #7EC8E3 100%)'
+                        }}
+                    >
                         <div className="flex items-center gap-2">
-                            <span>✦</span>
-                            <span>PREDICTION_LIVE.EXE</span>
+                            <span className="text-white text-sm font-bold drop-shadow-sm">✦ PREDICTION_LIVE.EXE</span>
                         </div>
                         <div className="flex gap-1">
-                            <div className="window-btn" />
-                            <div className="window-btn" />
-                            <div className="window-btn window-btn-close" />
+                            <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
+                            <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
+                            <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
                         </div>
                     </div>
 
                     <div className="p-8">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-4xl font-black gradient-text-pastel mb-3">
-                                    PREDICTION Live
+                                <h1
+                                    className="text-4xl font-black mb-3"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #FF6B9D, #957DAD, #7EC8E3)',
+                                        backgroundClip: 'text',
+                                        WebkitBackgroundClip: 'text',
+                                        color: 'transparent'
+                                    }}
+                                >
+                                    Prediction Markets
                                 </h1>
                                 <p className="text-[#957DAD]">
                                     Real-time micro-betting with sub-second settlement
                                 </p>
                             </div>
 
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-[#FF6B9D]">
+                            <div
+                                className="flex items-center gap-2 px-4 py-2 rounded-full"
+                                style={{
+                                    background: 'rgba(255,255,255,0.8)',
+                                    border: '2px solid #FF6B9D'
+                                }}
+                            >
                                 <span className="w-2 h-2 rounded-full bg-[#FF6B9D] animate-pulse" />
                                 <span className="text-sm font-bold text-[#FF6B9D]">LIVE</span>
                             </div>
@@ -281,16 +450,27 @@ export default function PredictionPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                     {/* Active Markets */}
-                    <div className="window-card">
-                        <div className="window-titlebar flex items-center justify-between">
+                    <div
+                        className="rounded-xl overflow-hidden"
+                        style={{
+                            background: 'rgba(255,255,255,0.9)',
+                            border: '3px solid #D8BFD8',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+                        }}
+                    >
+                        <div
+                            className="px-4 py-2 flex items-center justify-between"
+                            style={{
+                                background: 'linear-gradient(90deg, #957DAD 0%, #7EC8E3 100%)'
+                            }}
+                        >
                             <div className="flex items-center gap-2">
-                                <span>📊</span>
-                                <span>ACTIVE_MARKETS.DAT</span>
+                                <span className="text-white text-xs font-bold drop-shadow-sm">📊 ACTIVE_MARKETS.DAT</span>
                             </div>
                             <div className="flex gap-1">
-                                <div className="window-btn" />
-                                <div className="window-btn" />
-                                <div className="window-btn window-btn-close" />
+                                <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
                             </div>
                         </div>
 
@@ -314,22 +494,33 @@ export default function PredictionPage() {
                     </div>
 
                     {/* Scoreboard */}
-                    <div className="window-card">
-                        <div className="window-titlebar window-titlebar-pink flex items-center justify-between">
+                    <div
+                        className="rounded-xl overflow-hidden"
+                        style={{
+                            background: 'rgba(255,255,255,0.9)',
+                            border: '3px solid #D8BFD8',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+                        }}
+                    >
+                        <div
+                            className="px-4 py-2 flex items-center justify-between"
+                            style={{
+                                background: 'linear-gradient(90deg, #FF6B9D 0%, #C44569 100%)'
+                            }}
+                        >
                             <div className="flex items-center gap-2">
-                                <span>🎮</span>
-                                <span>SCOREBOARD.EXE</span>
+                                <span className="text-white text-xs font-bold drop-shadow-sm">🎮 SCOREBOARD.EXE</span>
                             </div>
                             <div className="flex gap-1">
-                                <div className="window-btn" />
-                                <div className="window-btn" />
-                                <div className="window-btn window-btn-close" />
+                                <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
                             </div>
                         </div>
 
                         <div className="p-6">
                             <h2 className="text-2xl font-bold text-[#6B4C7A] mb-6">Scoreboard</h2>
-                            <Scoreboard data={{ ...SCOREBOARD, time: currentTime }} />
+                            <Scoreboard data={{ ...SCOREBOARD, time: scoreboardTime }} />
                         </div>
                     </div>
                 </div>
@@ -339,23 +530,40 @@ export default function PredictionPage() {
                     href="/prediction/markets"
                     className="block mt-8 group"
                 >
-                    <div className="window-card overflow-hidden hover:shadow-xl hover:shadow-[#FF6B9D]/20 transition-all duration-300">
-                        <div className="window-titlebar window-titlebar-aqua flex items-center justify-between">
+                    <div
+                        className="rounded-xl overflow-hidden transition-all hover:scale-[1.01]"
+                        style={{
+                            background: 'rgba(255,255,255,0.9)',
+                            border: '3px solid #D8BFD8',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+                        }}
+                    >
+                        <div
+                            className="px-4 py-2 flex items-center justify-between"
+                            style={{
+                                background: 'linear-gradient(90deg, #7EC8E3 0%, #5BA4C9 100%)'
+                            }}
+                        >
                             <div className="flex items-center gap-2">
-                                <span>🏆</span>
-                                <span>FEATURED_MARKET.EXE</span>
+                                <span className="text-white text-xs font-bold drop-shadow-sm">🏆 FEATURED_MARKET.EXE</span>
                             </div>
                             <div className="flex gap-1">
-                                <div className="window-btn" />
-                                <div className="window-btn" />
-                                <div className="window-btn window-btn-close" />
+                                <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
                             </div>
                         </div>
 
                         <div className="p-8 bg-gradient-to-r from-[#FF6B9D]/10 via-[#E0BBE4]/10 to-[#7EC8E3]/10">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-6">
-                                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FF6B9D] to-[#C44569] flex items-center justify-center text-4xl shadow-lg glow-pink group-hover:scale-110 transition-transform">
+                                    <div
+                                        className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg group-hover:scale-110 transition-transform"
+                                        style={{
+                                            background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)',
+                                            boxShadow: '0 8px 30px rgba(255, 107, 157, 0.4)'
+                                        }}
+                                    >
                                         🏆
                                     </div>
                                     <div>
@@ -384,7 +592,13 @@ export default function PredictionPage() {
                                 </div>
 
                                 <div className="text-right">
-                                    <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-pink text-white font-bold group-hover:scale-105 transition-transform">
+                                    <span
+                                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold group-hover:scale-105 transition-transform"
+                                        style={{
+                                            background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)',
+                                            boxShadow: '0 8px 30px rgba(255, 107, 157, 0.4)'
+                                        }}
+                                    >
                                         Trade Now
                                         <span>→</span>
                                     </span>
@@ -396,43 +610,51 @@ export default function PredictionPage() {
 
                 {/* Quick Stats Row */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                    <div className="window-card">
-                        <div className="p-4 text-center">
-                            <p className="text-3xl font-black text-[#FF6B9D]">$9,850</p>
-                            <p className="text-xs text-[#957DAD] mt-1">Total Volume</p>
+                    {[
+                        { value: '$9,850', label: 'Total Volume', color: '#FF6B9D' },
+                        { value: '3', label: 'Active Markets', color: '#7EC8E3' },
+                        { value: '142', label: 'Total Bets', color: '#10B981' },
+                        { value: '89', label: 'Unique Traders', color: '#957DAD' },
+                    ].map((stat, index) => (
+                        <div
+                            key={index}
+                            className="rounded-xl overflow-hidden"
+                            style={{
+                                background: 'rgba(255,255,255,0.9)',
+                                border: '3px solid #D8BFD8',
+                                boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+                            }}
+                        >
+                            <div className="p-4 text-center">
+                                <p className="text-3xl font-black" style={{ color: stat.color }}>{stat.value}</p>
+                                <p className="text-xs text-[#957DAD] mt-1">{stat.label}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="window-card">
-                        <div className="p-4 text-center">
-                            <p className="text-3xl font-black text-[#7EC8E3]">3</p>
-                            <p className="text-xs text-[#957DAD] mt-1">Active Markets</p>
-                        </div>
-                    </div>
-                    <div className="window-card">
-                        <div className="p-4 text-center">
-                            <p className="text-3xl font-black text-[#10B981]">142</p>
-                            <p className="text-xs text-[#957DAD] mt-1">Total Bets</p>
-                        </div>
-                    </div>
-                    <div className="window-card">
-                        <div className="p-4 text-center">
-                            <p className="text-3xl font-black text-[#957DAD]">89</p>
-                            <p className="text-xs text-[#957DAD] mt-1">Unique Traders</p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
                 {/* How It Works */}
-                <div className="window-card mt-8">
-                    <div className="window-titlebar flex items-center justify-between">
+                <div
+                    className="mt-8 rounded-xl overflow-hidden"
+                    style={{
+                        background: 'rgba(255,255,255,0.9)',
+                        border: '3px solid #D8BFD8',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+                    }}
+                >
+                    <div
+                        className="px-4 py-2 flex items-center justify-between"
+                        style={{
+                            background: 'linear-gradient(90deg, #957DAD 0%, #6B4C7A 100%)'
+                        }}
+                    >
                         <div className="flex items-center gap-2">
-                            <span>📖</span>
-                            <span>HOW_IT_WORKS.TXT</span>
+                            <span className="text-white text-xs font-bold drop-shadow-sm">📖 HOW_IT_WORKS.TXT</span>
                         </div>
                         <div className="flex gap-1">
-                            <div className="window-btn" />
-                            <div className="window-btn" />
-                            <div className="window-btn window-btn-close" />
+                            <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
+                            <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
+                            <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
                         </div>
                     </div>
 
@@ -441,7 +663,12 @@ export default function PredictionPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="p-6 rounded-xl bg-[#F8E8F8]/50 border border-[#E0BBE4]">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF6B9D] to-[#C44569] flex items-center justify-center text-2xl mb-4">
+                                <div
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)'
+                                    }}
+                                >
                                     1️⃣
                                 </div>
                                 <h3 className="text-lg font-bold text-[#6B4C7A] mb-2">Pick a Market</h3>
@@ -451,7 +678,12 @@ export default function PredictionPage() {
                             </div>
 
                             <div className="p-6 rounded-xl bg-[#F8E8F8]/50 border border-[#E0BBE4]">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7EC8E3] to-[#5BA4C9] flex items-center justify-center text-2xl mb-4">
+                                <div
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #7EC8E3 0%, #5BA4C9 100%)'
+                                    }}
+                                >
                                     2️⃣
                                 </div>
                                 <h3 className="text-lg font-bold text-[#6B4C7A] mb-2">Place Your Bet</h3>
@@ -461,7 +693,12 @@ export default function PredictionPage() {
                             </div>
 
                             <div className="p-6 rounded-xl bg-[#F8E8F8]/50 border border-[#E0BBE4]">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center text-2xl mb-4">
+                                <div
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
+                                    }}
+                                >
                                     3️⃣
                                 </div>
                                 <h3 className="text-lg font-bold text-[#6B4C7A] mb-2">Win & Claim</h3>
@@ -472,6 +709,40 @@ export default function PredictionPage() {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Desktop Icons (decorative) */}
+            <div className="fixed right-8 top-36 z-5 hidden 2xl:flex flex-col gap-6">
+                {[
+                    { icon: '📁', label: 'My Bets' },
+                    { icon: '📊', label: 'Portfolio' },
+                    { icon: '⚙️', label: 'Settings' },
+                ].map((item) => (
+                    <div
+                        key={item.label}
+                        className="flex flex-col items-center gap-1 cursor-pointer group"
+                    >
+                        <div
+                            className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl transition-all group-hover:scale-110"
+                            style={{
+                                background: 'rgba(255,255,255,0.85)',
+                                border: '2px solid #D8BFD8',
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                            }}
+                        >
+                            {item.icon}
+                        </div>
+                        <span
+                            className="text-[10px] font-bold px-2 py-0.5 rounded"
+                            style={{
+                                background: 'rgba(255,255,255,0.9)',
+                                color: '#6B4C7A'
+                            }}
+                        >
+                            {item.label}
+                        </span>
+                    </div>
+                ))}
             </div>
         </div>
     );
