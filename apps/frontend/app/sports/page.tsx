@@ -82,7 +82,8 @@ const navItems: { name: string; path: Route }[] = [
     { name: 'Live', path: '/' as Route },
     { name: 'Sports', path: '/sports' as Route },
     { name: 'Esports', path: '/esports' as Route },
-    { name: 'Casino', path: '/casino' as Route }
+    { name: 'Casino', path: '/casino' as Route },
+    { name: 'Prediction', path: '/prediction' as Route }
 ]
 
 export default function SportsPage() {
