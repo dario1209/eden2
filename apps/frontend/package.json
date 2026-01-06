@@ -31,7 +31,9 @@
         "tailwindcss": "^3.4.10",
         "tailwindcss-animate": "^1.0.7",
         "viem": "^2.22.0",
-        "wagmi": "^2.16.0"
+        "wagmi": "^2.16.0",
+        "@reown/appkit": "^1.4.7",
+        "@reown/appkit-adapter-ethers": "^1.4.7"
     },
     "devDependencies": {
         "@types/node": "^20",
