@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { use } from 'react'
 
 const markets = [
     {
@@ -54,8 +53,8 @@ const markets = [
     },
 ]
 
-export default function Markets({ params }: { params: Promise<{ sport: string }> }) {
-    const { sport } = use(params)
+export default function Markets({ params }: { params: { sport: string } }) {
+    const { sport } = params
 
     return (
         <div className="container mx-auto px-4 py-8">
