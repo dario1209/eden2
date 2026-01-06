@@ -1,24 +1,24 @@
-# MicroBets – Live Micro‑Prediction Markets on Cronos
+# DegenHouse – Live Micro‑Prediction Markets on Cronos
 
-MicroBets is a **real-time prediction market** for live events, where one of the flagship experiences is a fully on-chain, x402‑powered sportsbook for micro-bets that resolve in seconds, not hours. It is built as a polyglot monorepo (Next.js + FastAPI + smart contracts) targeting Cronos, Chainlink SPORTS feeds, and the emerging x402 internet‑native payments standard.
+DegenHouse is a **real-time prediction market** for live events, where one of the flagship experiences is a fully on-chain, x402‑powered sportsbook for micro-bets that resolve in seconds, not hours. It is built as a polyglot monorepo (Next.js + FastAPI + smart contracts) targeting Cronos, Chainlink SPORTS feeds, and the emerging x402 internet‑native payments standard.
 
 ***
 
-## 1. What MicroBets Is
+## 1. What DegenHouse Is
 
-MicroBets lets users:
+DegenHouse lets users:
 
 - Trade **event-level prediction markets** (governance, crypto, sports, real‑world events), with automated resolution via Chainlink oracles.
 - Place **sportsbook-style micro bets** on the next play, point, serve, or possession, leveraging the same underlying prediction market liquidity.
 - Pay and settle using **x402 programmatic payments**, where HTTP 402 “Payment Required” becomes a first‑class primitive for stablecoin bets and fees.
 
-Designed for hackathons and production investors alike, MicroBets demonstrates how on-chain markets, real‑time data, and machine‑payable APIs converge into a single product surface.
+Designed for hackathons and production investors alike, DegenHouse demonstrates how on-chain markets, real‑time data, and machine‑payable APIs converge into a single product surface.
 
 ***
 
 ## 2. High‑Level Architecture
 
-At the top level, MicroBets is a Turborepo-style monorepo orchestrating frontend, backend, smart contracts, and automation:
+At the top level, DegenHouse is a Turborepo-style monorepo orchestrating frontend, backend, smart contracts, and automation:
 
 ```bash
 sportsbook-monorepo/
@@ -141,7 +141,7 @@ All external-facing x402 flows are covered by tests under `tests/`, demonstratin
 
 ## 5. Smart Contracts, x402, and Cronos/Chainlink
 
-Under `packages/` live the reusable building blocks that make MicroBets more than a demo:
+Under `packages/` live the reusable building blocks that make DegenHouse more than a demo:
 
 ```bash
 packages/
@@ -160,7 +160,7 @@ packages/
 - Implements the x402 flow where APIs can respond with an HTTP 402 status containing payment requirements, which clients satisfy via signed stablecoin payments before retrying.
 - Enables **machine-payable endpoints** for bets, data access, and premium analytics – a foundation for AI agents participating in markets programmatically.
 
-This composition positions MicroBets at the intersection of prediction markets, on-chain sports data, and internet-native payments.
+This composition positions DegenHouse at the intersection of prediction markets, on-chain sports data, and internet-native payments.
 
 ***
 
@@ -220,4 +220,4 @@ Chainlink jobs and market automation scripts live under `scripts/`, enabling sch
 - **For hackathon judges**: Demonstrates mastery of Cronos, Chainlink SPORTS feeds, real-time websockets, FastAPI, and Next.js, with a clear separation of concerns and test coverage for critical payment flows.
 - **For VCs/investors**: Targets the fastest-growing segment of wagering – micro-betting – which already represents a significant share of sports bets and is still accelerating as live, mobile-first engagement grows.
 
-MicroBets is not “just another sportsbook”. It is a **prediction market engine** where the sportsbook experience is one of many possible frontends on top of a programmable, x402‑enabled, oracle‑driven on-chain market layer.
+DegenHouse is not “just another sportsbook”. It is a **prediction market engine** where the sportsbook experience is one of many possible frontends on top of a programmable, x402‑enabled, oracle‑driven on-chain market layer.

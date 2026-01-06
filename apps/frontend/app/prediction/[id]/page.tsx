@@ -1,8 +1,8 @@
 /**
  * Prediction Market Page - XO Market Style
  * 
- * MicroBets Hackathon Market
- * "Will MicroBets win the Cronos x402 Hackathon?"
+ * DegenHouse Hackathon Market
+ * "Will DegenHouse win the Cronos x402 Hackathon?"
  * 
  * Features:
  * - Price history chart with Yes/No probability lines
@@ -79,10 +79,10 @@ const navItems: { name: string; path: Route }[] = [
 // ============================================================================
 
 const MARKET_DATA: MarketInfo = {
-	id: "microbets-hackathon-win",
-	question: "Will MicroBets win the Cronos x402 Hackathon?",
-	description: "Prediction market for the outcome of MicroBets in the DoraHacks Cronos x402 hackathon competition.",
-	creator: "@MicroBets",
+	id: "DegenHouse-hackathon-win",
+	question: "Will DegenHouse win the Cronos x402 Hackathon?",
+	description: "Prediction market for the outcome of DegenHouse in the DoraHacks Cronos x402 hackathon competition.",
+	creator: "@DegenHouse",
 	createdAt: "2025-12-15T00:00:00Z",
 	resolutionDate: "2026-01-31T23:59:59Z",
 	totalPool: 1250,
@@ -93,7 +93,7 @@ const MARKET_DATA: MarketInfo = {
 	totalBets: 47,
 	rules: {
 		resolvesTo: "Yes",
-		criteria: "MicroBets places 1st in the Cronos x402 Hackathon on DoraHacks",
+		criteria: "DegenHouse places 1st in the Cronos x402 Hackathon on DoraHacks",
 		source: "https://dorahacks.io/hackathon/cronos-x402/detail",
 	},
 };

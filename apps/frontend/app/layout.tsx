@@ -19,7 +19,7 @@ const orbitron = Orbitron({
 })
 
 export const metadata: Metadata = {
-    title: 'MicroBets - Live Sports Betting',
+    title: 'DegenHouse - Live Sports Betting',
     description: 'x402 payments + Chainlink settlement on Cronos. Bet on every point, kill, corner. Real-time, on-chain, sub-second.',
 }
 

@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 
 /**
  * @title PredictionMarket
- * @dev Binary prediction market contract for MicroBets
+ * @dev Binary prediction market contract for DegenHouse
  * Users bet YES or NO on a prediction, funds are sent to Gnosis Safe
  * Market state and bet tracking for real-time UI updates
  * 
