@@ -4,78 +4,139 @@
 
 @layer base {
     :root {
-        /* Pastel Dream Vaporwave palette */
-        --background: 0 0% 100%;
-        --foreground: 20 14.3% 4.1%;
+        /* Irish Heritage & Woods palette */
+        --background: 36 35% 93%;
+        /* Cream Linen #F3EBDD */
+        --foreground: 145 28% 18%;
+        /* Hunter Green #1F3D2B */
 
-        --card: 0 0% 100%;
-        --card-foreground: 20 14.3% 4.1%;
+        --card: 36 35% 93%;
+        /* Cream Linen */
+        --card-foreground: 145 28% 18%;
+        /* Hunter Green */
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 20 14.3% 4.1%;
+        --popover: 36 35% 93%;
+        /* Cream Linen */
+        --popover-foreground: 145 28% 18%;
+        /* Hunter Green */
 
-        --primary: 24 9.8% 10%;
-        --primary-foreground: 60 9.1% 97.8%;
+        --primary: 158 69% 22%;
+        /* Emerald Green #0F5C4A */
+        --primary-foreground: 36 35% 93%;
+        /* Cream Linen */
 
-        --secondary: 60 4.8% 95.9%;
-        --secondary-foreground: 24 9.8% 10%;
+        --secondary: 90 12% 79%;
+        /* Warm Beige #D8CFC0 */
+        --secondary-foreground: 145 28% 18%;
+        /* Hunter Green */
 
-        --muted: 60 4.8% 95.9%;
-        --muted-foreground: 25 5.3% 44.7%;
+        --muted: 90 12% 79%;
+        /* Warm Beige */
+        --muted-foreground: 75 15% 38%;
+        /* Moss Green #5F6F52 */
 
-        --accent: 60 4.8% 95.9%;
-        --accent-foreground: 24 9.8% 10%;
+        --accent: 22 49% 31%;
+        /* Mahogany Brown #4A2C1D */
+        --accent-foreground: 36 35% 93%;
+        /* Cream Linen */
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 60 9.1% 97.8%;
+        --destructive: 350 47% 24%;
+        /* Burgundy #5A1F2B */
+        --destructive-foreground: 36 35% 93%;
+        /* Cream Linen */
 
-        --border: 20 5.9% 90%;
-        --input: 20 5.9% 90%;
-        --ring: 20 14.3% 4.1%;
+        --border: 90 12% 79%;
+        /* Warm Beige */
+        --input: 90 12% 79%;
+        /* Warm Beige */
+        --ring: 45 43% 53%;
+        /* Antique Gold #C2A14D */
 
         --radius: 0.5rem;
 
-        /* Pastel specific colors */
-        --pink: #FFB6C1;
-        --pink-deep: #FF6B9D;
-        --pink-dark: #C44569;
-        --lavender: #E0BBE4;
-        --lavender-dark: #957DAD;
-        --purple: #6B4C7A;
-        --aqua: #7FE5F0;
-        --aqua-dark: #7EC8E3;
-        --cyan: #5BA4C9;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
+        /* Irish Heritage specific colors */
+        --hunter-green: #1F3D2B;
+        --emerald: #0F5C4A;
+        --moss: #5F6F52;
+        --mahogany: #4A2C1D;
+        --walnut: #6B4A32;
+        --burgundy: #5A1F2B;
+        --claret: #7B2D26;
+        --antique-gold: #C2A14D;
+        --aged-brass: #B08D57;
+        --cream-linen: #F3EBDD;
+        --warm-beige: #D8CFC0;
+
+        --chart-1: 145 28% 18%;
+        /* Hunter Green */
+        --chart-2: 158 69% 22%;
+        /* Emerald */
+        --chart-3: 75 15% 38%;
+        /* Moss */
+        --chart-4: 22 49% 31%;
+        /* Mahogany */
+        --chart-5: 350 47% 24%;
+        /* Burgundy */
     }
-  .dark {
-        --background: 20 14.3% 4.1%;
-        --foreground: 60 9.1% 97.8%;
-        --card: 20 14.3% 4.1%;
-        --card-foreground: 60 9.1% 97.8%;
-        --popover: 20 14.3% 4.1%;
-        --popover-foreground: 60 9.1% 97.8%;
-        --primary: 60 9.1% 97.8%;
-        --primary-foreground: 24 9.8% 10%;
-        --secondary: 12 6.5% 15.1%;
-        --secondary-foreground: 60 9.1% 97.8%;
-        --muted: 12 6.5% 15.1%;
-        --muted-foreground: 24 5.4% 63.9%;
-        --accent: 12 6.5% 15.1%;
-        --accent-foreground: 60 9.1% 97.8%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 60 9.1% 97.8%;
-        --border: 12 6.5% 15.1%;
-        --input: 12 6.5% 15.1%;
-        --ring: 24 5.7% 82.9%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+
+    .dark {
+        --background: 22 49% 12%;
+        /* Deep Mahogany base */
+        --foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --card: 145 28% 10%;
+        /* Dark Hunter Green */
+        --card-foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --popover: 145 28% 10%;
+        /* Dark Hunter Green */
+        --popover-foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --primary: 158 69% 32%;
+        /* Lighter Emerald */
+        --primary-foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --secondary: 75 15% 28%;
+        /* Dark Moss */
+        --secondary-foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --muted: 75 15% 28%;
+        /* Dark Moss */
+        --muted-foreground: 90 12% 65%;
+        /* Light Beige */
+
+        --accent: 22 49% 20%;
+        /* Darker Mahogany */
+        --accent-foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --destructive: 350 47% 34%;
+        /* Lighter Burgundy */
+        --destructive-foreground: 36 35% 93%;
+        /* Cream Linen */
+
+        --border: 75 15% 28%;
+        /* Dark Moss */
+        --input: 75 15% 28%;
+        /* Dark Moss */
+        --ring: 45 43% 63%;
+        /* Lighter Gold */
+
+        --chart-1: 158 69% 32%;
+        /* Emerald */
+        --chart-2: 75 15% 48%;
+        /* Moss */
+        --chart-3: 45 43% 53%;
+        /* Gold */
+        --chart-4: 350 47% 34%;
+        /* Burgundy */
+        --chart-5: 22 49% 41%;
+        /* Walnut */
     }
 }
 
@@ -91,10 +152,10 @@
     body {
         @apply antialiased;
         font-family: var(--font-space-grotesk), system-ui, sans-serif;
-        background: linear-gradient(180deg, #FFB6C1 0%, #E0BBE4 25%, #957DAD 50%, #7EC8E3 75%, #7FE5F0 100%);
+        background: linear-gradient(180deg, #F3EBDD 0%, #D8CFC0 20%, #5F6F52 50%, #4A2C1D 80%, #1F3D2B 100%);
         background-attachment: fixed;
         min-height: 100vh;
-        color: #6B4C7A;
+        color: #1F3D2B;
     }
 
     h1,
@@ -106,87 +167,87 @@
         font-family: var(--font-orbitron), var(--font-space-grotesk), system-ui, sans-serif;
     }
 
-    /* Custom scrollbar - pastel theme */
+    /* Custom scrollbar - Irish heritage theme */
     ::-webkit-scrollbar {
         width: 10px;
         height: 10px;
     }
 
     ::-webkit-scrollbar-track {
-        background: rgba(224, 187, 228, 0.3);
+        background: rgba(216, 207, 192, 0.3);
     }
 
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #FF6B9D, #C44569);
+        background: linear-gradient(180deg, #0F5C4A, #1F3D2B);
         border-radius: 5px;
-        border: 2px solid rgba(224, 187, 228, 0.3);
+        border: 2px solid rgba(216, 207, 192, 0.3);
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(180deg, #C44569, #9B2C50);
+        background: linear-gradient(180deg, #1F3D2B, #0A3D2D);
     }
 
     /* Selection styling */
     ::selection {
-        background: rgba(255, 107, 157, 0.3);
-        color: #6B4C7A;
+        background: rgba(194, 161, 77, 0.3);
+        color: #1F3D2B;
     }
 }
 
 @layer utilities {
 
     /* Soft glow effects */
-    .glow-pink {
-        box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3),
-            0 8px 40px rgba(255, 107, 157, 0.2);
+    .glow-emerald {
+        box-shadow: 0 4px 20px rgba(15, 92, 74, 0.3),
+            0 8px 40px rgba(15, 92, 74, 0.2);
     }
 
-    .glow-lavender {
-        box-shadow: 0 4px 20px rgba(149, 125, 173, 0.3),
-            0 8px 40px rgba(149, 125, 173, 0.2);
+    .glow-gold {
+        box-shadow: 0 4px 20px rgba(194, 161, 77, 0.4),
+            0 8px 40px rgba(194, 161, 77, 0.3);
     }
 
-    .glow-aqua {
-        box-shadow: 0 4px 20px rgba(126, 200, 227, 0.3),
-            0 8px 40px rgba(126, 200, 227, 0.2);
+    .glow-burgundy {
+        box-shadow: 0 4px 20px rgba(90, 31, 43, 0.3),
+            0 8px 40px rgba(90, 31, 43, 0.2);
     }
 
     /* Gradient text */
-    .gradient-text-pastel {
-        @apply bg-gradient-to-r from-[#FF6B9D] via-[#957DAD] to-[#7EC8E3] bg-clip-text text-transparent;
+    .gradient-text-irish {
+        @apply bg-gradient-to-r from-[#0F5C4A] via-[#C2A14D] to-[#5A1F2B] bg-clip-text text-transparent;
     }
 
     /* Window style card */
     .window-card {
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(243, 235, 221, 0.95);
         backdrop-filter: blur(10px);
-        border: 2px solid #E0BBE4;
+        border: 2px solid #6B4A32;
         border-radius: 8px;
         overflow: hidden;
     }
 
     .window-titlebar {
-        background: linear-gradient(180deg, #E0BBE4 0%, #C9A0DC 100%);
+        background: linear-gradient(180deg, #4A2C1D 0%, #6B4A32 100%);
         padding: 6px 12px;
         font-size: 11px;
         font-weight: bold;
-        color: rgba(255, 255, 255, 0.9);
+        color: rgba(243, 235, 221, 0.95);
         letter-spacing: 0.5px;
     }
 
-    .window-titlebar-pink {
-        background: linear-gradient(180deg, #FF6B9D 0%, #C44569 100%);
+    .window-titlebar-emerald {
+        background: linear-gradient(180deg, #0F5C4A 0%, #1F3D2B 100%);
     }
 
-    .window-titlebar-aqua {
-        background: linear-gradient(180deg, #7EC8E3 0%, #5BA4C9 100%);
+    .window-titlebar-burgundy {
+        background: linear-gradient(180deg, #5A1F2B 0%, #7B2D26 100%);
     }
 
     /* Grid background */
     .grid-bg {
         background-image:
-            linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+            linear-gradient(rgba(95, 111, 82, 0.2) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(95, 111, 82, 0.2) 1px, transparent 1px);
         background-size: 40px 40px;
     }
 
@@ -207,69 +268,72 @@
         }
     }
 
-    /* Sparkle animation */
-    .sparkle {
-        animation: sparkle 2s ease-in-out infinite;
+    /* Shimmer animation */
+    .shimmer {
+        animation: shimmer 2s ease-in-out infinite;
     }
 
-    @keyframes sparkle {
+    @keyframes shimmer {
 
         0%,
         100% {
-            opacity: 0.4;
+            opacity: 0.6;
             transform: scale(1);
         }
 
         50% {
             opacity: 1;
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
     }
 
     /* Button variants */
-    .btn-pink {
+    .btn-emerald {
         @apply font-bold text-white rounded-full transition-all;
-        background: linear-gradient(135deg, #FF6B9D, #C44569);
-        box-shadow: 0 4px 15px rgba(196, 69, 105, 0.3);
+        background: linear-gradient(135deg, #0F5C4A, #1F3D2B);
+        box-shadow: 0 4px 15px rgba(15, 92, 74, 0.3);
     }
 
-    .btn-pink:hover {
-        box-shadow: 0 6px 20px rgba(196, 69, 105, 0.4);
+    .btn-emerald:hover {
+        box-shadow: 0 6px 20px rgba(15, 92, 74, 0.5);
         transform: scale(1.05);
     }
 
-    .btn-aqua {
-        @apply font-bold text-white rounded-full transition-all;
-        background: linear-gradient(135deg, #7EC8E3, #5BA4C9);
-        box-shadow: 0 4px 15px rgba(126, 200, 227, 0.3);
+    .btn-gold {
+        @apply font-bold rounded-full transition-all;
+        background: linear-gradient(135deg, #C2A14D, #B08D57);
+        color: #1F3D2B;
+        box-shadow: 0 4px 15px rgba(194, 161, 77, 0.3);
     }
 
-    .btn-aqua:hover {
-        box-shadow: 0 6px 20px rgba(126, 200, 227, 0.4);
+    .btn-gold:hover {
+        box-shadow: 0 6px 20px rgba(194, 161, 77, 0.5);
         transform: scale(1.05);
     }
 
-    .btn-outline-lavender {
+    .btn-outline-mahogany {
         @apply font-semibold rounded-full transition-all;
-        background: white;
-        color: #957DAD;
-        border: 2px solid #E0BBE4;
+        background: #F3EBDD;
+        color: #4A2C1D;
+        border: 2px solid #6B4A32;
     }
 
-    .btn-outline-lavender:hover {
-        background: #F8E8F8;
+    .btn-outline-mahogany:hover {
+        background: #D8CFC0;
     }
 
     /* Odds button styles */
     .odds-btn {
         @apply px-3 py-2 rounded-lg transition-all;
-        background: #F8E8F8;
-        border: 2px solid #E0BBE4;
+        background: #F3EBDD;
+        border: 2px solid #6B4A32;
+        color: #1F3D2B;
     }
 
     .odds-btn:hover {
         transform: scale(1.05);
-        border-color: #C9A0DC;
+        border-color: #C2A14D;
+        box-shadow: 0 2px 8px rgba(194, 161, 77, 0.3);
     }
 
     /* Input focus states */
@@ -277,15 +341,15 @@
     textarea:focus,
     select:focus {
         @apply outline-none;
-        border-color: #FF6B9D !important;
-        box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+        border-color: #C2A14D !important;
+        box-shadow: 0 0 0 3px rgba(194, 161, 77, 0.2);
     }
 
     /* Loading spinner */
     .spinner {
         @apply w-5 h-5 border-2 rounded-full;
-        border-color: #E0BBE4;
-        border-top-color: #FF6B9D;
+        border-color: #D8CFC0;
+        border-top-color: #0F5C4A;
         animation: spin 0.8s linear infinite;
     }
 
@@ -296,20 +360,20 @@
     }
 
     /* Glass card */
-    .glass-pastel {
-        background: rgba(255, 255, 255, 0.85);
+    .glass-irish {
+        background: rgba(243, 235, 221, 0.85);
         backdrop-filter: blur(10px);
-        border: 2px solid #E0BBE4;
+        border: 2px solid #6B4A32;
     }
 
     /* Retro window buttons */
     .window-btn {
         @apply w-3 h-3 rounded-sm;
-        background: rgba(255, 255, 255, 0.4);
+        background: rgba(216, 207, 192, 0.5);
     }
 
     .window-btn-close {
-        background: #FFB6C1;
+        background: #5A1F2B;
     }
 }
 
@@ -340,19 +404,20 @@ input {
 /* Focus visible for accessibility */
 :focus-visible {
     @apply outline-2 outline-offset-2;
-    outline-color: #FF6B9D;
+    outline-color: #C2A14D;
 }
 
 /* Custom placeholder color */
 ::placeholder {
-    color: #C9A0DC;
+    color: #B08D57;
 }
 
 @layer base {
-  * {
-    @apply border-border;
+    * {
+        @apply border-border;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground;
     }
 }
