@@ -1,6 +1,7 @@
 'use client'
 
-import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react'
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react'
+import { useDisconnect } from 'wagmi'; // keep wagmi for disconnect
 
 export function ConnectButton() {
     const { address, isConnected } = useAppKitAccount()
