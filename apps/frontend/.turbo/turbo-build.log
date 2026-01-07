@@ -23,10 +23,10 @@ Route (app)                                 Size  First Load JS
 ├ ○ /_not-found                            988 B         103 kB
 ├ ƒ /api/chainlink/markets                 140 B         102 kB
 ├ ƒ /api/x402/place-bet                    140 B         102 kB
-├ ○ /Edge Haus                                  140 B         102 kB
-├ ƒ /Edge Haus/[sport]                          140 B         102 kB
-├ ƒ /Edge Haus/[sport]/[marketId]              2.2 kB         115 kB
-└ ƒ /Edge Haus/[sport]/markets                  140 B         102 kB
+├ ○ /Eden Haus                                  140 B         102 kB
+├ ƒ /Eden Haus/[sport]                          140 B         102 kB
+├ ƒ /Eden Haus/[sport]/[marketId]              2.2 kB         115 kB
+└ ƒ /Eden Haus/[sport]/markets                  140 B         102 kB
 + First Load JS shared by all             102 kB
   ├ chunks/18-a0e0267f22a67d87.js        45.8 kB
   ├ chunks/87c73c54-beb8c3352f017ae5.js  54.2 kB

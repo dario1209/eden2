@@ -1,8 +1,8 @@
 /**
  * Prediction Market Page - XO Market Style
  * 
- * Edge Haus Hackathon Market
- * "Will Edge Haus win the Cronos x402 Hackathon?"
+ * Eden Haus Hackathon Market
+ * "Will Eden Haus win the Cronos x402 Hackathon?"
  * 
  * Features:
  * - Price history chart with Yes/No probability lines
@@ -79,10 +79,10 @@ const navItems: { name: string; path: Route }[] = [
 // ============================================================================
 
 const MARKET_DATA: MarketInfo = {
-	id: "Edge Haus-hackathon-win",
-	question: "Will Edge Haus win the Cronos x402 Hackathon?",
-	description: "Prediction market for the outcome of Edge Haus in the DoraHacks Cronos x402 hackathon competition.",
-	creator: "@Edge Haus",
+	id: "Eden Haus-hackathon-win",
+	question: "Will Eden Haus win the Cronos x402 Hackathon?",
+	description: "Prediction market for the outcome of Eden Haus in the DoraHacks Cronos x402 hackathon competition.",
+	creator: "@Eden Haus",
 	createdAt: "2025-12-15T00:00:00Z",
 	resolutionDate: "2026-01-31T23:59:59Z",
 	totalPool: 1250,
@@ -93,7 +93,7 @@ const MARKET_DATA: MarketInfo = {
 	totalBets: 47,
 	rules: {
 		resolvesTo: "Yes",
-		criteria: "Edge Haus places 1st in the Cronos x402 Hackathon on DoraHacks",
+		criteria: "Eden Haus places 1st in the Cronos x402 Hackathon on DoraHacks",
 		source: "https://dorahacks.io/hackathon/cronos-x402/detail",
 	},
 };

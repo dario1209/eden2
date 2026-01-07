@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.websocket("/ws/markets")
 async def websocket_markets(websocket: WebSocket):
-    """Edge Haus market updates via Redis Pub/Sub"""
+    """Eden Haus market updates via Redis Pub/Sub"""
     await websocket.accept()
     
     if redis_client:

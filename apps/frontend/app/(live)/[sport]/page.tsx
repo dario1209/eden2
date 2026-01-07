@@ -291,7 +291,7 @@ export default async function SportLivePage({
                     >
                         <div className="flex items-center gap-3">
                             <span className="text-sm font-black text-white tracking-widest drop-shadow-md">
-                                Edge Haus.EXE
+                                Eden Haus.EXE
                             </span>
                             <div
                                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"

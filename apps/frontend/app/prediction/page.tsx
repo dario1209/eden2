@@ -48,10 +48,10 @@ interface ScoreboardData {
 
 const MARKETS: Market[] = [
     {
-        id: "Edge Haus-hackathon",
+        id: "Eden Haus-hackathon",
         slug: "markets",
-        question: "Will Edge Haus win the Cronos x402 Hackathon?",
-        shortTitle: "Edge Haus Hackathon Win",
+        question: "Will Eden Haus win the Cronos x402 Hackathon?",
+        shortTitle: "Eden Haus Hackathon Win",
         odds: 2.38,
         pool: 1250,
         status: "active",
@@ -112,7 +112,7 @@ const navItems: { name: string; path: Route }[] = [
 // ============================================================================
 
 const MarketCard = ({ market }: { market: Market }) => {
-    const isHackathonMarket = market.id === "Edge Haus-hackathon";
+    const isHackathonMarket = market.id === "Eden Haus-hackathon";
 
     return (
         <Link
@@ -638,7 +638,7 @@ export default function PredictionPage() {
                                             FEATURED MARKET
                                         </p>
                                         <h3 className="text-2xl font-bold text-[#6B4C7A] group-hover:text-[#FF6B9D] transition-colors">
-                                            Will Edge Haus win the Cronos x402 Hackathon?
+                                            Will Eden Haus win the Cronos x402 Hackathon?
                                         </h3>
                                         <div className="flex items-center gap-4 mt-3">
                                             <span className="px-3 py-1 rounded-full bg-white border border-[#E0BBE4] text-xs font-medium text-[#6B4C7A]">

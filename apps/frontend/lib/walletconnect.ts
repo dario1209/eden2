@@ -7,7 +7,7 @@ export const appKit = createAppKit({
     projectId,
     networks: [cronos],
     metadata: {
-        name: 'Edge Haus',
+        name: 'Eden Haus',
         description: 'Real-time micro-betting',
         url: 'https://sportsbook-monorepo-frontend.vercel.app',
         icons: []
