@@ -1,22 +1,15 @@
 /**
- * Prediction Market Page - XO Market Style
- * 
- * Eden Haus Hackathon Market
- * "Will Eden Haus win the Cronos x402 Hackathon?"
- * 
- * Features:
- * - Price history chart with Yes/No probability lines
- * - Clean market header with stats badges
- * - Sidebar trading panel with Yes/No buttons
- * - Rules & Resolution section
- * - Pastel Dream vaporwave aesthetic
- * 
+ * Eden Haus Prediction Market Detail Page (Irish Earthy)
  * Route: /prediction/[id]
+ *
+ * Intent:
+ * - Replace the vaporwave/XO look with a more "Eden Haus" members-club aesthetic.
+ * - Keep existing behavior: recharts history + wagmi connection gating + mock data.
  */
 
 "use client";
 
-import type { Route } from 'next';
+import type { Route } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -26,7 +19,7 @@ import {
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
-	YAxis
+	YAxis,
 } from "recharts";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
@@ -67,12 +60,12 @@ interface MarketInfo {
 // ============================================================================
 
 const navItems: { name: string; path: Route }[] = [
-	{ name: 'Live', path: '/' as Route },
-	{ name: 'Sports', path: '/sports' as Route },
-	{ name: 'Esports', path: '/esports' as Route },
-	{ name: 'Casino', path: '/casino' as Route },
-	{ name: 'Prediction', path: '/prediction' as Route }
-]
+	{ name: "Live", path: "/" as Route },
+	{ name: "Sports", path: "/sports" as Route },
+	{ name: "Esports", path: "/esports" as Route },
+	{ name: "Casino", path: "/casino" as Route },
+	{ name: "Prediction", path: "/prediction" as Route },
+];
 
 // ============================================================================
 // MOCK DATA - Will be replaced with real data
@@ -81,7 +74,8 @@ const navItems: { name: string; path: Route }[] = [
 const MARKET_DATA: MarketInfo = {
 	id: "Eden Haus-hackathon-win",
 	question: "Will Eden Haus win the Cronos x402 Hackathon?",
-	description: "Prediction market for the outcome of Eden Haus in the DoraHacks Cronos x402 hackathon competition.",
+	description:
+		"Prediction market for the outcome of Eden Haus in the DoraHacks Cronos x402 hackathon competition.",
 	creator: "@Eden Haus",
 	createdAt: "2025-12-15T00:00:00Z",
 	resolutionDate: "2026-01-31T23:59:59Z",
@@ -98,21 +92,18 @@ const MARKET_DATA: MarketInfo = {
 	},
 };
 
-// Generate realistic-looking price history
 function generatePriceHistory(): PricePoint[] {
 	const points: PricePoint[] = [];
 	const now = Date.now();
 	const startDate = new Date("2025-12-15").getTime();
 	const days = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
 
-	let yesPrice = 35; // Starting probability
+	let yesPrice = 35;
 
 	for (let i = 0; i <= Math.min(days, 30); i++) {
 		const date = new Date(startDate + i * 24 * 60 * 60 * 1000);
-
-		// Add some realistic volatility
 		const volatility = (Math.random() - 0.5) * 8;
-		const trend = i > 10 ? 0.3 : -0.1; // Slight upward trend after initial period
+		const trend = i > 10 ? 0.3 : -0.1;
 		yesPrice = Math.max(5, Math.min(95, yesPrice + volatility + trend));
 
 		points.push({
@@ -123,7 +114,6 @@ function generatePriceHistory(): PricePoint[] {
 		});
 	}
 
-	// Ensure last point matches current market state
 	if (points.length > 0) {
 		points[points.length - 1].yes = MARKET_DATA.yesPercent;
 		points[points.length - 1].no = MARKET_DATA.noPercent;
@@ -133,34 +123,7 @@ function generatePriceHistory(): PricePoint[] {
 }
 
 // ============================================================================
-// CUSTOM CHART TOOLTIP
-// ============================================================================
-
-const CustomTooltip = ({ active, payload, label }: any) => {
-	if (active && payload && payload.length) {
-		return (
-			<div className="glass-pastel rounded-lg p-3 shadow-lg">
-				<p className="text-xs text-[#957DAD] font-medium mb-2">{label}</p>
-				<div className="space-y-1">
-					<p className="text-sm">
-						<span className="inline-block w-3 h-3 rounded-full bg-[#10B981] mr-2" />
-						<span className="text-[#6B4C7A]">Yes: </span>
-						<span className="font-bold text-[#10B981]">{payload[0]?.value}%</span>
-					</p>
-					<p className="text-sm">
-						<span className="inline-block w-3 h-3 rounded-full bg-[#F43F5E] mr-2" />
-						<span className="text-[#6B4C7A]">No: </span>
-						<span className="font-bold text-[#F43F5E]">{payload[1]?.value}%</span>
-					</p>
-				</div>
-			</div>
-		);
-	}
-	return null;
-};
-
-// ============================================================================
-// TIME FILTER BUTTONS
+// UI HELPERS
 // ============================================================================
 
 type TimeFilter = "1H" | "3H" | "24H" | "7D" | "ALL";
@@ -176,35 +139,64 @@ const TimeFilterButton = ({
 }) => (
 	<button
 		onClick={onClick}
-		className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${active
-			? "bg-gradient-to-r from-[#FF6B9D] to-[#C44569] text-white shadow-md"
-			: "text-[#957DAD] hover:bg-[#F8E8F8]"
-			}`}
+		className={
+			active
+				? "eh-seg-btn eh-seg-btn--active"
+				: "eh-seg-btn eh-seg-btn--idle"
+		}
 	>
 		{filter}
 	</button>
 );
 
-// ============================================================================
-// STATS BADGE
-// ============================================================================
-
-const StatsBadge = ({
-	icon,
+const StatsChip = ({
+	label,
 	value,
-	className = "",
 }: {
-	icon: string;
+	label: string;
 	value: string;
-	className?: string;
 }) => (
-	<div
-		className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-[#E0BBE4] text-xs font-medium text-[#6B4C7A] ${className}`}
-	>
-		<span>{icon}</span>
-		<span>{value}</span>
+	<div className="eh-chip">
+		<span className="eh-chip__label">{label}</span>
+		<span className="eh-chip__value">{value}</span>
 	</div>
 );
+
+const SectionTitle = ({ title, subtitle }: { title: string; subtitle?: string }) => (
+	<div className="flex items-end justify-between gap-3">
+		<div>
+			<h2 className="eh-h2">{title}</h2>
+			{subtitle ? <p className="eh-sub">{subtitle}</p> : null}
+		</div>
+		<div className="eh-divider" />
+	</div>
+);
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+	if (active && payload && payload.length) {
+		return (
+			<div className="eh-tooltip">
+				<div className="eh-tooltip__top">
+					<span className="eh-tooltip__date">{label}</span>
+					<span className="eh-tooltip__badge">ODDS</span>
+				</div>
+				<div className="eh-tooltip__rows">
+					<div className="eh-tooltip__row">
+						<span className="eh-dot eh-dot--yes" />
+						<span className="eh-tooltip__k">Yes</span>
+						<span className="eh-tooltip__v">{payload[0]?.value}%</span>
+					</div>
+					<div className="eh-tooltip__row">
+						<span className="eh-dot eh-dot--no" />
+						<span className="eh-tooltip__k">No</span>
+						<span className="eh-tooltip__v">{payload[1]?.value}%</span>
+					</div>
+				</div>
+			</div>
+		);
+	}
+	return null;
+};
 
 // ============================================================================
 // MAIN COMPONENT
@@ -212,38 +204,42 @@ const StatsBadge = ({
 
 export default function PredictionMarketPage() {
 	const params = useParams();
-	const { address: walletAddress, isConnected } = useAccount();
+	const { isConnected } = useAccount();
 
 	// State
 	const [market] = useState<MarketInfo>(MARKET_DATA);
 	const [priceHistory] = useState<PricePoint[]>(generatePriceHistory);
 	const [timeFilter, setTimeFilter] = useState<TimeFilter>("ALL");
-	const [selectedOutcome, setSelectedOutcome] = useState<"yes" | "no" | null>(null);
+	const [selectedOutcome, setSelectedOutcome] = useState<"yes" | "no" | null>(
+		null
+	);
 	const [betAmount, setBetAmount] = useState<string>("");
 	const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
 	const [isPlacingBet, setIsPlacingBet] = useState(false);
-	const [currentTime, setCurrentTime] = useState('');
-	const [currentDate, setCurrentDate] = useState('');
+	const [currentTime, setCurrentTime] = useState("");
+	const [currentDate, setCurrentDate] = useState("");
 
-	// Update time and date
 	useEffect(() => {
 		const timer = setInterval(() => {
-			const now = new Date()
-			setCurrentTime(now.toLocaleTimeString('en-US', {
-				hour: '2-digit',
-				minute: '2-digit',
-				hour12: true
-			}))
-			setCurrentDate(now.toLocaleDateString('en-US', {
-				weekday: 'short',
-				month: 'short',
-				day: 'numeric'
-			}))
-		}, 1000)
-		return () => clearInterval(timer)
-	}, [])
+			const now = new Date();
+			setCurrentTime(
+				now.toLocaleTimeString("en-US", {
+					hour: "2-digit",
+					minute: "2-digit",
+					hour12: true,
+				})
+			);
+			setCurrentDate(
+				now.toLocaleDateString("en-US", {
+					weekday: "short",
+					month: "short",
+					day: "numeric",
+				})
+			);
+		}, 1000);
+		return () => clearInterval(timer);
+	}, []);
 
-	// Calculate days remaining
 	const daysLeft = useMemo(() => {
 		const now = new Date();
 		const resolution = new Date(market.resolutionDate);
@@ -251,7 +247,6 @@ export default function PredictionMarketPage() {
 		return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 	}, [market.resolutionDate]);
 
-	// Filter price history based on time filter
 	const filteredHistory = useMemo(() => {
 		if (timeFilter === "ALL") return priceHistory;
 
@@ -266,7 +261,6 @@ export default function PredictionMarketPage() {
 		return priceHistory.filter((p) => now - p.timestamp <= filterMs);
 	}, [priceHistory, timeFilter]);
 
-	// Handle bet placement
 	const handlePlaceBet = useCallback(async () => {
 		if (!selectedOutcome || !betAmount) {
 			toast.error("Please select an outcome and enter an amount");
@@ -279,8 +273,6 @@ export default function PredictionMarketPage() {
 		}
 
 		setIsPlacingBet(true);
-
-		// Simulate bet placement
 		await new Promise((resolve) => setTimeout(resolve, 2000));
 
 		toast.success(`Bet placed! ${selectedOutcome.toUpperCase()} for $${betAmount}`);
@@ -289,325 +281,169 @@ export default function PredictionMarketPage() {
 		setSelectedOutcome(null);
 	}, [selectedOutcome, betAmount, isConnected]);
 
-	// Format date
 	const formatDate = (dateStr: string) => {
 		const date = new Date(dateStr);
-		return date.toLocaleDateString("en-US", {
-			month: "long",
-			day: "numeric",
-			year: "numeric",
-		}) + " at " + date.toLocaleTimeString("en-US", {
-			hour: "numeric",
-			minute: "2-digit",
-			hour12: true,
-		}) + " UTC";
+		return (
+			date.toLocaleDateString("en-US", {
+				month: "long",
+				day: "numeric",
+				year: "numeric",
+			}) +
+			" at " +
+			date.toLocaleTimeString("en-US", {
+				hour: "numeric",
+				minute: "2-digit",
+				hour12: true,
+			}) +
+			" UTC"
+		);
 	};
 
+	const yesOdds = useMemo(() => 100 / Math.max(1, market.yesPercent), [market.yesPercent]);
+	const noOdds = useMemo(() => 100 / Math.max(1, market.noPercent), [market.noPercent]);
+
 	return (
-		<div className="min-h-screen overflow-hidden relative">
-			{/* Dreamy Vaporwave Background - Market Theme */}
-			<div className="fixed inset-0">
-				{/* Main gradient */}
-				<div
-					className="absolute inset-0"
-					style={{
-						background: 'linear-gradient(180deg, #E6E6FA 0%, #DDA0DD 15%, #FFB6C1 30%, #FFDAB9 50%, #B0E0E6 70%, #98D8C8 85%, #E6E6FA 100%)'
-					}}
-				/>
-
-				{/* Secondary overlay for depth */}
-				<div
-					className="absolute inset-0 opacity-50"
-					style={{
-						background: 'radial-gradient(ellipse at 30% 20%, rgba(230, 230, 250, 0.4) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(255, 182, 193, 0.4) 0%, transparent 50%)'
-					}}
-				/>
-
-				{/* Retro grid overlay */}
-				<div
-					className="absolute inset-0 opacity-25"
-					style={{
-						backgroundImage: `
-							linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-							linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
-						`,
-						backgroundSize: '40px 40px'
-					}}
-				/>
-
-				{/* Floating clouds */}
-				<div className="absolute top-16 left-[8%] text-5xl opacity-70 animate-bounce" style={{ animationDuration: '6s' }}>☁️</div>
-				<div className="absolute top-32 right-[12%] text-4xl opacity-60 animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}>☁️</div>
-				<div className="absolute top-48 left-[25%] text-3xl opacity-50 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>☁️</div>
-
-				{/* Sparkles */}
-				<div className="absolute top-24 right-[30%] text-2xl opacity-60 animate-pulse">✦</div>
-				<div className="absolute top-40 left-[15%] text-xl opacity-50 animate-pulse" style={{ animationDelay: '0.5s' }}>✧</div>
-				<div className="absolute bottom-32 right-[20%] text-2xl opacity-60 animate-pulse" style={{ animationDelay: '1s' }}>✦</div>
-				<div className="absolute bottom-48 left-[35%] text-xl opacity-50 animate-pulse" style={{ animationDelay: '1.5s' }}>✧</div>
-
-				{/* Market-themed floating elements */}
-				<div className="absolute bottom-24 right-[15%] text-3xl opacity-40 animate-bounce" style={{ animationDuration: '5s' }}>📊</div>
-				<div className="absolute top-[45%] left-[5%] text-2xl opacity-30 animate-bounce" style={{ animationDuration: '6s', animationDelay: '1s' }}>🏆</div>
-				<div className="absolute bottom-[40%] right-[5%] text-2xl opacity-35 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>💎</div>
+		<div className="eh-page">
+			{/* Background */}
+			<div className="eh-bg" aria-hidden="true">
+				<div className="eh-bg__grad" />
+				<div className="eh-bg__grid" />
+				<div className="eh-bg__grain" />
 			</div>
 
-			{/* Main Desktop Window */}
-			<div className="relative z-10 mx-4 mt-4">
-				{/* Window Frame */}
-				<div
-					className="rounded-xl overflow-hidden"
-					style={{
-						background: 'linear-gradient(180deg, #E6E6FA 0%, #DDA0DD 100%)',
-						border: '3px solid #D8BFD8',
-						boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,0.5)'
-					}}
-				>
-					{/* Window Title Bar */}
-					<div
-						className="flex items-center justify-between px-4 py-2"
-						style={{
-							background: 'linear-gradient(90deg, #FF6B9D 0%, #C44569 25%, #957DAD 50%, #7EC8E3 75%, #98D8C8 100%)',
-							borderBottom: '2px solid rgba(255,255,255,0.3)'
-						}}
-					>
-						<div className="flex items-center gap-3">
-							<span className="text-sm font-black text-white tracking-widest drop-shadow-md">
-								MARKET.EXE
-							</span>
-							<div
-								className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
-								style={{
-									background: 'linear-gradient(135deg, #10B981, #059669)',
-									color: 'white',
-									boxShadow: '0 2px 8px rgba(16, 185, 129, 0.4)'
-								}}
-							>
-								<span className="w-2 h-2 bg-white rounded-full animate-ping" />
-								ACTIVE
+			{/* Top header */}
+			<header className="eh-top">
+				<div className="eh-top__inner">
+					<div className="eh-top__left">
+						<Link href={"/" as Route} className="eh-brand">
+							<div className="eh-crest" aria-hidden="true">
+								EH
 							</div>
-						</div>
-						<div className="flex items-center gap-4">
-							<div className="hidden sm:flex items-center gap-2 text-xs font-mono text-white/90">
-								<span>{currentDate}</span>
-								<span className="text-white/60">|</span>
-								<span>{currentTime}</span>
+							<div>
+								<div className="eh-brand__name">Eden Haus</div>
+								<div className="eh-brand__tag">Members Market</div>
 							</div>
-							<div className="flex gap-1.5">
-								<button className="w-4 h-4 rounded-sm bg-yellow-300 hover:bg-yellow-400 transition-colors flex items-center justify-center text-[10px] font-bold text-yellow-800">−</button>
-								<button className="w-4 h-4 rounded-sm bg-green-300 hover:bg-green-400 transition-colors flex items-center justify-center text-[10px] font-bold text-green-800">□</button>
-								<button className="w-4 h-4 rounded-sm bg-pink-300 hover:bg-pink-400 transition-colors flex items-center justify-center text-[10px] font-bold text-pink-800">×</button>
-							</div>
-						</div>
+						</Link>
+
+						<nav className="eh-nav">
+							{navItems.map((item) => {
+								const isPrediction = item.name === "Prediction";
+								return (
+									<Link
+										key={item.name}
+										href={item.path}
+										className={
+											isPrediction ? "eh-nav__item eh-nav__item--active" : "eh-nav__item"
+										}
+									>
+										{item.name}
+									</Link>
+								);
+							})}
+						</nav>
 					</div>
 
-					{/* Menu Bar */}
-					<div
-						className="flex items-center gap-6 px-4 py-1.5 text-xs font-medium"
-						style={{
-							background: 'rgba(255,255,255,0.85)',
-							borderBottom: '1px solid rgba(186, 85, 211, 0.2)',
-							color: '#6B4C7A'
-						}}
-					>
-						<span className="hover:text-pink-500 cursor-pointer transition-colors">File</span>
-						<span className="hover:text-pink-500 cursor-pointer transition-colors">Edit</span>
-						<span className="hover:text-pink-500 cursor-pointer transition-colors">View</span>
-						<span className="hover:text-pink-500 cursor-pointer transition-colors">Markets</span>
-						<span className="hover:text-pink-500 cursor-pointer transition-colors">Wallet</span>
-						<span className="hover:text-pink-500 cursor-pointer transition-colors">Help</span>
-					</div>
 
-					{/* Main Header Content */}
-					<div
-						className="flex items-center justify-between px-4 py-3"
-						style={{
-							background: 'rgba(255,255,255,0.9)',
-							backdropFilter: 'blur(10px)'
-						}}
-					>
-						<div className="flex items-center gap-8">
-							{/* Logo */}
-							<Link href={'/' as Route} className="flex items-center gap-3 group">
-								<div
-									className="w-11 h-11 rounded-xl flex items-center justify-center text-xl font-black text-white transition-all group-hover:scale-110 group-hover:rotate-3"
-									style={{
-										background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 50%, #957DAD 100%)',
-										boxShadow: '0 4px 15px rgba(196, 69, 105, 0.4), inset 0 2px 0 rgba(255,255,255,0.3)'
-									}}
-								>
-									μ
-								</div>
-								<div className="flex flex-col">
-									<span className="text-xl font-black tracking-tight leading-none">
-										<span style={{ color: '#C44569' }}>MICRO</span>
-										<span style={{ color: '#957DAD' }}>BETS</span>
-									</span>
-									<span className="text-[10px] font-bold tracking-widest" style={{ color: '#7EC8E3' }}>
-										📊 MARKET VIEW 📊
-									</span>
-								</div>
-							</Link>
-
-							{/* Navigation */}
-							<nav className="hidden md:flex items-center gap-1">
-								{navItems.map((item) => {
-									const isPrediction = item.name === 'Prediction'
-
-									return (
-										<Link
-											key={item.name}
-											href={item.path}
-											className={`
-												px-4 py-2 rounded-full text-sm font-bold transition-all duration-300
-												${isPrediction
-													? 'text-white scale-105'
-													: 'hover:scale-105'
-												}
-											`}
-											style={isPrediction ? {
-												background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 50%, #98D8C8 100%)',
-												boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
-											} : {
-												color: '#957DAD',
-												background: 'transparent'
-											}}
-										>
-											{isPrediction && (
-												<span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />
-											)}
-											{item.name}
-										</Link>
-									)
-								})}
-							</nav>
+					<div className="eh-top__right">
+						<div className="eh-clock">
+							<span>{currentDate}</span>
+							<span className="eh-clock__sep">•</span>
+							<span>{currentTime}</span>
 						</div>
-
-						{/* Right side */}
-						<div className="flex items-center gap-3">
-							<button
-								className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105"
-								style={{
-									background: 'linear-gradient(135deg, rgba(255,107,157,0.2), rgba(196,69,105,0.2))',
-									border: '2px solid rgba(196, 69, 105, 0.3)',
-									color: '#C44569'
-								}}
-							>
-								<span>🔍</span>
-								<span>Search</span>
-							</button>
-							<button
-								className="px-5 py-2.5 rounded-full text-sm font-black text-white transition-all hover:scale-105"
-								style={{
-									background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)',
-									boxShadow: '0 4px 15px rgba(196, 69, 105, 0.4)'
-								}}
-							>
-								🔮 Connect Wallet
-							</button>
-						</div>
+						<button className="eh-cta">Connect Wallet</button>
 					</div>
 				</div>
-			</div>
+			</header>
 
-			{/* Main Content */}
-			<div className="relative z-10 max-w-7xl mx-auto px-4 mt-4 pb-12">
-				{/* Navigation Breadcrumb */}
-				<nav className="flex items-center gap-2 text-sm mb-4">
-					<Link href="/" className="text-[#957DAD] hover:text-[#6B4C7A] transition-colors">
-						Home
-					</Link>
-					<span className="text-[#E0BBE4]">›</span>
-					<Link href="/prediction" className="text-[#957DAD] hover:text-[#6B4C7A] transition-colors">
-						Markets
-					</Link>
-					<span className="text-[#E0BBE4]">›</span>
-					<span className="text-[#6B4C7A] font-medium">Hackathon</span>
-				</nav>
+			{/* Body */}
+			<main className="eh-main">
+				<div className="eh-breadcrumbs">
+					<Link href="/" className="eh-link">Home</Link>
+					<span className="eh-breadcrumbs__sep">/</span>
+					<Link href="/prediction" className="eh-link">Markets</Link>
+					<span className="eh-breadcrumbs__sep">/</span>
+					<span className="eh-breadcrumbs__here">{String(params?.id ?? "market")}</span>
+				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-					{/* ============================================ */}
-					{/* LEFT COLUMN - Market Info & Chart */}
-					{/* ============================================ */}
-					<div className="lg:col-span-2 space-y-6">
-
-						{/* Market Header Card */}
-						<div className="window-card">
-							<div className="window-titlebar window-titlebar-pink flex items-center justify-between">
-								<div className="flex items-center gap-2">
-									<span>✦</span>
-									<span>MARKET_INFO.EXE</span>
+				<div className="eh-layout">
+					{/* Left */}
+					<section className="eh-left">
+						<div className="eh-card eh-card--hero">
+							<div className="eh-hero">
+								<div className="eh-hero__meta">
+									<div className="eh-hero__pill">
+										<span className="eh-dot eh-dot--live" />
+										{market.status}
+									</div>
+									<div className="eh-hero__pill eh-hero__pill--muted">Resolves in {daysLeft} days</div>
 								</div>
-								<div className="flex gap-1">
-									<div className="window-btn" />
-									<div className="window-btn" />
-									<div className="window-btn window-btn-close" />
-								</div>
-							</div>
 
-							<div className="p-6">
-								{/* Market Question */}
-								<div className="flex items-start gap-4 mb-6">
-									{/* Market Icon */}
-									<div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#FF6B9D] to-[#C44569] flex items-center justify-center text-3xl shadow-lg glow-pink">
-										🏆
+								<div className="eh-hero__grid">
+									<div className="eh-hero__main">
+										<h1 className="eh-h1">{market.question}</h1>
+										<p className="eh-body">{market.description}</p>
+
+										<div className="eh-chips">
+											<StatsChip label="Pool" value={`$${market.totalPool.toLocaleString()}`} />
+											<StatsChip label="Currency" value={market.currency} />
+											<StatsChip label="Bets" value={`${market.totalBets}`} />
+											<StatsChip label="Created" value={formatDate(market.createdAt)} />
+										</div>
+
+										<div className="eh-hero__byline">
+											<span className="eh-byline__k">Created by</span>
+											<span className="eh-byline__v">{market.creator}</span>
+										</div>
 									</div>
 
-									<div className="flex-1">
-										<h1 className="text-2xl font-bold text-[#6B4C7A] leading-tight mb-3">
-											{market.question}
-										</h1>
-
-										{/* Creator Badge */}
-										<div className="flex items-center gap-2 mb-4">
-											<div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#7EC8E3] to-[#5BA4C9] flex items-center justify-center">
-												<span className="text-xs">🎮</span>
+									<aside className="eh-hero__side">
+										<div className="eh-odds">
+											<div className="eh-odds__head">Market odds</div>
+											<div className="eh-odds__rows">
+												<div className="eh-odds__row">
+													<div className="eh-odds__label">
+														<span className="eh-dot eh-dot--yes" /> YES
+													</div>
+													<div className="eh-odds__val">{market.yesPercent}%</div>
+													<div className="eh-odds__sub">~{yesOdds.toFixed(2)}x</div>
+												</div>
+												<div className="eh-odds__row">
+													<div className="eh-odds__label">
+														<span className="eh-dot eh-dot--no" /> NO
+													</div>
+													<div className="eh-odds__val">{market.noPercent}%</div>
+													<div className="eh-odds__sub">~{noOdds.toFixed(2)}x</div>
+												</div>
 											</div>
-											<span className="text-sm font-semibold text-[#957DAD]">{market.creator}</span>
-											<span className="text-[#E0BBE4]">•</span>
-											<span className="text-sm text-[#957DAD]">
-												{Math.floor((Date.now() - new Date(market.createdAt).getTime()) / (1000 * 60 * 60 * 24))} days ago
-											</span>
+
+											<div className="eh-odds__bar" aria-hidden="true">
+												<div className="eh-odds__barYes" style={{ width: `${market.yesPercent}%` }} />
+												<div className="eh-odds__barNo" style={{ width: `${market.noPercent}%` }} />
+											</div>
 										</div>
 
-										{/* Stats Badges */}
-										<div className="flex flex-wrap gap-2">
-											<StatsBadge icon="📊" value={`$${market.totalPool.toLocaleString()}`} />
-											<StatsBadge icon="💎" value={market.currency} />
-											<StatsBadge icon="⏰" value={`${daysLeft} days left`} />
-											<StatsBadge icon="🎲" value={`${market.totalBets} bets`} />
+										<div className="eh-note">
+											<div className="eh-note__k">Resolution source</div>
+											<a
+												href={market.rules.source}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="eh-link eh-note__v"
+											>
+												{market.rules.source}
+											</a>
 										</div>
-									</div>
+									</aside>
 								</div>
 							</div>
 						</div>
 
-						{/* Price History Chart Card */}
-						<div className="window-card">
-							<div className="window-titlebar window-titlebar-aqua flex items-center justify-between">
-								<div className="flex items-center gap-2">
-									<span>📈</span>
-									<span>PRICE_HISTORY.DAT</span>
-								</div>
-								<div className="flex gap-1">
-									<div className="window-btn" />
-									<div className="window-btn" />
-									<div className="window-btn window-btn-close" />
-								</div>
-							</div>
+						<div className="eh-card">
+							<div className="eh-card__pad">
+								<SectionTitle title="Price history" subtitle="Market probability over time" />
 
-							<div className="p-6">
-								{/* Chart Header */}
-								<div className="flex items-center justify-between mb-6">
-									<div className="flex items-center gap-4">
-										<button className="px-4 py-2 rounded-lg bg-[#6B4C7A] text-white text-sm font-semibold flex items-center gap-2">
-											<span>▼</span> All outcomes
-										</button>
-									</div>
-
-									{/* Time Filters */}
-									<div className="flex items-center gap-1 p-1 rounded-lg bg-[#F8E8F8]">
+								<div className="eh-chartTop">
+									<div className="eh-seg">
 										{(["1H", "3H", "24H", "7D", "ALL"] as TimeFilter[]).map((filter) => (
 											<TimeFilterButton
 												key={filter}
@@ -617,400 +453,1337 @@ export default function PredictionMarketPage() {
 											/>
 										))}
 									</div>
+
+									<div className="eh-chartKpis">
+										<div className="eh-kpi">
+											<span className="eh-dot eh-dot--yes" />
+											<span className="eh-kpi__k">Yes</span>
+											<span className="eh-kpi__v">{market.yesPercent}%</span>
+										</div>
+										<div className="eh-kpi">
+											<span className="eh-dot eh-dot--no" />
+											<span className="eh-kpi__k">No</span>
+											<span className="eh-kpi__v">{market.noPercent}%</span>
+										</div>
+									</div>
 								</div>
 
-								{/* Current Prices Display */}
-								<div className="flex items-center gap-8 mb-4">
-									<div className="flex items-center gap-2">
-										<div className="w-3 h-3 rounded-full bg-[#10B981]" />
-										<span className="text-sm text-[#6B4C7A]">Yes</span>
-										<span className="text-lg font-bold text-[#10B981]">{market.yesPercent}%</span>
-									</div>
-									<div className="flex items-center gap-2">
-										<div className="w-3 h-3 rounded-full bg-[#F43F5E]" />
-										<span className="text-sm text-[#6B4C7A]">No</span>
-										<span className="text-lg font-bold text-[#F43F5E]">{market.noPercent}%</span>
-									</div>
-								</div>
-
-								{/* Chart */}
-								<div className="h-[300px] w-full">
+								<div className="eh-chartWrap">
 									<ResponsiveContainer width="100%" height="100%">
-										<AreaChart data={filteredHistory} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+										<AreaChart data={filteredHistory} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
 											<defs>
 												<linearGradient id="yesGradient" x1="0" y1="0" x2="0" y2="1">
-													<stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
-													<stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+													<stop offset="5%" stopColor="var(--eh-emerald)" stopOpacity={0.32} />
+													<stop offset="95%" stopColor="var(--eh-emerald)" stopOpacity={0} />
 												</linearGradient>
 												<linearGradient id="noGradient" x1="0" y1="0" x2="0" y2="1">
-													<stop offset="5%" stopColor="#F43F5E" stopOpacity={0.3} />
-													<stop offset="95%" stopColor="#F43F5E" stopOpacity={0} />
+													<stop offset="5%" stopColor="var(--eh-burgundy)" stopOpacity={0.30} />
+													<stop offset="95%" stopColor="var(--eh-burgundy)" stopOpacity={0} />
 												</linearGradient>
 											</defs>
 											<XAxis
 												dataKey="date"
 												axisLine={false}
 												tickLine={false}
-												tick={{ fill: "#957DAD", fontSize: 11 }}
+												tick={{ fill: "var(--eh-muted)", fontSize: 11 }}
 												dy={10}
 											/>
 											<YAxis
 												domain={[0, 100]}
 												axisLine={false}
 												tickLine={false}
-												tick={{ fill: "#957DAD", fontSize: 11 }}
-												tickFormatter={(value) => `${value}%`}
+												tick={{ fill: "var(--eh-muted)", fontSize: 11 }}
+												tickFormatter={(v) => `${v}%`}
 												dx={-10}
 											/>
 											<Tooltip content={<CustomTooltip />} />
-											<Area
-												type="monotone"
-												dataKey="yes"
-												stroke="#10B981"
-												strokeWidth={2}
-												fill="url(#yesGradient)"
-											/>
-											<Area
-												type="monotone"
-												dataKey="no"
-												stroke="#F43F5E"
-												strokeWidth={2}
-												fill="url(#noGradient)"
-											/>
+											<Area type="monotone" dataKey="yes" stroke="var(--eh-emerald)" strokeWidth={2} fill="url(#yesGradient)" />
+											<Area type="monotone" dataKey="no" stroke="var(--eh-burgundy)" strokeWidth={2} fill="url(#noGradient)" />
 										</AreaChart>
 									</ResponsiveContainer>
 								</div>
 
-								{/* Legend */}
-								<div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-[#E0BBE4]">
-									<div className="flex items-center gap-2">
-										<div className="w-3 h-3 rounded-full bg-[#10B981]" />
-										<span className="text-sm text-[#6B4C7A]">Yes</span>
-									</div>
-									<div className="flex items-center gap-2">
-										<div className="w-3 h-3 rounded-full bg-[#F43F5E]" />
-										<span className="text-sm text-[#6B4C7A]">No</span>
-									</div>
+								<div className="eh-legend">
+									<div className="eh-legend__item"><span className="eh-dot eh-dot--yes" />Yes</div>
+									<div className="eh-legend__item"><span className="eh-dot eh-dot--no" />No</div>
 								</div>
 							</div>
 						</div>
 
-						{/* Rules & Resolution Card */}
-						<div className="window-card">
-							<div className="window-titlebar flex items-center justify-between">
-								<div className="flex items-center gap-2">
-									<span>📋</span>
-									<span>RULES.TXT</span>
-								</div>
-								<div className="flex gap-1">
-									<div className="window-btn" />
-									<div className="window-btn" />
-									<div className="window-btn window-btn-close" />
-								</div>
-							</div>
+						<div className="eh-card">
+							<div className="eh-card__pad">
+								<SectionTitle title="Rules" subtitle="How this market resolves" />
 
-							<div className="p-6">
-								<div className="flex items-center justify-between mb-4">
-									<h3 className="text-lg font-bold text-[#6B4C7A] flex items-center gap-2">
-										<span>⚖️</span> Rules & Resolution
-									</h3>
-									<a
-										href={market.rules.source}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="text-sm text-[#FF6B9D] hover:text-[#C44569] font-medium transition-colors"
-									>
-										See all rules →
-									</a>
-								</div>
-
-								<div className="space-y-4">
-									<div>
-										<p className="text-sm text-[#957DAD] mb-1">Resolves to</p>
-										<p className="text-lg font-bold text-[#10B981]">{market.rules.resolvesTo}</p>
+								<div className="eh-rules">
+									<div className="eh-rules__row">
+										<div className="eh-rules__k">Resolves to</div>
+										<div className="eh-rules__v">{market.rules.resolvesTo}</div>
 									</div>
-
-									<div className="p-4 rounded-lg bg-[#F8E8F8] border border-[#E0BBE4]">
-										<p className="text-sm text-[#6B4C7A]">{market.rules.criteria}</p>
-									</div>
-
-									<div>
-										<p className="text-sm text-[#957DAD] mb-1">Resolution Source</p>
-										<a
-											href={market.rules.source}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-sm text-[#7EC8E3] hover:text-[#5BA4C9] underline break-all"
-										>
+									<div className="eh-rules__box">{market.rules.criteria}</div>
+									<div className="eh-rules__row">
+										<div className="eh-rules__k">Resolution source</div>
+										<a href={market.rules.source} target="_blank" rel="noopener noreferrer" className="eh-link eh-rules__v">
 											{market.rules.source}
 										</a>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</section>
 
-					{/* ============================================ */}
-					{/* RIGHT COLUMN - Trading Panel */}
-					{/* ============================================ */}
-					<div className="space-y-6">
-
-						{/* Trading Card */}
-						<div className="window-card sticky top-4">
-							<div className="window-titlebar window-titlebar-pink flex items-center justify-between">
-								<div className="flex items-center gap-2">
-									<span>💰</span>
-									<span>TRADE.EXE</span>
-								</div>
-								<div className="flex gap-1">
-									<div className="window-btn" />
-									<div className="window-btn" />
-									<div className="window-btn window-btn-close" />
-								</div>
-							</div>
-
-							<div className="p-6">
-								{/* Status & Dates */}
-								<div className="flex items-center justify-between mb-4">
-									<div className="flex items-center gap-2">
-										<span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-										<span className="text-sm font-semibold text-[#10B981]">{market.status}</span>
+					{/* Right */}
+					<aside className="eh-right">
+						<div className="eh-card eh-trade">
+							<div className="eh-card__pad">
+								<div className="eh-trade__top">
+									<div>
+										<div className="eh-trade__title">Trade</div>
+										<div className="eh-trade__sub">Buy / sell shares</div>
 									</div>
-									<button className="px-3 py-1 text-xs font-semibold rounded-lg border border-[#E0BBE4] text-[#957DAD] hover:bg-[#F8E8F8] transition-colors">
-										Resolve
-									</button>
-								</div>
-
-								<div className="space-y-2 mb-6 text-sm">
-									<div className="flex justify-between">
-										<span className="text-[#957DAD]">Created</span>
-										<span className="text-[#6B4C7A] font-medium">{formatDate(market.createdAt)}</span>
-									</div>
-									<div className="flex justify-between">
-										<span className="text-[#957DAD]">Resolves</span>
-										<span className="text-[#6B4C7A] font-medium">{formatDate(market.resolutionDate)}</span>
+									<div className="eh-trade__status">
+										<span className="eh-dot eh-dot--live" />
+										{market.status}
 									</div>
 								</div>
 
-								{/* Buy/Sell Tabs */}
-								<div className="flex mb-4">
-									<button
-										onClick={() => setActiveTab("buy")}
-										className={`flex-1 py-3 text-sm font-bold rounded-l-lg transition-all ${activeTab === "buy"
-											? "bg-[#6B4C7A] text-white"
-											: "bg-[#F8E8F8] text-[#957DAD] hover:bg-[#E0BBE4]"
-											}`}
-									>
-										Buy
-									</button>
-									<button
-										onClick={() => setActiveTab("sell")}
-										className={`flex-1 py-3 text-sm font-bold rounded-r-lg transition-all ${activeTab === "sell"
-											? "bg-[#6B4C7A] text-white"
-											: "bg-[#F8E8F8] text-[#957DAD] hover:bg-[#E0BBE4]"
-											}`}
-									>
-										Sell
-									</button>
+								<div className="eh-trade__dates">
+									<div className="eh-trade__date"><span>Created</span><span>{formatDate(market.createdAt)}</span></div>
+									<div className="eh-trade__date"><span>Resolves</span><span>{formatDate(market.resolutionDate)}</span></div>
 								</div>
 
-								{/* Outcome Buttons */}
-								<div className="space-y-3 mb-6">
+								<div className="eh-tabs">
+									<button className={activeTab === "buy" ? "eh-tab eh-tab--active" : "eh-tab"} onClick={() => setActiveTab("buy")}>Buy</button>
+									<button className={activeTab === "sell" ? "eh-tab eh-tab--active" : "eh-tab"} onClick={() => setActiveTab("sell")}>Sell</button>
+								</div>
+
+								<div className="eh-outcomes">
 									<button
 										onClick={() => setSelectedOutcome(selectedOutcome === "yes" ? null : "yes")}
-										className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${selectedOutcome === "yes"
-											? "border-[#10B981] bg-[#10B981]/10"
-											: "border-[#E0BBE4] bg-white hover:border-[#10B981]/50"
-											}`}
+										className={selectedOutcome === "yes" ? "eh-outcome eh-outcome--yes eh-outcome--active" : "eh-outcome eh-outcome--yes"}
 									>
-										<span className={`text-lg font-bold ${selectedOutcome === "yes" ? "text-[#10B981]" : "text-[#6B4C7A]"
-											}`}>
-											Yes
-										</span>
-										<span className={`text-xl font-bold ${selectedOutcome === "yes" ? "text-[#10B981]" : "text-[#6B4C7A]"
-											}`}>
-											{market.yesPercent}%
-										</span>
+										<span className="eh-outcome__k">Yes</span>
+										<span className="eh-outcome__v">{market.yesPercent}%</span>
 									</button>
 
 									<button
 										onClick={() => setSelectedOutcome(selectedOutcome === "no" ? null : "no")}
-										className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${selectedOutcome === "no"
-											? "border-[#F43F5E] bg-[#F43F5E]/10"
-											: "border-[#E0BBE4] bg-white hover:border-[#F43F5E]/50"
-											}`}
+										className={selectedOutcome === "no" ? "eh-outcome eh-outcome--no eh-outcome--active" : "eh-outcome eh-outcome--no"}
 									>
-										<span className={`text-lg font-bold ${selectedOutcome === "no" ? "text-[#F43F5E]" : "text-[#6B4C7A]"
-											}`}>
-											No
-										</span>
-										<span className={`text-xl font-bold ${selectedOutcome === "no" ? "text-[#F43F5E]" : "text-[#6B4C7A]"
-											}`}>
-											{market.noPercent}%
-										</span>
+										<span className="eh-outcome__k">No</span>
+										<span className="eh-outcome__v">{market.noPercent}%</span>
 									</button>
 								</div>
 
-								{/* Amount Input */}
-								{selectedOutcome && (
-									<div className="mb-6 space-y-3">
-										<label className="text-sm font-medium text-[#6B4C7A]">Amount (USDT)</label>
-										<div className="relative">
+								{selectedOutcome ? (
+									<div className="eh-amount">
+										<label className="eh-label">Amount (USDT)</label>
+										<div className="eh-amount__row">
 											<input
 												type="number"
 												value={betAmount}
 												onChange={(e) => setBetAmount(e.target.value)}
 												placeholder="0.00"
-												className="w-full px-4 py-3 rounded-xl border-2 border-[#E0BBE4] bg-white text-[#6B4C7A] font-semibold text-lg focus:border-[#FF6B9D] focus:outline-none transition-colors"
+												className="eh-input"
 											/>
-											<div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
-												<button
-													onClick={() => setBetAmount("10")}
-													className="px-2 py-1 text-xs font-semibold rounded bg-[#F8E8F8] text-[#957DAD] hover:bg-[#E0BBE4] transition-colors"
-												>
-													$10
-												</button>
-												<button
-													onClick={() => setBetAmount("50")}
-													className="px-2 py-1 text-xs font-semibold rounded bg-[#F8E8F8] text-[#957DAD] hover:bg-[#E0BBE4] transition-colors"
-												>
-													$50
-												</button>
-												<button
-													onClick={() => setBetAmount("100")}
-													className="px-2 py-1 text-xs font-semibold rounded bg-[#F8E8F8] text-[#957DAD] hover:bg-[#E0BBE4] transition-colors"
-												>
-													MAX
-												</button>
+											<div className="eh-quick">
+												<button className="eh-quick__btn" onClick={() => setBetAmount("10")}>10</button>
+												<button className="eh-quick__btn" onClick={() => setBetAmount("50")}>50</button>
+												<button className="eh-quick__btn" onClick={() => setBetAmount("100")}>Max</button>
 											</div>
 										</div>
 
-										{/* Potential Payout */}
-										{betAmount && parseFloat(betAmount) > 0 && (
-											<div className="p-3 rounded-lg bg-[#F8E8F8] border border-[#E0BBE4]">
-												<div className="flex justify-between text-sm">
-													<span className="text-[#957DAD]">Potential payout</span>
-													<span className="font-bold text-[#6B4C7A]">
-														${(parseFloat(betAmount) * (100 / (selectedOutcome === "yes" ? market.yesPercent : market.noPercent)) * 0.95).toFixed(2)}
+										{betAmount && parseFloat(betAmount) > 0 ? (
+											<div className="eh-payout">
+												<div className="eh-payout__row">
+													<span>Potential payout</span>
+													<span className="eh-payout__strong">
+														${(
+															parseFloat(betAmount) *
+															(100 /
+																(selectedOutcome === "yes"
+																	? market.yesPercent
+																	: market.noPercent)) *
+															0.95
+														).toFixed(2)}
 													</span>
 												</div>
-												<div className="flex justify-between text-xs mt-1">
-													<span className="text-[#957DAD]">After 5% fee</span>
-													<span className="text-[#10B981] font-semibold">
-														{((100 / (selectedOutcome === "yes" ? market.yesPercent : market.noPercent)) * 0.95).toFixed(2)}x
+												<div className="eh-payout__row eh-payout__row--muted">
+													<span>After 5% fee</span>
+													<span>
+														{(
+															(100 /
+																(selectedOutcome === "yes"
+																	? market.yesPercent
+																	: market.noPercent)) *
+															0.95
+														).toFixed(2)}x
 													</span>
 												</div>
 											</div>
-										)}
+										) : null}
 									</div>
-								)}
+								) : null}
 
-								{/* Action Button */}
 								{!isConnected ? (
-									<div className="text-center">
-										<p className="text-sm text-[#957DAD] mb-3">Connect your wallet to trade</p>
-										<p className="text-xs text-[#C9A0DC] mb-4">
-											You need to connect your wallet to buy or sell shares in this market.
-										</p>
-										<button className="w-full py-4 rounded-xl text-lg font-bold text-white transition-all hover:scale-[1.02]"
-											style={{
-												background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)',
-												boxShadow: '0 4px 15px rgba(196, 69, 105, 0.4)'
-											}}
-										>
-											🔮 Connect Wallet
-										</button>
+									<div className="eh-gate">
+										<div className="eh-gate__k">Connect your wallet to trade</div>
+										<div className="eh-gate__sub">Wallet connection required for buys & sells.</div>
+										<button className="eh-action eh-action--gold">Connect Wallet</button>
 									</div>
 								) : (
 									<button
 										onClick={handlePlaceBet}
 										disabled={!selectedOutcome || !betAmount || isPlacingBet}
-										className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${selectedOutcome && betAmount && !isPlacingBet
-											? selectedOutcome === "yes"
-												? "bg-gradient-to-r from-[#10B981] to-[#059669] text-white shadow-lg hover:shadow-xl"
-												: "bg-gradient-to-r from-[#F43F5E] to-[#DC2626] text-white shadow-lg hover:shadow-xl"
-											: "bg-[#E0BBE4] text-[#957DAD] cursor-not-allowed"
-											}`}
+										className={
+											selectedOutcome && betAmount && !isPlacingBet
+												? selectedOutcome === "yes"
+													? "eh-action eh-action--yes"
+													: "eh-action eh-action--no"
+												: "eh-action eh-action--disabled"
+										}
 									>
-										{isPlacingBet ? (
-											<span className="flex items-center justify-center gap-2">
-												<span className="spinner" />
-												Placing Bet...
-											</span>
-										) : selectedOutcome ? (
-											`Buy ${selectedOutcome.toUpperCase()}`
-										) : (
-											"Select Outcome"
-										)}
+										{isPlacingBet
+											? "Placing bet..."
+											: selectedOutcome
+												? `Buy ${selectedOutcome.toUpperCase()}`
+												: "Select outcome"}
 									</button>
 								)}
 
-								{/* Disclaimer */}
-								<p className="text-xs text-center text-[#C9A0DC] mt-4">
-									By trading, you agree to our terms. 5% fee on winnings.
-								</p>
+								<p className="eh-fineprint">By trading, you agree to our terms. 5% fee on winnings.</p>
 							</div>
 						</div>
 
-						{/* Market Stats Card */}
-						<div className="window-card">
-							<div className="window-titlebar flex items-center justify-between">
-								<div className="flex items-center gap-2">
-									<span>📊</span>
-									<span>STATS.DAT</span>
-								</div>
-								<div className="flex gap-1">
-									<div className="window-btn" />
-									<div className="window-btn" />
-									<div className="window-btn window-btn-close" />
-								</div>
-							</div>
+						<div className="eh-card">
+							<div className="eh-card__pad">
+								<div className="eh-miniTitle">Market stats</div>
 
-							<div className="p-6 space-y-4">
-								<div className="flex justify-between items-center">
-									<span className="text-sm text-[#957DAD]">Total Pool</span>
-									<span className="text-lg font-bold text-[#6B4C7A]">${market.totalPool.toLocaleString()}</span>
-								</div>
-								<div className="flex justify-between items-center">
-									<span className="text-sm text-[#957DAD]">Total Bets</span>
-									<span className="text-lg font-bold text-[#6B4C7A]">{market.totalBets}</span>
-								</div>
-								<div className="flex justify-between items-center">
-									<span className="text-sm text-[#957DAD]">Days Remaining</span>
-									<span className="text-lg font-bold text-[#FF6B9D]">{daysLeft}</span>
+								<div className="eh-statsList">
+									<div className="eh-statsRow"><span>Total pool</span><span>${market.totalPool.toLocaleString()}</span></div>
+									<div className="eh-statsRow"><span>Total bets</span><span>{market.totalBets}</span></div>
+									<div className="eh-statsRow"><span>Days remaining</span><span className="eh-gold">{daysLeft}</span></div>
 								</div>
 
-								{/* Pool Distribution Bar */}
-								<div className="pt-4 border-t border-[#E0BBE4]">
-									<p className="text-sm text-[#957DAD] mb-3">Pool Distribution</p>
-									<div className="h-4 rounded-full overflow-hidden flex">
-										<div
-											className="bg-gradient-to-r from-[#10B981] to-[#34D399] transition-all duration-500"
-											style={{ width: `${market.yesPercent}%` }}
-										/>
-										<div
-											className="bg-gradient-to-r from-[#F43F5E] to-[#FB7185] transition-all duration-500"
-											style={{ width: `${market.noPercent}%` }}
-										/>
-									</div>
-									<div className="flex justify-between mt-2 text-xs">
-										<span className="text-[#10B981] font-semibold">Yes {market.yesPercent}%</span>
-										<span className="text-[#F43F5E] font-semibold">No {market.noPercent}%</span>
-									</div>
+								<div className="eh-miniBar" aria-hidden="true">
+									<div className="eh-miniBar__yes" style={{ width: `${market.yesPercent}%` }} />
+									<div className="eh-miniBar__no" style={{ width: `${market.noPercent}%` }} />
+								</div>
+								<div className="eh-miniBarLegend">
+									<span className="eh-yes">Yes {market.yesPercent}%</span>
+									<span className="eh-no">No {market.noPercent}%</span>
 								</div>
 							</div>
 						</div>
 
-						{/* Live Indicator */}
-						<div className="text-center p-3 rounded-lg bg-white/50 border border-[#E0BBE4]">
-							<div className="flex items-center justify-center gap-2 text-xs text-[#957DAD]">
-								<span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-								<span>Market updates every 30s</span>
-							</div>
-						</div>
-					</div>
+						<div className="eh-ticker">Updates every 30s • Members only • Settle fast</div>
+					</aside>
 				</div>
-			</div>
+			</main>
+
+			<style jsx global>{`
+        :root {
+          --eh-hunter: #1F3D2B;
+          --eh-emerald: #0F5C4A;
+          --eh-moss: #5F6F52;
+          --eh-mahogany: #4A2C1D;
+          --eh-walnut: #6B4A32;
+          --eh-burgundy: #5A1F2B;
+          --eh-claret: #7B2D26;
+          --eh-gold: #C2A14D;
+          --eh-brass: #B08D57;
+          --eh-cream: #F3EBDD;
+          --eh-beige: #D8CFC0;
+          --eh-muted: rgba(31, 61, 43, 0.55);
+          --eh-ink: rgba(22, 28, 24, 0.92);
+        }
+
+        .eh-page {
+          min-height: 100vh;
+          color: var(--eh-ink);
+          position: relative;
+        }
+
+        /* Background */
+        .eh-bg {
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
+        }
+
+        .eh-bg__grad {
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(ellipse at 20% 20%, rgba(194, 161, 77, 0.22) 0%, transparent 55%),
+            radial-gradient(ellipse at 70% 70%, rgba(15, 92, 74, 0.24) 0%, transparent 60%),
+            linear-gradient(180deg, rgba(243, 235, 221, 1) 0%, rgba(216, 207, 192, 1) 58%, rgba(243, 235, 221, 1) 100%);
+        }
+
+        .eh-bg__grid {
+          position: absolute;
+          inset: 0;
+          opacity: 0.14;
+          background-image:
+            linear-gradient(rgba(31, 61, 43, 0.25) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(31, 61, 43, 0.18) 1px, transparent 1px);
+          background-size: 64px 64px;
+        }
+
+        .eh-bg__grain {
+          position: absolute;
+          inset: 0;
+          opacity: 0.12;
+          background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+          background-size: 3px 3px;
+          mix-blend-mode: multiply;
+        }
+
+        /* Top */
+        .eh-top {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          backdrop-filter: blur(14px);
+          background: rgba(243, 235, 221, 0.86);
+          border-bottom: 1px solid rgba(31, 61, 43, 0.14);
+        }
+
+        .eh-top__inner {
+          max-width: 1180px;
+          margin: 0 auto;
+          padding: 14px 16px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+
+        .eh-top__left {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          min-width: 0;
+        }
+
+        .eh-brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .eh-crest {
+          width: 42px;
+          height: 42px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          color: var(--eh-cream);
+          background: linear-gradient(135deg, var(--eh-hunter), var(--eh-emerald));
+          box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+          border: 1px solid rgba(194, 161, 77, 0.25);
+        }
+
+        .eh-brand__name {
+          font-weight: 900;
+          font-size: 14px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .eh-brand__tag {
+          font-weight: 700;
+          font-size: 11px;
+          color: rgba(31, 61, 43, 0.65);
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        .eh-nav {
+          display: none;
+          align-items: center;
+          gap: 6px;
+          flex-wrap: wrap;
+        }
+
+        @media (min-width: 860px) {
+          .eh-nav {
+            display: flex;
+          }
+        }
+
+        .eh-nav__item {
+          text-decoration: none;
+          color: rgba(31, 61, 43, 0.85);
+          font-weight: 800;
+          font-size: 13px;
+          padding: 8px 12px;
+          border-radius: 999px;
+          border: 1px solid transparent;
+          transition: background 160ms ease, border 160ms ease;
+        }
+
+        .eh-nav__item:hover {
+          background: rgba(31, 61, 43, 0.06);
+          border-color: rgba(31, 61, 43, 0.10);
+        }
+
+        .eh-nav__item--active {
+          background: rgba(31, 61, 43, 0.10);
+          border-color: rgba(31, 61, 43, 0.14);
+          color: rgba(31, 61, 43, 0.95);
+        }
+
+        .eh-top__right {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .eh-clock {
+          display: none;
+          gap: 8px;
+          font-size: 12px;
+          color: rgba(31, 61, 43, 0.72);
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        @media (min-width: 640px) {
+          .eh-clock {
+            display: flex;
+          }
+        }
+
+        .eh-clock__sep {
+          opacity: 0.6;
+        }
+
+        .eh-cta {
+          background: linear-gradient(135deg, var(--eh-gold) 0%, var(--eh-brass) 100%);
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          color: rgba(31, 61, 43, 0.95);
+          padding: 10px 14px;
+          font-weight: 900;
+          border-radius: 999px;
+          letter-spacing: 0.04em;
+        }
+
+        /* Layout */
+        .eh-main {
+          position: relative;
+          z-index: 1;
+          max-width: 1180px;
+          margin: 0 auto;
+          padding: 16px;
+          padding-bottom: 56px;
+        }
+
+        .eh-breadcrumbs {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 13px;
+          color: rgba(31, 61, 43, 0.72);
+          margin-bottom: 14px;
+        }
+
+        .eh-breadcrumbs__sep {
+          opacity: 0.5;
+        }
+
+        .eh-breadcrumbs__here {
+          font-weight: 800;
+          color: rgba(31, 61, 43, 0.88);
+        }
+
+        .eh-link {
+          color: rgba(15, 92, 74, 0.95);
+          text-decoration: none;
+        }
+
+        .eh-link:hover {
+          color: rgba(31, 61, 43, 1);
+          text-decoration: underline;
+        }
+
+        .eh-layout {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        @media (min-width: 1024px) {
+          .eh-layout {
+            grid-template-columns: 2fr 1fr;
+            align-items: start;
+          }
+        }
+
+        .eh-card {
+          background: rgba(243, 235, 221, 0.84);
+          border: 1px solid rgba(31, 61, 43, 0.16);
+          border-radius: 18px;
+          box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+          overflow: hidden;
+        }
+
+        .eh-card__pad {
+          padding: 18px;
+        }
+
+        .eh-card--hero .eh-card__pad {
+          padding: 0;
+        }
+
+        .eh-hero {
+          padding: 22px;
+          position: relative;
+        }
+
+        .eh-hero:before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(ellipse at 20% 10%, rgba(194, 161, 77, 0.18) 0%, transparent 55%),
+            radial-gradient(ellipse at 80% 90%, rgba(15, 92, 74, 0.12) 0%, transparent 60%);
+          pointer-events: none;
+        }
+
+        .eh-hero__meta {
+          position: relative;
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 14px;
+        }
+
+        .eh-hero__pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 10px;
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          background: rgba(31, 61, 43, 0.08);
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          color: rgba(31, 61, 43, 0.90);
+        }
+
+        .eh-hero__pill--muted {
+          color: rgba(31, 61, 43, 0.70);
+        }
+
+        .eh-hero__grid {
+          position: relative;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+
+        @media (min-width: 860px) {
+          .eh-hero__grid {
+            grid-template-columns: 1.35fr 0.65fr;
+          }
+        }
+
+        .eh-h1 {
+          font-size: 26px;
+          line-height: 1.15;
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.95);
+          margin: 0 0 10px 0;
+        }
+
+        .eh-body {
+          margin: 0;
+          color: rgba(31, 61, 43, 0.72);
+          line-height: 1.55;
+          font-size: 14px;
+        }
+
+        .eh-chips {
+          margin-top: 14px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .eh-chip {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 10px 12px;
+          border-radius: 14px;
+          background: rgba(216, 207, 192, 0.36);
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          min-width: 168px;
+        }
+
+        .eh-chip__label {
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.60);
+        }
+
+        .eh-chip__value {
+          font-size: 12px;
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.92);
+        }
+
+        .eh-hero__byline {
+          margin-top: 14px;
+          padding-top: 14px;
+          border-top: 1px solid rgba(31, 61, 43, 0.12);
+          display: flex;
+          gap: 10px;
+          align-items: baseline;
+        }
+
+        .eh-byline__k {
+          font-size: 12px;
+          font-weight: 800;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-byline__v {
+          font-size: 13px;
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.92);
+        }
+
+        .eh-odds {
+          background: rgba(243, 235, 221, 0.78);
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          border-radius: 16px;
+          padding: 14px;
+        }
+
+        .eh-odds__head {
+          font-size: 12px;
+          font-weight: 950;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.72);
+          margin-bottom: 10px;
+        }
+
+        .eh-odds__rows {
+          display: grid;
+          gap: 10px;
+          margin-bottom: 12px;
+        }
+
+        .eh-odds__row {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 6px;
+          padding: 10px;
+          border-radius: 14px;
+          border: 1px solid rgba(31, 61, 43, 0.12);
+          background: rgba(216, 207, 192, 0.26);
+        }
+
+        .eh-odds__label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 950;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          font-size: 12px;
+        }
+
+        .eh-odds__val {
+          font-weight: 950;
+          font-size: 16px;
+          color: rgba(31, 61, 43, 0.92);
+          justify-self: end;
+        }
+
+        .eh-odds__sub {
+          grid-column: 1 / -1;
+          font-size: 12px;
+          font-weight: 800;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-odds__bar {
+          height: 10px;
+          border-radius: 999px;
+          overflow: hidden;
+          display: flex;
+          background: rgba(31, 61, 43, 0.10);
+          border: 1px solid rgba(31, 61, 43, 0.12);
+        }
+
+        .eh-odds__barYes {
+          background: linear-gradient(90deg, var(--eh-emerald), var(--eh-moss));
+          height: 100%;
+        }
+
+        .eh-odds__barNo {
+          background: linear-gradient(90deg, var(--eh-burgundy), var(--eh-claret));
+          height: 100%;
+        }
+
+        .eh-note {
+          margin-top: 12px;
+          padding: 14px;
+          border-radius: 16px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(243, 235, 221, 0.72);
+        }
+
+        .eh-note__k {
+          font-size: 11px;
+          font-weight: 950;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.60);
+          margin-bottom: 6px;
+        }
+
+        .eh-note__v {
+          font-size: 12px;
+          word-break: break-all;
+        }
+
+        /* Section headers */
+        .eh-h2 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 950;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.88);
+        }
+
+        .eh-sub {
+          margin: 6px 0 0 0;
+          font-size: 13px;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-divider {
+          flex: 1;
+          height: 1px;
+          background: rgba(31, 61, 43, 0.14);
+          max-width: 160px;
+          border-radius: 999px;
+        }
+
+        /* Chart */
+        .eh-chartTop {
+          margin-top: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .eh-seg {
+          display: inline-flex;
+          border-radius: 999px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(31, 61, 43, 0.06);
+          padding: 4px;
+          gap: 4px;
+        }
+
+        .eh-seg-btn {
+          border: 0;
+          cursor: pointer;
+          padding: 8px 10px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 950;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+        }
+
+        .eh-seg-btn--idle {
+          background: transparent;
+          color: rgba(31, 61, 43, 0.68);
+        }
+
+        .eh-seg-btn--idle:hover {
+          background: rgba(31, 61, 43, 0.06);
+        }
+
+        .eh-seg-btn--active {
+          background: linear-gradient(135deg, var(--eh-gold), var(--eh-brass));
+          color: rgba(31, 61, 43, 0.95);
+        }
+
+        .eh-chartKpis {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .eh-kpi {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 10px;
+          border-radius: 999px;
+          background: rgba(216, 207, 192, 0.28);
+          border: 1px solid rgba(31, 61, 43, 0.12);
+        }
+
+        .eh-kpi__k {
+          font-size: 12px;
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.70);
+        }
+
+        .eh-kpi__v {
+          font-size: 12px;
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.92);
+        }
+
+        .eh-chartWrap {
+          margin-top: 14px;
+          height: 320px;
+          border-radius: 16px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(243, 235, 221, 0.70);
+          overflow: hidden;
+        }
+
+        .eh-legend {
+          display: flex;
+          justify-content: center;
+          gap: 18px;
+          padding-top: 12px;
+          margin-top: 12px;
+          border-top: 1px solid rgba(31, 61, 43, 0.12);
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.75);
+          font-size: 12px;
+        }
+
+        .eh-legend__item {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        /* Tooltip */
+        .eh-tooltip {
+          background: rgba(243, 235, 221, 0.94);
+          border: 1px solid rgba(31, 61, 43, 0.16);
+          border-radius: 14px;
+          padding: 10px 12px;
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+          backdrop-filter: blur(10px);
+          min-width: 180px;
+        }
+
+        .eh-tooltip__top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 10px;
+        }
+
+        .eh-tooltip__date {
+          font-size: 11px;
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.68);
+        }
+
+        .eh-tooltip__badge {
+          font-size: 10px;
+          font-weight: 950;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 4px 8px;
+          border-radius: 999px;
+          background: rgba(31, 61, 43, 0.08);
+          border: 1px solid rgba(31, 61, 43, 0.12);
+          color: rgba(31, 61, 43, 0.75);
+        }
+
+        .eh-tooltip__rows {
+          display: grid;
+          gap: 8px;
+        }
+
+        .eh-tooltip__row {
+          display: grid;
+          grid-template-columns: 16px 1fr auto;
+          gap: 8px;
+          align-items: center;
+        }
+
+        .eh-tooltip__k {
+          font-size: 12px;
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.78);
+        }
+
+        .eh-tooltip__v {
+          font-size: 12px;
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.92);
+        }
+
+        /* Dots */
+        .eh-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
+          display: inline-block;
+        }
+
+        .eh-dot--yes {
+          background: var(--eh-emerald);
+          box-shadow: 0 0 0 4px rgba(15, 92, 74, 0.12);
+        }
+
+        .eh-dot--no {
+          background: var(--eh-burgundy);
+          box-shadow: 0 0 0 4px rgba(90, 31, 43, 0.12);
+        }
+
+        .eh-dot--live {
+          background: var(--eh-gold);
+          box-shadow: 0 0 0 4px rgba(194, 161, 77, 0.16);
+        }
+
+        /* Rules */
+        .eh-rules {
+          margin-top: 14px;
+          display: grid;
+          gap: 12px;
+        }
+
+        .eh-rules__row {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 10px;
+        }
+
+        .eh-rules__k {
+          font-size: 12px;
+          font-weight: 950;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-rules__v {
+          font-size: 13px;
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.90);
+        }
+
+        .eh-rules__box {
+          padding: 12px 12px;
+          border-radius: 14px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(216, 207, 192, 0.30);
+          color: rgba(31, 61, 43, 0.80);
+          line-height: 1.5;
+          font-size: 13px;
+        }
+
+        /* Right column */
+        .eh-right {
+          display: grid;
+          gap: 18px;
+        }
+
+        @media (min-width: 1024px) {
+          .eh-trade {
+            position: sticky;
+            top: 86px;
+          }
+        }
+
+        .eh-trade__top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 14px;
+        }
+
+        .eh-trade__title {
+          font-size: 16px;
+          font-weight: 950;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.90);
+        }
+
+        .eh-trade__sub {
+          margin-top: 6px;
+          font-size: 13px;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-trade__status {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 12px;
+          font-weight: 950;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.82);
+          padding: 8px 10px;
+          border-radius: 999px;
+          background: rgba(31, 61, 43, 0.06);
+          border: 1px solid rgba(31, 61, 43, 0.12);
+        }
+
+        .eh-trade__dates {
+          display: grid;
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+
+        .eh-trade__date {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          font-size: 12px;
+          color: rgba(31, 61, 43, 0.70);
+        }
+
+        .eh-trade__date span:last-child {
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.88);
+          text-align: right;
+        }
+
+        .eh-tabs {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          border-radius: 14px;
+          overflow: hidden;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(31, 61, 43, 0.06);
+          margin-bottom: 12px;
+        }
+
+        .eh-tab {
+          border: 0;
+          cursor: pointer;
+          padding: 12px 10px;
+          font-weight: 950;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          font-size: 12px;
+          color: rgba(31, 61, 43, 0.70);
+          background: transparent;
+        }
+
+        .eh-tab--active {
+          background: rgba(31, 61, 43, 0.92);
+          color: var(--eh-cream);
+        }
+
+        .eh-outcomes {
+          display: grid;
+          gap: 10px;
+          margin-bottom: 12px;
+        }
+
+        .eh-outcome {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-radius: 16px;
+          padding: 14px 14px;
+          border: 1px solid rgba(31, 61, 43, 0.16);
+          background: rgba(243, 235, 221, 0.72);
+          cursor: pointer;
+          transition: transform 120ms ease, border 120ms ease;
+        }
+
+        .eh-outcome:hover {
+          transform: translateY(-1px);
+          border-color: rgba(15, 92, 74, 0.25);
+        }
+
+        .eh-outcome--active {
+          border-width: 2px;
+        }
+
+        .eh-outcome--yes.eh-outcome--active {
+          border-color: rgba(15, 92, 74, 0.75);
+          background: rgba(15, 92, 74, 0.06);
+        }
+
+        .eh-outcome--no.eh-outcome--active {
+          border-color: rgba(90, 31, 43, 0.75);
+          background: rgba(90, 31, 43, 0.06);
+        }
+
+        .eh-outcome__k {
+          font-size: 14px;
+          font-weight: 950;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.88);
+        }
+
+        .eh-outcome__v {
+          font-size: 16px;
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.92);
+        }
+
+        .eh-amount {
+          margin-top: 12px;
+          padding: 12px;
+          border-radius: 16px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(216, 207, 192, 0.24);
+        }
+
+        .eh-label {
+          display: block;
+          font-size: 12px;
+          font-weight: 950;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.70);
+          margin-bottom: 8px;
+        }
+
+        .eh-amount__row {
+          position: relative;
+        }
+
+        .eh-input {
+          width: 100%;
+          padding: 12px 12px;
+          font-size: 16px;
+          font-weight: 900;
+          border-radius: 14px;
+          border: 2px solid rgba(31, 61, 43, 0.14);
+          background: rgba(243, 235, 221, 0.80);
+          color: rgba(31, 61, 43, 0.95);
+          outline: none;
+        }
+
+        .eh-input:focus {
+          border-color: rgba(194, 161, 77, 0.85);
+          box-shadow: 0 0 0 4px rgba(194, 161, 77, 0.18);
+        }
+
+        .eh-quick {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          display: flex;
+          gap: 6px;
+        }
+
+        .eh-quick__btn {
+          border: 1px solid rgba(31, 61, 43, 0.16);
+          background: rgba(31, 61, 43, 0.08);
+          color: rgba(31, 61, 43, 0.88);
+          padding: 6px 8px;
+          border-radius: 10px;
+          font-weight: 950;
+          font-size: 12px;
+          cursor: pointer;
+        }
+
+        .eh-quick__btn:hover {
+          background: rgba(31, 61, 43, 0.12);
+        }
+
+        .eh-payout {
+          margin-top: 10px;
+          border-radius: 14px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(243, 235, 221, 0.70);
+          padding: 10px;
+        }
+
+        .eh-payout__row {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          font-size: 13px;
+          color: rgba(31, 61, 43, 0.80);
+        }
+
+        .eh-payout__row--muted {
+          margin-top: 6px;
+          font-size: 12px;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-payout__strong {
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.92);
+        }
+
+        .eh-gate {
+          margin-top: 12px;
+          padding: 14px;
+          border-radius: 16px;
+          border: 1px solid rgba(31, 61, 43, 0.14);
+          background: rgba(243, 235, 221, 0.72);
+          text-align: center;
+        }
+
+        .eh-gate__k {
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.88);
+        }
+
+        .eh-gate__sub {
+          margin-top: 6px;
+          font-size: 12px;
+          color: rgba(31, 61, 43, 0.62);
+        }
+
+        .eh-action {
+          width: 100%;
+          margin-top: 12px;
+          border: 0;
+          border-radius: 16px;
+          padding: 14px;
+          font-size: 14px;
+          font-weight: 950;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
+
+        .eh-action--gold {
+          background: linear-gradient(135deg, var(--eh-gold), var(--eh-brass));
+          color: rgba(31, 61, 43, 0.95);
+          border: 1px solid rgba(31, 61, 43, 0.12);
+        }
+
+        .eh-action--yes {
+          background: linear-gradient(135deg, var(--eh-emerald), var(--eh-hunter));
+          color: var(--eh-cream);
+        }
+
+        .eh-action--no {
+          background: linear-gradient(135deg, var(--eh-burgundy), var(--eh-claret));
+          color: var(--eh-cream);
+        }
+
+        .eh-action--disabled {
+          background: rgba(31, 61, 43, 0.10);
+          color: rgba(31, 61, 43, 0.45);
+          cursor: not-allowed;
+        }
+
+        .eh-fineprint {
+          margin-top: 10px;
+          font-size: 12px;
+          color: rgba(31, 61, 43, 0.60);
+          text-align: center;
+        }
+
+        /* Stats card */
+        .eh-miniTitle {
+          font-size: 12px;
+          font-weight: 950;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(31, 61, 43, 0.72);
+          margin-bottom: 10px;
+        }
+
+        .eh-statsList {
+          display: grid;
+          gap: 10px;
+          font-size: 13px;
+          color: rgba(31, 61, 43, 0.72);
+        }
+
+        .eh-statsRow {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+        }
+
+        .eh-statsRow span:last-child {
+          font-weight: 950;
+          color: rgba(31, 61, 43, 0.90);
+        }
+
+        .eh-gold {
+          color: var(--eh-gold) !important;
+        }
+
+        .eh-miniBar {
+          margin-top: 12px;
+          height: 12px;
+          border-radius: 999px;
+          overflow: hidden;
+          display: flex;
+          background: rgba(31, 61, 43, 0.10);
+          border: 1px solid rgba(31, 61, 43, 0.12);
+        }
+
+        .eh-miniBar__yes {
+          background: linear-gradient(90deg, var(--eh-emerald), var(--eh-moss));
+        }
+
+        .eh-miniBar__no {
+          background: linear-gradient(90deg, var(--eh-burgundy), var(--eh-claret));
+        }
+
+        .eh-miniBarLegend {
+          margin-top: 8px;
+          display: flex;
+          justify-content: space-between;
+          font-size: 12px;
+          font-weight: 950;
+        }
+
+        .eh-yes {
+          color: var(--eh-emerald);
+        }
+
+        .eh-no {
+          color: var(--eh-burgundy);
+        }
+
+        .eh-ticker {
+          text-align: center;
+          font-size: 12px;
+          font-weight: 900;
+          color: rgba(31, 61, 43, 0.62);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          padding: 10px 12px;
+          border-radius: 16px;
+          border: 1px solid rgba(31, 61, 43, 0.12);
+          background: rgba(243, 235, 221, 0.60);
+        }
+      `}</style>
 		</div>
 	);
 }
