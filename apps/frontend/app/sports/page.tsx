@@ -93,6 +93,8 @@ function formatOdds(n: number) {
 export default function SportsPage() {
     const pathname = usePathname()
     const [selectedSport, setSelectedSport] = useState("Football")
+    const [expandedMatchId, setExpandedMatchId] = useState<number | null>(null)
+
     const [betSlip, setBetSlip] = useState<
         { match: string; selection: string; odds: number }[]
     >([])
@@ -155,13 +157,12 @@ export default function SportsPage() {
         "text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/50"
 
     const buttonBase =
-        "rounded-xl border border-[#B08D57]/28 bg-[#0A0E0C]/18 hover:bg-[#0A0E0C]/26 hover:border-[#C2A14D]/45 transition"
+        "rounded-xl border border-[#B08D57]/28 bg-[#0A0E0C]/14 hover:bg-[#0A0E0C]/24 hover:border-[#C2A14D]/45 transition"
 
-    const oddsButton =
-        "min-w-[74px] px-3 py-2 text-left " + buttonBase
+    const oddsButton = "w-full px-3 py-2 text-left " + buttonBase
 
-    const statusPillBase =
-        "inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em]"
+    const pillBase =
+        "inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] border"
 
     return (
         <main className="relative min-h-screen overflow-hidden">
@@ -172,7 +173,7 @@ export default function SportsPage() {
             <div className="absolute inset-0 opacity-[0.10] deco-lines" />
 
             <div className="relative z-10 px-4 md:px-8 py-10">
-                {/* Header (quieter) */}
+                {/* Header */}
                 <header className={`${panelClass} px-6 py-5`}>
                     {innerBorder}
 
@@ -233,7 +234,7 @@ export default function SportsPage() {
 
                 {/* Layout */}
                 <div className="mt-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    {/* Sports list (calmer) */}
+                    {/* Sports list */}
                     <aside className="xl:col-span-3">
                         <div className={`${panelClass} p-5`}>
                             {innerBorder}
@@ -299,7 +300,7 @@ export default function SportsPage() {
                         </div>
                     </aside>
 
-                    {/* Board */}
+                    {/* Board (accordion cards) */}
                     <section className="xl:col-span-6">
                         <div className={`${panelClass} p-5`}>
                             {innerBorder}
@@ -313,154 +314,223 @@ export default function SportsPage() {
                                 </div>
 
                                 <div className="hidden md:block text-right">
-                                    <div className={subtleText}>Markets</div>
+                                    <div className={subtleText}>Tap a match</div>
                                     <div className="mt-1 text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/55">
-                                        1X2 • O/U 2.5
+                                        Expand for markets
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="mt-5 overflow-hidden rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/14">
-                                {/* header */}
-                                <div className="grid grid-cols-12 gap-3 px-4 py-3 text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/75 border-b border-[#B08D57]/18">
-                                    <div className="col-span-4">Match</div>
-                                    <div className="col-span-3 text-center">1 X 2</div>
-                                    <div className="col-span-2 text-center">O/U 2.5</div>
-                                    <div className="col-span-1 text-center">Score</div>
-                                    <div className="col-span-2 text-center">Time</div>
-                                </div>
-
-                                {liveMatches.map((match, index) => {
-                                    const rowBorder =
-                                        index !== liveMatches.length - 1
-                                            ? "border-b border-[#B08D57]/12"
-                                            : ""
-
+                            <div className="mt-5 space-y-3">
+                                {liveMatches.map((match) => {
+                                    const isExpanded = expandedMatchId === match.id
                                     const live = match.status === "LIVE"
+                                    const matchKey = `${match.homeTeam} vs ${match.awayTeam}`
 
                                     return (
                                         <div
                                             key={match.id}
-                                            className={`grid grid-cols-12 gap-3 px-4 py-4 items-center ${rowBorder} hover:bg-[#0A0E0C]/18 transition`}
+                                            className={[
+                                                "rounded-2xl border bg-[#0A0E0C]/12 transition",
+                                                isExpanded
+                                                    ? "border-[#C2A14D]/45"
+                                                    : "border-[#B08D57]/22 hover:border-[#C2A14D]/35",
+                                            ].join(" ")}
                                         >
-                                            {/* Match */}
-                                            <div className="col-span-12 sm:col-span-4">
-                                                <div className="flex items-center gap-2">
-                                                    {live && (
-                                                        <span className="inline-block h-2 w-2 rounded-full bg-[#C2A14D] shadow-[0_0_16px_rgba(194,161,77,0.45)]" />
-                                                    )}
-                                                    <span className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/75">
-                                                        {match.league}
-                                                    </span>
-                                                </div>
-
-                                                <div className="mt-2 space-y-1">
-                                                    <div className="font-semibold text-[#F3EBDD]">
-                                                        {match.homeTeam}
-                                                    </div>
-                                                    <div className="font-semibold text-[#D8CFC0]/78">
-                                                        {match.awayTeam}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* 1X2 */}
-                                            <div className="col-span-12 sm:col-span-3 flex justify-center gap-2">
-                                                {[
-                                                    {
-                                                        label: "1",
-                                                        selection: match.homeTeam,
-                                                        value: match.odds.home,
-                                                    },
-                                                    { label: "X", selection: "Draw", value: match.odds.draw },
-                                                    {
-                                                        label: "2",
-                                                        selection: match.awayTeam,
-                                                        value: match.odds.away,
-                                                    },
-                                                ].map((odd) => (
-                                                    <button
-                                                        key={odd.label}
-                                                        onClick={() =>
-                                                            addToBetSlip(
-                                                                `${match.homeTeam} vs ${match.awayTeam}`,
-                                                                odd.selection,
-                                                                odd.value,
-                                                            )
-                                                        }
-                                                        className={oddsButton}
-                                                    >
-                                                        <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
-                                                            {odd.label}
+                                            {/* Clickable summary row */}
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    setExpandedMatchId((prev) =>
+                                                        prev === match.id ? null : match.id,
+                                                    )
+                                                }
+                                                className="w-full text-left px-4 py-4"
+                                                aria-expanded={isExpanded}
+                                                aria-controls={`match-${match.id}`}
+                                            >
+                                                <div className="flex items-start justify-between gap-4">
+                                                    <div className="min-w-0">
+                                                        <div className="flex items-center gap-2">
+                                                            {live && (
+                                                                <span className="inline-block h-2 w-2 rounded-full bg-[#C2A14D] shadow-[0_0_16px_rgba(194,161,77,0.45)]" />
+                                                            )}
+                                                            <span className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/75">
+                                                                {match.league}
+                                                            </span>
                                                         </div>
-                                                        <div className="mt-1 font-semibold text-[#F3EBDD]">
-                                                            {formatOdds(odd.value)}
+
+                                                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-2">
+                                                            <div className="font-semibold text-[#F3EBDD] truncate">
+                                                                {match.homeTeam}
+                                                            </div>
+                                                            <div className="font-semibold text-[#D8CFC0]/78 truncate sm:text-right">
+                                                                {match.awayTeam}
+                                                            </div>
                                                         </div>
-                                                    </button>
-                                                ))}
-                                            </div>
 
-                                            {/* O/U */}
-                                            <div className="col-span-12 sm:col-span-2 flex justify-center gap-2">
-                                                <button
-                                                    onClick={() =>
-                                                        addToBetSlip(
-                                                            `${match.homeTeam} vs ${match.awayTeam}`,
-                                                            "Over 2.5",
-                                                            match.overUnder.over,
-                                                        )
-                                                    }
-                                                    className={oddsButton}
+                                                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                                                            <span
+                                                                className={[
+                                                                    pillBase,
+                                                                    live
+                                                                        ? "border-[#C2A14D]/45 bg-[#C2A14D]/10 text-[#F3EBDD]"
+                                                                        : "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                                                                ].join(" ")}
+                                                            >
+                                                                {match.time}
+                                                            </span>
+
+                                                            <span className="inline-flex items-center gap-2 rounded-full px-3 py-2 border border-[#B08D57]/20 bg-[#0A0E0C]/10">
+                                                                <span className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/55">
+                                                                    Score
+                                                                </span>
+                                                                <span className="font-semibold text-[#F3EBDD]">
+                                                                    {match.homeScore}
+                                                                </span>
+                                                                <span className="text-[#B08D57]/45">–</span>
+                                                                <span className="font-semibold text-[#F3EBDD]">
+                                                                    {match.awayScore}
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="shrink-0 flex flex-col items-end gap-2">
+                                                        <span className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/45">
+                                                            {isExpanded ? "Close" : "Open"}
+                                                        </span>
+                                                        <span
+                                                            className={[
+                                                                "inline-flex items-center justify-center h-10 w-10 rounded-full border transition",
+                                                                isExpanded
+                                                                    ? "border-[#C2A14D]/55 bg-[#C2A14D]/10 text-[#F3EBDD]"
+                                                                    : "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                                                            ].join(" ")}
+                                                        >
+                                                            {isExpanded ? "−" : "+"}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </button>
+
+                                            {/* Expanded markets */}
+                                            {isExpanded && (
+                                                <div
+                                                    id={`match-${match.id}`}
+                                                    className="px-4 pb-4 pt-0"
                                                 >
-                                                    <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
-                                                        O
-                                                    </div>
-                                                    <div className="mt-1 font-semibold text-[#F3EBDD]">
-                                                        {formatOdds(match.overUnder.over)}
-                                                    </div>
-                                                </button>
+                                                    <div className="rounded-2xl border border-[#B08D57]/18 bg-[#0A0E0C]/10 p-4">
+                                                        <div className="flex items-center justify-between gap-3">
+                                                            <div className={subtleLabel}>Markets</div>
+                                                            <div className={subtleText}>
+                                                                Tap odds to add
+                                                            </div>
+                                                        </div>
 
-                                                <button
-                                                    onClick={() =>
-                                                        addToBetSlip(
-                                                            `${match.homeTeam} vs ${match.awayTeam}`,
-                                                            "Under 2.5",
-                                                            match.overUnder.under,
-                                                        )
-                                                    }
-                                                    className={oddsButton}
-                                                >
-                                                    <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
-                                                        U
-                                                    </div>
-                                                    <div className="mt-1 font-semibold text-[#F3EBDD]">
-                                                        {formatOdds(match.overUnder.under)}
-                                                    </div>
-                                                </button>
-                                            </div>
+                                                        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                            {/* 1X2 */}
+                                                            <div>
+                                                                <div className={subtleText}>1X2</div>
+                                                                <div className="mt-2 grid grid-cols-3 gap-2">
+                                                                    {[
+                                                                        {
+                                                                            label: "1",
+                                                                            selection: match.homeTeam,
+                                                                            value: match.odds.home,
+                                                                        },
+                                                                        {
+                                                                            label: "X",
+                                                                            selection: "Draw",
+                                                                            value: match.odds.draw,
+                                                                        },
+                                                                        {
+                                                                            label: "2",
+                                                                            selection: match.awayTeam,
+                                                                            value: match.odds.away,
+                                                                        },
+                                                                    ].map((odd) => (
+                                                                        <button
+                                                                            key={odd.label}
+                                                                            onClick={() =>
+                                                                                addToBetSlip(
+                                                                                    matchKey,
+                                                                                    odd.selection,
+                                                                                    odd.value,
+                                                                                )
+                                                                            }
+                                                                            className={oddsButton}
+                                                                        >
+                                                                            <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
+                                                                                {odd.label}
+                                                                            </div>
+                                                                            <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                                                                {formatOdds(odd.value)}
+                                                                            </div>
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
 
-                                            {/* Score */}
-                                            <div className="col-span-6 sm:col-span-1 text-center">
-                                                <span className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#B08D57]/20 bg-[#0A0E0C]/12 px-3 py-2 text-sm font-semibold text-[#F3EBDD]">
-                                                    <span>{match.homeScore}</span>
-                                                    <span className="text-[#B08D57]/45">–</span>
-                                                    <span>{match.awayScore}</span>
-                                                </span>
-                                            </div>
+                                                            {/* O/U */}
+                                                            <div>
+                                                                <div className={subtleText}>O/U 2.5</div>
+                                                                <div className="mt-2 grid grid-cols-2 gap-2">
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            addToBetSlip(
+                                                                                matchKey,
+                                                                                "Over 2.5",
+                                                                                match.overUnder.over,
+                                                                            )
+                                                                        }
+                                                                        className={oddsButton}
+                                                                    >
+                                                                        <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
+                                                                            O
+                                                                        </div>
+                                                                        <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                                                            {formatOdds(match.overUnder.over)}
+                                                                        </div>
+                                                                    </button>
 
-                                            {/* Time */}
-                                            <div className="col-span-6 sm:col-span-2 text-center">
-                                                <span
-                                                    className={[
-                                                        statusPillBase,
-                                                        live
-                                                            ? "border border-[#C2A14D]/55 bg-[#C2A14D]/10 text-[#F3EBDD]"
-                                                            : "border border-[#B08D57]/25 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
-                                                    ].join(" ")}
-                                                >
-                                                    {match.time}
-                                                </span>
-                                            </div>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            addToBetSlip(
+                                                                                matchKey,
+                                                                                "Under 2.5",
+                                                                                match.overUnder.under,
+                                                                            )
+                                                                        }
+                                                                        className={oddsButton}
+                                                                    >
+                                                                        <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
+                                                                            U
+                                                                        </div>
+                                                                        <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                                                            {formatOdds(match.overUnder.under)}
+                                                                        </div>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="mt-4 flex items-center justify-between gap-3">
+                                                            <div className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/40">
+                                                                {match.league}
+                                                            </div>
+
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setExpandedMatchId(null)}
+                                                                className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/55 hover:text-[#C2A14D] transition-colors"
+                                                            >
+                                                                Collapse →
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     )
                                 })}
@@ -480,7 +550,7 @@ export default function SportsPage() {
                             </div>
                         </div>
 
-                        {/* Stats (less loud) */}
+                        {/* Stats (kept) */}
                         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
                             {[
                                 { label: "Total volume", value: "$2.4M", note: "+12% week" },
@@ -611,7 +681,6 @@ export default function SportsPage() {
                                 )}
                             </div>
 
-                            {/* Featured match (simplified) */}
                             <div className="mt-6 rounded-3xl border border-[#B08D57]/30 bg-[#0A0E0C]/10 p-5">
                                 <div className="text-[11px] tracking-[0.48em] uppercase text-[#B08D57]/80 text-center">
                                     Featured
@@ -649,7 +718,6 @@ export default function SportsPage() {
                     </aside>
                 </div>
 
-                {/* Mobile time/date */}
                 <div className="mt-6 sm:hidden text-center text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/40">
                     {currentDate} • {currentTime}
                 </div>
