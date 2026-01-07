@@ -70,7 +70,7 @@ const MARKET_DATA: MarketInfo = {
 	question: "Will Eden Haus win the Cronos x402 Hackathon?",
 	description:
 		"Prediction market for the outcome of Eden Haus in the DoraHacks Cronos x402 hackathon competition.",
-	creator: "@Eden Haus",
+	creator: "Eden Haus",
 	createdAt: "2025-12-15T00:00:00Z",
 	resolutionDate: "2026-01-31T23:59:59Z",
 	totalPool: 1250,
