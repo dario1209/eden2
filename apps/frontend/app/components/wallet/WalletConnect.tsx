@@ -1,18 +1,14 @@
 'use client'
 
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react'
+import { useDisconnect } from 'wagmi'
 
 export function WalletConnect() {
-    const { address, isConnected } = useAccount()
-    const { connect, connectors } = useConnect()
+    const { address, isConnected } = useAppKitAccount()
+    const { open } = useAppKit()
     const { disconnect } = useDisconnect()
 
-    const wcConnectors = connectors.filter(c =>
-        c.name.toLowerCase().includes('walletconnect') ||
-        c.id.includes('walletConnect')
-    )
-
-    if (isConnected)
+    if (isConnected) {
         return (
             <button
                 onClick={() => disconnect()}
@@ -21,18 +17,14 @@ export function WalletConnect() {
                 Disconnect {address?.slice(0, 6)}...
             </button>
         )
+    }
 
     return (
-        <div className="flex gap-2">
-            {wcConnectors.map((connector) => (
-                <button
-                    key={connector.uid}
-                    onClick={() => connect({ connector })}
-                    className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
-                >
-                    📱 WalletConnect
-                </button>
-            ))}
-        </div>
+        <button
+            onClick={() => open()}
+            className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
+        >
+            📱 WalletConnect
+        </button>
     )
 }
