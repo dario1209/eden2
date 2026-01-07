@@ -31,7 +31,7 @@ export default function Home() {
             if (JSON.stringify(newSequence) === JSON.stringify(secretPattern)) {
                 setIsAuthenticated(true)
                 setSmokeEffect(true)
-                setTimeout(() => router.push("/predictions"), 1200)
+                setTimeout(() => router.push("/prediction"), 1200)
             } else {
                 setTimeout(() => setKnockSequence([]), 1000)
             }
@@ -40,7 +40,7 @@ export default function Home() {
 
     const handleSlipInside = () => {
         setSmokeEffect(true)
-        setTimeout(() => router.push("/predictions"), 800)
+        setTimeout(() => router.push("/prediction"), 800)
     }
 
     return (
