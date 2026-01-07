@@ -53,6 +53,10 @@ export default function Home() {
             <div className="absolute inset-0 opacity-[0.10] mix-blend-soft-light wallpaper" />
             <div className="absolute inset-0 opacity-[0.12] deco-lines" />
 
+            {/* Film grain + vignette (hero-only) */}
+            <div className="absolute inset-0 pointer-events-none film" />
+            <div className="absolute inset-0 pointer-events-none vignette" />
+
             {/* Smoke overlay (gentle drift, not pulse) */}
             {smokeEffect && <div className="absolute inset-0 z-50 pointer-events-none smoke" />}
 
@@ -96,6 +100,7 @@ export default function Home() {
                                         role="button"
                                         aria-label="Knock on the door"
                                     >
+                                        {/* frame */}
                                         <rect
                                             x="40"
                                             y="30"
@@ -107,31 +112,22 @@ export default function Home() {
                                             className="transition-all duration-500"
                                         />
 
-                                        {/* windows */}
+                                        {/* top panes: 3 tall (deco) */}
                                         {[
-                                            // top row (centered)
-                                            [52.5, 45],
-                                            [72.5, 45],
-                                            [92.5, 45],
-                                            [112.5, 45],
-                                            [132.5, 45],
-
-                                            // middle row (centered)
-                                            [52.5, 75],
-                                            [72.5, 75],
-                                            [92.5, 75],
-                                            [112.5, 75],
-                                            [132.5, 75],
+                                            [60, 45],
+                                            [92, 45],
+                                            [124, 45],
                                         ].map(([x, y], i) => (
                                             <rect
                                                 key={i}
                                                 x={x}
                                                 y={y}
-                                                width="15"
-                                                height="20"
+                                                width="16"
+                                                height="44"
+                                                rx="2"
                                                 fill="none"
                                                 stroke="#D8CFC0"
-                                                strokeWidth="1.5"
+                                                strokeWidth="1.8"
                                                 opacity="0.85"
                                             />
                                         ))}
@@ -139,45 +135,76 @@ export default function Home() {
                                         {/* door */}
                                         <rect
                                             x="80"
-                                            y="120"
+                                            y="118"
                                             width="40"
-                                            height="55"
+                                            height="57"
+                                            rx="2"
                                             fill={isAuthenticated ? "#C2A14D" : "#4A2C1D"}
                                             stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
                                             strokeWidth="2"
                                             className="cursor-pointer hover:brightness-110 transition-all duration-300"
                                         />
 
+                                        {/* door arch */}
                                         <path
-                                            d="M 80 120 Q 100 110 120 120"
+                                            d="M 80 118 Q 100 108 120 118"
                                             fill="none"
                                             stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
                                             strokeWidth="2"
                                         />
 
+                                        {/* keyhole */}
+                                        <path
+                                            d="M100 136
+                         c-4.5 0-8 3.3-8 7.6
+                         c0 3.2 1.9 6 4.8 7.1
+                         l-2.2 9.8
+                         h10.8
+                         l-2.2-9.8
+                         c2.9-1.1 4.8-3.9 4.8-7.1
+                         c0-4.3-3.5-7.6-8-7.6z"
+                                            fill="#0A0E0C"
+                                            opacity="0.95"
+                                        />
+
+                                        {/* knob */}
                                         <circle
-                                            cx="110"
+                                            cx="112"
                                             cy="150"
                                             r="3"
-                                            fill={isAuthenticated ? "#F3EBDD" : "#B08D57"}
+                                            fill={isAuthenticated ? "#F3EBDD" : "#C2A14D"}
                                             className="cursor-pointer hover:scale-125 transition-transform"
                                         />
 
-                                        <rect
-                                            x="95"
-                                            y="135"
-                                            width="10"
-                                            height="6"
-                                            fill="#0A0E0C"
-                                            stroke={isAuthenticated ? "#C2A14D" : "#6B4A32"}
-                                            strokeWidth="1"
-                                        />
-
                                         {/* subtle corner brackets (deco touch) */}
-                                        <path d="M 45 35 L 45 45 M 45 35 L 55 35" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-                                        <path d="M 155 35 L 155 45 M 155 35 L 145 35" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-                                        <path d="M 45 175 L 45 165 M 45 175 L 55 175" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-                                        <path d="M 155 175 L 155 165 M 155 175 L 145 175" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+                                        <path
+                                            d="M 45 35 L 45 45 M 45 35 L 55 35"
+                                            stroke="#D8CFC0"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            opacity="0.65"
+                                        />
+                                        <path
+                                            d="M 155 35 L 155 45 M 155 35 L 145 35"
+                                            stroke="#D8CFC0"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            opacity="0.65"
+                                        />
+                                        <path
+                                            d="M 45 175 L 45 165 M 45 175 L 55 175"
+                                            stroke="#D8CFC0"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            opacity="0.65"
+                                        />
+                                        <path
+                                            d="M 155 175 L 155 165 M 155 175 L 145 175"
+                                            stroke="#D8CFC0"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            opacity="0.65"
+                                        />
                                     </svg>
 
                                     <div className="mt-5 flex justify-center gap-2">
@@ -207,8 +234,8 @@ export default function Home() {
                                     <div className="mx-auto mt-6 h-px w-44 bg-[#B08D57]/35" />
 
                                     <p className="mx-auto mt-6 max-w-md text-center text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        A discreet room for those who read the game fast and wager with composure. Knock
-                                        thrice, or slip in quietly.
+                                        A discreet room for those who read the game fast and wager with composure. Knock thrice, or slip in
+                                        quietly.
                                     </p>
                                 </div>
 
@@ -280,9 +307,16 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
             {/* Local CSS for texture/lines/smoke */}
             <style jsx>{`
         @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-4px); }
-          75% { transform: translateX(4px); }
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-4px);
+          }
+          75% {
+            transform: translateX(4px);
+          }
         }
         .shake {
           animation: shake 0.2s ease-in-out;
@@ -290,33 +324,64 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
 
         /* Wallpaper: soft, non-repeating feel */
         .wallpaper {
-          background-image:
-            radial-gradient(circle at 25% 20%, rgba(194,161,77,0.06), transparent 55%),
-            radial-gradient(circle at 70% 60%, rgba(15,92,74,0.07), transparent 60%),
-            radial-gradient(circle at 40% 85%, rgba(90,31,43,0.05), transparent 60%);
+          background-image: radial-gradient(circle at 25% 20%, rgba(194, 161, 77, 0.06), transparent 55%),
+            radial-gradient(circle at 70% 60%, rgba(15, 92, 74, 0.07), transparent 60%),
+            radial-gradient(circle at 40% 85%, rgba(90, 31, 43, 0.05), transparent 60%);
           filter: blur(0.2px);
         }
 
         /* Art-deco linework overlay */
         .deco-lines {
-          background-image:
-            linear-gradient(to right, rgba(176,141,87,0.22) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(176,141,87,0.14) 1px, transparent 1px);
+          background-image: linear-gradient(to right, rgba(176, 141, 87, 0.22) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(176, 141, 87, 0.14) 1px, transparent 1px);
           background-size: 120px 120px;
           mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 72%);
         }
 
+        /* Film grain + vignette (hero-only) */
+        .film {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          opacity: 0.1;
+          mix-blend-mode: overlay;
+          background-image: repeating-linear-gradient(
+              0deg,
+              rgba(255, 255, 255, 0.035) 0 1px,
+              transparent 1px 2px
+            ),
+            repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.035) 0 1px, transparent 1px 3px);
+          filter: blur(0.25px);
+        }
+
+        .vignette {
+          position: absolute;
+          inset: -20px;
+          pointer-events: none;
+          background: radial-gradient(
+            1200px 700px at 50% 35%,
+            transparent 35%,
+            rgba(0, 0, 0, 0.35) 70%,
+            rgba(0, 0, 0, 0.65) 100%
+          );
+        }
+
         /* Smoke drift overlay */
         .smoke {
-          background:
-            radial-gradient(800px 420px at 30% 35%, rgba(95,111,82,0.20), transparent 60%),
-            radial-gradient(900px 520px at 70% 55%, rgba(216,207,192,0.10), transparent 65%),
-            radial-gradient(1000px 620px at 45% 80%, rgba(95,111,82,0.18), transparent 70%);
+          background: radial-gradient(800px 420px at 30% 35%, rgba(95, 111, 82, 0.2), transparent 60%),
+            radial-gradient(900px 520px at 70% 55%, rgba(216, 207, 192, 0.1), transparent 65%),
+            radial-gradient(1000px 620px at 45% 80%, rgba(95, 111, 82, 0.18), transparent 70%);
           animation: drift 1.2s ease-out forwards;
         }
         @keyframes drift {
-          0% { opacity: 0; transform: translateY(8px); }
-          100% { opacity: 1; transform: translateY(0); }
+          0% {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
         </main>
