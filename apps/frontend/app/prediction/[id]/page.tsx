@@ -16,6 +16,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@/components/ConnectButton";
+,
 
 // ============================================================================
 // TYPES
@@ -692,9 +694,7 @@ export default function PredictionMarketPage() {
 										<div className="eh-gate">
 											<div className="eh-gate__k">Connect your wallet to trade</div>
 											<div className="eh-gate__sub">Wallet connection required for buys & sells.</div>
-											<button className="eh-action eh-action--gold" type="button">
-												Connect Wallet
-											</button>
+											<ConnectButton />
 										</div>
 									) : (
 										<button
@@ -716,6 +716,7 @@ export default function PredictionMarketPage() {
 													: "Select outcome"}
 										</button>
 									)}
+
 
 									<p className="eh-fineprint">By trading, you agree to our terms. 5% fee on winnings.</p>
 								</div>
