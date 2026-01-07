@@ -1,4 +1,4 @@
-export default function Edge HausLayout({
+export default function LiveLayout({
     children,
 }: {
     children: React.ReactNode
