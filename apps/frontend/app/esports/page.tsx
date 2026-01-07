@@ -94,6 +94,9 @@ export default function EsportsPage() {
     const [currentDate, setCurrentDate] = useState("");
     const [viewerCount, setViewerCount] = useState(247892);
 
+    // Accordion state (prevents score/status overlap by revealing details vertically)
+    const [expandedMatchId, setExpandedMatchId] = useState<number | null>(esportsMatches[0]?.id ?? null);
+
     useEffect(() => {
         const timer = setInterval(() => {
             const now = new Date();
@@ -132,16 +135,12 @@ export default function EsportsPage() {
     };
 
     const liveCount = useMemo(() => esportsMatches.filter((m) => m.status === "LIVE").length, []);
+    const totalOdds = useMemo(() => betSlip.reduce((acc, bet) => acc * bet.odds, 1), [betSlip]);
 
     const isActiveNav = (path: string) => {
         if (path === "/") return pathname === "/";
         return pathname?.startsWith(path);
     };
-
-    const totalOdds = useMemo(
-        () => betSlip.reduce((acc, bet) => acc * bet.odds, 1),
-        [betSlip]
-    );
 
     const panelClass =
         "relative rounded-3xl bg-[linear-gradient(135deg,rgba(10,14,12,0.55),rgba(10,14,12,0.22))] " +
@@ -160,7 +159,7 @@ export default function EsportsPage() {
             <div className="absolute inset-0 opacity-10 eh-decoLines" />
 
             <div className="relative z-10 px-4 md:px-8 py-10">
-                {/* Header panel (same family as File 1) */}
+                {/* Header panel */}
                 <header className={`${panelClass} px-6 py-5`}>
                     {innerBorder}
 
@@ -177,7 +176,7 @@ export default function EsportsPage() {
                                 </div>
 
                                 <div className="mt-1 text-[11px] tracking-[0.34em] uppercase text-[#D8CFC0]/50 group-hover:text-[#C2A14D]/80 transition-colors">
-                                    Quiet Confidence • Reliable Odds
+                                    Esports • Quiet Confidence • Reliable Odds
                                 </div>
                             </Link>
 
@@ -277,7 +276,7 @@ export default function EsportsPage() {
                                     <div className="eh-headRow">
                                         <div>
                                             <div className="eh-miniTitle">Live matches</div>
-                                            <div className="eh-subtle">Click odds to add to slip • {selectedEsport}</div>
+                                            <div className="eh-subtle">Tap a match to expand • {selectedEsport}</div>
                                         </div>
                                         <div className="eh-pill">
                                             <span className="eh-dot" />
@@ -285,112 +284,152 @@ export default function EsportsPage() {
                                         </div>
                                     </div>
 
-                                    <div className="eh-table">
-                                        <div className="eh-thead">
-                                            <div>Match</div>
-                                            <div className="text-center">Winner</div>
-                                            <div className="text-center">O/U</div>
-                                            <div className="text-center">Score</div>
-                                            <div className="text-center">Status</div>
-                                        </div>
+                                    {/* Desktop header row */}
+                                    <div className="eh-tableHead">
+                                        <div>Match</div>
+                                        <div className="text-center">Winner</div>
+                                        <div className="text-center">O/U</div>
+                                        <div className="text-center">Score</div>
+                                        <div className="text-center">Status</div>
+                                    </div>
 
-                                        <div className="eh-tbody">
-                                            {esportsMatches.map((match) => (
-                                                <div key={match.id} className="eh-row">
-                                                    <div className="eh-cell">
-                                                        <div className="eh-league">
-                                                            {match.status === "LIVE" ? <span className="eh-liveDot" /> : null}
-                                                            {match.league}
+                                    {/* Accordion list */}
+                                    <div className="eh-acc">
+                                        {esportsMatches.map((match) => {
+                                            const isExpanded = expandedMatchId === match.id;
+                                            return (
+                                                <div key={match.id} className={isExpanded ? "eh-rowAcc eh-rowAcc--open" : "eh-rowAcc"}>
+                                                    {/* Summary row (mobile + desktop safe) */}
+                                                    <button
+                                                        type="button"
+                                                        className="eh-rowAcc__summary"
+                                                        onClick={() => setExpandedMatchId(isExpanded ? null : match.id)}
+                                                    >
+                                                        <div className="eh-rowAcc__left">
+                                                            <div className="eh-league">
+                                                                {match.status === "LIVE" ? <span className="eh-liveDot" /> : null}
+                                                                {match.league}
+                                                            </div>
+
+                                                            <div className="eh-teams">
+                                                                <div className="eh-team">{match.homeTeam}</div>
+                                                                <div className="eh-team eh-team--muted">{match.awayTeam}</div>
+                                                            </div>
                                                         </div>
-                                                        <div className="eh-teams">
-                                                            <div className="eh-team">{match.homeTeam}</div>
-                                                            <div className="eh-team eh-team--muted">{match.awayTeam}</div>
+
+                                                        <div className="eh-rowAcc__right">
+                                                            <div className="eh-score">
+                                                                <span>{match.homeScore}</span>
+                                                                <span className="eh-score__sep">-</span>
+                                                                <span>{match.awayScore}</span>
+                                                            </div>
+
+                                                            <span className={match.status === "LIVE" ? "eh-status eh-status--live" : "eh-status"}>
+                                                                {match.time}
+                                                            </span>
+
+                                                            <span className="eh-rowAcc__chev" aria-hidden="true">
+                                                                {isExpanded ? "−" : "+"}
+                                                            </span>
                                                         </div>
-                                                    </div>
+                                                    </button>
 
-                                                    <div className="eh-cell eh-centerCell">
-                                                        <div className="eh-oddsBtns">
-                                                            <button
-                                                                type="button"
-                                                                className="eh-oddBtn"
-                                                                onClick={() =>
-                                                                    addToBetSlip(
-                                                                        `${match.homeTeam} vs ${match.awayTeam}`,
-                                                                        match.homeTeam,
-                                                                        match.odds.home
-                                                                    )
-                                                                }
-                                                            >
-                                                                <div className="eh-oddBtn__k">1</div>
-                                                                <div className="eh-oddBtn__v">{match.odds.home.toFixed(2)}</div>
-                                                            </button>
+                                                    {/* Expanded details */}
+                                                    {isExpanded ? (
+                                                        <div className="eh-rowAcc__details">
+                                                            <div className="eh-rowAcc__grid">
+                                                                <div className="eh-detailBlock">
+                                                                    <div className="eh-detailBlock__k">Winner</div>
+                                                                    <div className="eh-oddsBtns">
+                                                                        <button
+                                                                            type="button"
+                                                                            className="eh-oddBtn"
+                                                                            onClick={() =>
+                                                                                addToBetSlip(
+                                                                                    `${match.homeTeam} vs ${match.awayTeam}`,
+                                                                                    match.homeTeam,
+                                                                                    match.odds.home
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <div className="eh-oddBtn__k">1</div>
+                                                                            <div className="eh-oddBtn__v">{match.odds.home.toFixed(2)}</div>
+                                                                        </button>
 
-                                                            <button
-                                                                type="button"
-                                                                className="eh-oddBtn"
-                                                                onClick={() =>
-                                                                    addToBetSlip(
-                                                                        `${match.homeTeam} vs ${match.awayTeam}`,
-                                                                        match.awayTeam,
-                                                                        match.odds.away
-                                                                    )
-                                                                }
-                                                            >
-                                                                <div className="eh-oddBtn__k">2</div>
-                                                                <div className="eh-oddBtn__v">{match.odds.away.toFixed(2)}</div>
-                                                            </button>
+                                                                        <button
+                                                                            type="button"
+                                                                            className="eh-oddBtn"
+                                                                            onClick={() =>
+                                                                                addToBetSlip(
+                                                                                    `${match.homeTeam} vs ${match.awayTeam}`,
+                                                                                    match.awayTeam,
+                                                                                    match.odds.away
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <div className="eh-oddBtn__k">2</div>
+                                                                            <div className="eh-oddBtn__v">{match.odds.away.toFixed(2)}</div>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="eh-detailBlock">
+                                                                    <div className="eh-detailBlock__k">Over / Under</div>
+                                                                    <div className="eh-oddsBtns">
+                                                                        <button
+                                                                            type="button"
+                                                                            className="eh-oddBtn eh-oddBtn--soft"
+                                                                            onClick={() =>
+                                                                                addToBetSlip(
+                                                                                    `${match.homeTeam} vs ${match.awayTeam}`,
+                                                                                    "Over",
+                                                                                    match.overUnder.over
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <div className="eh-oddBtn__k">O</div>
+                                                                            <div className="eh-oddBtn__v">{match.overUnder.over.toFixed(2)}</div>
+                                                                        </button>
+
+                                                                        <button
+                                                                            type="button"
+                                                                            className="eh-oddBtn eh-oddBtn--soft"
+                                                                            onClick={() =>
+                                                                                addToBetSlip(
+                                                                                    `${match.homeTeam} vs ${match.awayTeam}`,
+                                                                                    "Under",
+                                                                                    match.overUnder.under
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <div className="eh-oddBtn__k">U</div>
+                                                                            <div className="eh-oddBtn__v">{match.overUnder.under.toFixed(2)}</div>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="eh-rowAcc__meta">
+                                                                <div className="eh-metaPill">
+                                                                    <span className="eh-metaPill__k">Score</span>
+                                                                    <span className="eh-metaPill__v">
+                                                                        {match.homeScore}-{match.awayScore}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="eh-metaPill">
+                                                                    <span className="eh-metaPill__k">Status</span>
+                                                                    <span className="eh-metaPill__v">{match.status}</span>
+                                                                </div>
+                                                                <div className="eh-metaPill">
+                                                                    <span className="eh-metaPill__k">Time</span>
+                                                                    <span className="eh-metaPill__v">{match.time}</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-
-                                                    <div className="eh-cell eh-centerCell">
-                                                        <div className="eh-oddsBtns">
-                                                            <button
-                                                                type="button"
-                                                                className="eh-oddBtn eh-oddBtn--soft"
-                                                                onClick={() =>
-                                                                    addToBetSlip(
-                                                                        `${match.homeTeam} vs ${match.awayTeam}`,
-                                                                        "Over",
-                                                                        match.overUnder.over
-                                                                    )
-                                                                }
-                                                            >
-                                                                <div className="eh-oddBtn__k">O</div>
-                                                                <div className="eh-oddBtn__v">{match.overUnder.over.toFixed(2)}</div>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="eh-oddBtn eh-oddBtn--soft"
-                                                                onClick={() =>
-                                                                    addToBetSlip(
-                                                                        `${match.homeTeam} vs ${match.awayTeam}`,
-                                                                        "Under",
-                                                                        match.overUnder.under
-                                                                    )
-                                                                }
-                                                            >
-                                                                <div className="eh-oddBtn__k">U</div>
-                                                                <div className="eh-oddBtn__v">{match.overUnder.under.toFixed(2)}</div>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="eh-cell eh-centerCell">
-                                                        <div className="eh-score">
-                                                            <span>{match.homeScore}</span>
-                                                            <span className="eh-score__sep">-</span>
-                                                            <span>{match.awayScore}</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="eh-cell eh-centerCell">
-                                                        <span className={match.status === "LIVE" ? "eh-status eh-status--live" : "eh-status"}>
-                                                            {match.time}
-                                                        </span>
-                                                    </div>
+                                                    ) : null}
                                                 </div>
-                                            ))}
-                                        </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -629,16 +668,9 @@ export default function EsportsPage() {
           background: rgba(10, 14, 12, 0.1);
         }
 
-        /* Table */
-        .eh-table {
-          border-radius: 16px;
-          border: 1px solid rgba(176, 141, 87, 0.18);
-          overflow: hidden;
-          background: rgba(10, 14, 12, 0.12);
-        }
-
-        .eh-thead {
-          display: grid;
+        /* Desktop-style header row for table (hidden on small screens) */
+        .eh-tableHead {
+          display: none;
           grid-template-columns: 4fr 3fr 2fr 1.5fr 2fr;
           gap: 10px;
           padding: 12px 14px;
@@ -647,40 +679,138 @@ export default function EsportsPage() {
           letter-spacing: 0.22em;
           text-transform: uppercase;
           color: rgba(216, 207, 192, 0.55);
-          background: rgba(10, 14, 12, 0.14);
-          border-bottom: 1px solid rgba(176, 141, 87, 0.16);
+          border-radius: 16px;
+          border: 1px solid rgba(176, 141, 87, 0.18);
+          background: rgba(10, 14, 12, 0.12);
+          margin-bottom: 10px;
         }
 
-        .eh-tbody {
-          display: grid;
+        @media (min-width: 980px) {
+          .eh-tableHead {
+            display: grid;
+          }
         }
 
-        .eh-row {
+        /* Accordion list */
+        .eh-acc {
           display: grid;
-          grid-template-columns: 4fr 3fr 2fr 1.5fr 2fr;
           gap: 10px;
-          padding: 14px;
-          border-bottom: 1px solid rgba(176, 141, 87, 0.12);
         }
 
-        .eh-row:last-child {
-          border-bottom: 0;
+        .eh-rowAcc {
+          border-radius: 16px;
+          border: 1px solid rgba(176, 141, 87, 0.18);
+          background: rgba(10, 14, 12, 0.12);
+          overflow: hidden;
         }
 
-        .eh-row:hover {
+        .eh-rowAcc--open {
+          border-color: rgba(194, 161, 77, 0.35);
           background: rgba(10, 14, 12, 0.14);
         }
 
-        .eh-cell {
+        .eh-rowAcc__summary {
+          width: 100%;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
+          padding: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          text-align: left;
+        }
+
+        .eh-rowAcc__left {
           min-width: 0;
         }
 
-        .eh-centerCell {
+        .eh-rowAcc__right {
           display: flex;
           align-items: center;
-          justify-content: center;
+          gap: 10px;
+          flex-shrink: 0;
         }
 
+        .eh-rowAcc__chev {
+          width: 34px;
+          height: 34px;
+          border-radius: 12px;
+          border: 1px solid rgba(176, 141, 87, 0.18);
+          background: rgba(10, 14, 12, 0.12);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          color: rgba(243, 235, 221, 0.75);
+        }
+
+        .eh-rowAcc__details {
+          padding: 12px 14px 14px;
+          border-top: 1px solid rgba(176, 141, 87, 0.12);
+        }
+
+        .eh-rowAcc__grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+          .eh-rowAcc__grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        .eh-detailBlock {
+          border-radius: 16px;
+          border: 1px solid rgba(176, 141, 87, 0.18);
+          background: rgba(10, 14, 12, 0.12);
+          padding: 12px;
+        }
+
+        .eh-detailBlock__k {
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(216, 207, 192, 0.55);
+          margin-bottom: 10px;
+        }
+
+        .eh-rowAcc__meta {
+          margin-top: 12px;
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+
+        .eh-metaPill {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 10px;
+          padding: 10px 12px;
+          border-radius: 999px;
+          border: 1px solid rgba(176, 141, 87, 0.18);
+          background: rgba(10, 14, 12, 0.12);
+        }
+
+        .eh-metaPill__k {
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(216, 207, 192, 0.55);
+        }
+
+        .eh-metaPill__v {
+          font-size: 12px;
+          font-weight: 900;
+          color: rgba(243, 235, 221, 0.9);
+        }
+
+        /* League + teams */
         .eh-league {
           font-size: 10px;
           font-weight: 900;
@@ -717,15 +847,16 @@ export default function EsportsPage() {
           color: rgba(216, 207, 192, 0.7);
         }
 
+        /* Odds buttons */
         .eh-oddsBtns {
           display: flex;
           gap: 8px;
           flex-wrap: wrap;
-          justify-content: center;
+          justify-content: flex-start;
         }
 
         .eh-oddBtn {
-          width: 66px;
+          width: 78px;
           padding: 10px 10px;
           border-radius: 14px;
           border: 1px solid rgba(194, 161, 77, 0.28);
@@ -759,6 +890,7 @@ export default function EsportsPage() {
           color: rgba(243, 235, 221, 0.95);
         }
 
+        /* Score + status */
         .eh-score {
           display: inline-flex;
           align-items: center;
@@ -769,6 +901,7 @@ export default function EsportsPage() {
           background: rgba(10, 14, 12, 0.12);
           font-weight: 900;
           color: rgba(243, 235, 221, 0.9);
+          white-space: nowrap;
         }
 
         .eh-score__sep {
@@ -789,6 +922,7 @@ export default function EsportsPage() {
           text-transform: uppercase;
           color: rgba(216, 207, 192, 0.65);
           min-width: 110px;
+          white-space: nowrap;
         }
 
         .eh-status--live {
@@ -1059,11 +1193,10 @@ export default function EsportsPage() {
         .eh-wallpaper {
           background-image: radial-gradient(circle at 25% 20%, rgba(194, 161, 77, 0.06), transparent 55%),
             radial-gradient(circle at 70% 60%, rgba(15, 92, 74, 0.07), transparent 60%),
-            radial-gradient(circle at 40% 85%, rgba(90, 31, 43, 0.05), transparent 60%);
-          filter: blur(0.2px);
-        }
+            radial-gradient(circle at 40
 
-        .eh-decoLines {
+
+.eh-decoLines {
           background-image: linear-gradient(to right, rgba(176, 141, 87, 0.2) 1px, transparent 1px),
             linear-gradient(to bottom, rgba(176, 141, 87, 0.12) 1px, transparent 1px);
           background-size: 140px 140px;
