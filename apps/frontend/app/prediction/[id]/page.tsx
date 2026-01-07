@@ -11,7 +11,7 @@
 
 import type { Route } from "next";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
 	Area,
@@ -23,6 +23,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
+
 
 // ============================================================================
 // TYPES
@@ -66,6 +67,22 @@ const navItems: { name: string; path: Route }[] = [
 	{ name: "Casino", path: "/casino" as Route },
 	{ name: "Prediction", path: "/prediction" as Route },
 ];
+
+const pathname = usePathname();
+
+const activeNav = (path: string) => {
+	if (path === "/") return pathname === "/";
+	return pathname?.startsWith(path);
+};
+
+const panelClass =
+	"rounded-[18px] overflow-hidden border border-[#B08D57]/30 " +
+	"bg-[linear-gradient(180deg,rgba(31,61,43,0.92),rgba(31,61,43,0.55))] " +
+	"shadow-[0_24px_70px_rgba(0,0,0,0.30)]";
+
+const innerBorder = (
+	<div className="pointer-events-none absolute inset-0 rounded-[18px] border border-[#F3EBDD]/10" />
+);
 
 // ============================================================================
 // MOCK DATA - Will be replaced with real data
@@ -311,49 +328,67 @@ export default function PredictionMarketPage() {
 				<div className="eh-bg__grain" />
 			</div>
 
-			{/* Top header */}
-			<header className="eh-top">
-				<div className="eh-top__inner">
-					<div className="eh-top__left">
-						<Link href={"/" as Route} className="eh-brand">
-							<div className="eh-crest" aria-hidden="true">
-								EH
+			{/* Header (match Sports) */}
+			<header className={`${panelClass} px-6 py-5`}>
+				{innerBorder}
+
+				<div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+					<div className="min-w-0">
+						<Link href={"/" as Route} className="group inline-block">
+							<div className="flex items-baseline gap-3">
+								<span className="font-serif text-2xl md:text-3xl tracking-[0.12em] text-[#F3EBDD] drop-shadow-[0_10px_25px_rgba(0,0,0,0.55)]">
+									Eden Haus
+								</span>
+								<span className="hidden sm:inline text-[11px] tracking-[0.45em] uppercase text-[#B08D57]/80">
+									Members Only
+								</span>
 							</div>
-							<div>
-								<div className="eh-brand__name">Eden Haus</div>
-								<div className="eh-brand__tag">Members Market</div>
+
+							<div className="mt-1 text-[11px] tracking-[0.34em] uppercase text-[#D8CFC0]/50 group-hover:text-[#C2A14D]/80 transition-colors">
+								Quiet Confidence • Reliable Odds
 							</div>
 						</Link>
 
-						<nav className="eh-nav">
-							{navItems.map((item) => {
-								const isPrediction = item.name === "Prediction";
-								return (
-									<Link
-										key={item.name}
-										href={item.path}
-										className={
-											isPrediction ? "eh-nav__item eh-nav__item--active" : "eh-nav__item"
-										}
-									>
-										{item.name}
-									</Link>
-								);
-							})}
-						</nav>
-					</div>
+						<div className="mt-4 flex flex-wrap items-center gap-3">
+							<div className="inline-flex items-center gap-2 rounded-full px-3 py-2 border border-[#B08D57]/30 bg-[#0A0E0C]/14">
+								<span className="inline-block h-2 w-2 rounded-full bg-[#C2A14D] shadow-[0_0_18px_rgba(194,161,77,0.40)]" />
+								<span className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/70">
+									{market.status} • {daysLeft} days
+								</span>
+							</div>
 
-
-					<div className="eh-top__right">
-						<div className="eh-clock">
-							<span>{currentDate}</span>
-							<span className="eh-clock__sep">•</span>
-							<span>{currentTime}</span>
+							<div className="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-2 border border-[#B08D57]/25 bg-[#0A0E0C]/12">
+								<span className="text-[#C2A14D]/75">⏱</span>
+								<span className="text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/60">
+									{currentDate} • {currentTime}
+								</span>
+							</div>
 						</div>
-						<button className="eh-cta">Connect Wallet</button>
 					</div>
+
+					<nav className="flex flex-wrap items-center gap-2">
+						{navItems.map((item) => {
+							const isActive = activeNav(item.path as string);
+
+							return (
+								<Link
+									key={item.name}
+									href={item.path}
+									className={[
+										"relative rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em] transition border",
+										isActive
+											? "border-[#C2A14D]/65 text-[#F3EBDD] bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.05))]"
+											: "border-[#B08D57]/30 text-[#D8CFC0]/65 bg-[#0A0E0C]/10 hover:text-[#F3EBDD] hover:border-[#C2A14D]/45",
+									].join(" ")}
+								>
+									{item.name}
+								</Link>
+							);
+						})}
+					</nav>
 				</div>
 			</header>
+
 
 			{/* Body */}
 			<main className="eh-main">
