@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Cormorant_Garamond, Space_Grotesk } from "next/font/google"
+import { Playfair_Display, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 
@@ -8,7 +8,7 @@ const spaceGrotesk = Space_Grotesk({
     variable: "--font-space-grotesk",
 })
 
-const cormorantGaramond = Cormorant_Garamond({
+const cormorantGaramond = Playfair_Display({
     subsets: ["latin"],
     weight: ["400", "500", "600", "700"],
     variable: "--font-cormorant-garamond",
