@@ -233,7 +233,7 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
                                 {/* Optional: text-link entrance (extra elegant) */}
                                 <div className="mt-4">
                                     <Link
-                                        href="/predictions"
+                                        href="/prediction"
                                         className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
                                     >
                                         Enter via the side door
