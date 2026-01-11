@@ -91,7 +91,7 @@ export default function Home() {
 
                             {/* Emblem + knock door */}
                             <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
-                                <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(10,14,12,0.45),rgba(10,14,12,0.20))] p-6 ring-1 ring-[#B08D57]/25">
+                                <div className="rounded-2xl bg-[#FDFBD4] p-6 ring-1 ring-[#B08D57]/25">
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - In House Bets"
