@@ -83,7 +83,7 @@ export default function Home() {
                         ].join(" ")}
                     >
                         {/* Brass double border */}
-                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-3 md:p-10">
+                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-1 md:p-10">
                             <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/25" />
 
                             {/* Warm spotlight */}
