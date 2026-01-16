@@ -12,7 +12,7 @@ import { projectId, wagmiAdapter } from "@/lib/config/appkit"; // create this fi
 const metadata = {
     name: "Eden Haus",
     description: "Eden Haus — Members Only",
-    url: "https://edgehaus.vercel.app/", // must match your deployed domain
+    url: "https://edenhaus.vercel.app/", // must match your deployed domain
     icons: ["https://YOUR_DOMAIN_HERE/icon.png"],
 };
 
