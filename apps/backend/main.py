@@ -23,14 +23,21 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+def get_allowed_origins() -> list[str]:
+    env_value = os.getenv("ALLOWED_ORIGINS", "").strip()
+    if env_value:
+        return [origin.strip() for origin in env_value.split(",") if origin.strip()]
+    return [
+        "http://localhost:3000",
+        "https://sportsbook-monorepo-frontend.vercel.app",
+        "https://edenhaus.vercel.app",
+        "https://*.vercel.app",
+    ]
+
 # CORS for Vercel + localhost
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://sportsbook-monorepo-frontend.vercel.app",
-        "https://*.vercel.app"
-    ],
+    allow_origins=get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
