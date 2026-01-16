@@ -365,25 +365,28 @@ export default function PredictionMarketPage() {
 							</div>
 						</div>
 
-						<nav className="flex flex-wrap items-center gap-2">
-							{navItems.map((item) => {
-								const isActive = activeNav(item.path as string);
-								return (
-									<Link
-										key={item.name}
-										href={item.path}
-										className={[
-											"relative rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em] transition border",
-											isActive
-												? "border-[#C2A14D]/65 text-[#F3EBDD] bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.05))]"
-												: "border-[#B08D57]/30 text-[#D8CFC0]/65 bg-[#0A0E0C]/10 hover:text-[#F3EBDD] hover:border-[#C2A14D]/45",
-										].join(" ")}
-									>
-										{item.name}
-									</Link>
-								);
-							})}
-						</nav>
+						<div className="flex flex-wrap items-center gap-3">
+							<nav className="flex flex-wrap items-center gap-2">
+								{navItems.map((item) => {
+									const isActive = activeNav(item.path as string);
+									return (
+										<Link
+											key={item.name}
+											href={item.path}
+											className={[
+												"relative rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em] transition border",
+												isActive
+													? "border-[#C2A14D]/65 text-[#F3EBDD] bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.05))]"
+													: "border-[#B08D57]/30 text-[#D8CFC0]/65 bg-[#0A0E0C]/10 hover:text-[#F3EBDD] hover:border-[#C2A14D]/45",
+											].join(" ")}
+										>
+											{item.name}
+										</Link>
+									);
+								})}
+							</nav>
+							<ConnectButton />
+						</div>
 					</div>
 				</header>
 
