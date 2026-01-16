@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useWalletClient } from 'wagmi'
-import { isAddress, parseEther } from 'viem'
+import { isAddress, parseEther, type Address } from 'viem'
 
 interface X402Payload {
     stake: number
@@ -21,7 +21,7 @@ interface X402Options {
 }
 
 interface PaymentRequest {
-    address: string
+    address: Address
     amount?: string
 }
 
@@ -38,7 +38,7 @@ function parsePaymentRequiredHeader(paymentRequired: string): PaymentRequest | n
 
     if (!isAddress(address)) return null
 
-    return { address, amount }
+    return { address: address as Address, amount }
 }
 
 export function useX402Pay(endpoint: string, options: X402Options = {}) {

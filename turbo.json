@@ -3,6 +3,26 @@
     "globalDependencies": [
         "**/.env.*local"
     ],
+    "globalEnv": [
+        "PGDATA",
+        "PGHOST",
+        "PGPORT",
+        "PGUSER",
+        "PGDATABASE",
+        "PGPASSWORD",
+        "POSTGRES_DB",
+        "DATABASE_URL",
+        "POSTGRES_USER",
+        "SSL_CERT_DAYS",
+        "POSTGRES_PASSWORD",
+        "DATABASE_PUBLIC_URL",
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS",
+        "ALLOWED_ORIGINS",
+        "DEBUG",
+        "ENVIRONMENT",
+        "CRONOS_RPC_URL",
+        "CRONOS_TESTNET_RPC_URL"
+    ],
     "tasks": {
         "build": {
             "dependsOn": [
