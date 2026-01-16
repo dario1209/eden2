@@ -1,47 +1,197 @@
 # See https://github.com/github/gitignore/blob/main/Next.js.gitignore
 # See https://github.com/github/gitignore/blob/main/Python.gitignore
 
-# Monorepo
+# ============================================================================
+# ENVIRONMENT VARIABLES (NEVER COMMIT!)
+# ============================================================================
+.env
+.env.local
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
 apps/frontend/.env.local
-apps/frontend/.next/
-apps/backend/__pycache__/
-apps/backend/.venv/
-apps/backend/venv/
-packages/contracts/cache/
-packages/contracts/artifacts/
+apps/backend/.env
+apps/backend/.env.local
+*.env
+!.env.example
+!.env.local.example
 
+# ============================================================================
+# PYTHON BACKEND
+# ============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+apps/backend/__pycache__/
+apps/backend/**/__pycache__/
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+apps/backend/venv/
+apps/backend/.venv/
+
+# Python testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.cover
+.hypothesis/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+apps/backend/*.db
+
+# Alembic
+apps/backend/alembic/versions/*.pyc
+
+# ============================================================================
+# NODE.JS / NEXT.JS FRONTEND
+# ============================================================================
 # Dependencies
 node_modules/
 .npm/
 .pnp/
+.pnp.js
 .yarn/install-state.gz
 
-# Production
+# Next.js
 .next/
 out/
+apps/frontend/.next/
+
+# Production builds
 build/
 dist/
-.env*.local
 
-# Testing
+# Vercel
+.vercel
+
+# Turbo
+.turbo
+
+# ============================================================================
+# PRISMA
+# ============================================================================
+apps/frontend/prisma/migrations/*
+apps/backend/prisma/migrations/*
+!apps/frontend/prisma/migrations/.gitkeep
+!apps/backend/prisma/migrations/.gitkeep
+
+# ============================================================================
+# TESTING
+# ============================================================================
 coverage/
 .coverage/
-.pytest_cache/
+.nyc_output/
+*.lcov
 
-# IDEs
+# ============================================================================
+# LOGS
+# ============================================================================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ============================================================================
+# IDEs & EDITORS
+# ============================================================================
 .vscode/settings.json
+.vscode/*.code-workspace
 .idea/
 *.swp
 *.swo
+*~
+.project
+.classpath
+.settings/
 
-# OS
+# ============================================================================
+# OPERATING SYSTEM
+# ============================================================================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# Smart Contracts
+# ============================================================================
+# SMART CONTRACTS
+# ============================================================================
 contract/.env.local
 contract/.env*.local
 contract/cache/
 contract/artifacts/
 contract/typechain-types/
 contract/deployment.json
+packages/contracts/cache/
+packages/contracts/artifacts/
+packages/contracts/deployments/
+packages/contracts/typechain/
+
+# ============================================================================
+# BACKUPS & TEMPORARY FILES
+# ============================================================================
+*.bak
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.backup/
+backup/
+backups/
+
+# Database backups
+*.sql.gz
+*.sql.bak
+apps/backend/migrations/*.bak
+
+# ============================================================================
+# SENSITIVE DATA (EXTRA PRECAUTION)
+# ============================================================================
+# Private keys
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*.asc
+
+# Secrets
+secrets.json
+credentials.json
+serviceAccountKey.json
+
+# API Keys
+.api-keys
+api-keys.txt
+
+# ============================================================================
+# DOCKER
+# ============================================================================
+docker-compose.override.yml
+.dockerignore
+
+# ============================================================================
+# MISC
+# ============================================================================
+.cache/
+.parcel-cache/
+.eslintcache
+*.tsbuildinfo

@@ -4,6 +4,7 @@ import type { Route } from "next"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
+import { getPredictionMarket, placeVote, type VoteRequest } from "@/lib/api/predictions"
 
 // ============================================================================
 // TYPES
@@ -333,7 +334,7 @@ function MarketCard({
                                     YES
                                 </div>
                                 <div className="mt-1 font-semibold text-[#F3EBDD]">
-                                    {formatOdds(yesPrice)}
+                                    {market.yesPercent}%
                                 </div>
                             </button>
 
@@ -345,7 +346,7 @@ function MarketCard({
                                     NO
                                 </div>
                                 <div className="mt-1 font-semibold text-[#F3EBDD]">
-                                    {formatOdds(noPrice)}
+                                    {market.noPercent}%
                                 </div>
                             </button>
                         </div>
@@ -391,6 +392,42 @@ export default function PredictionPage() {
 
     const [scoreboardTime, setScoreboardTime] = useState(SCOREBOARD.time)
 
+    // Backend integration states
+    const [liveMarkets, setLiveMarkets] = useState<Market[]>(MARKETS)
+    const [isVoting, setIsVoting] = useState(false)
+    const [voteError, setVoteError] = useState<string | null>(null)
+
+    // Fetch live market data from backend
+    useEffect(() => {
+        const fetchMarketData = async () => {
+            try {
+                const market = await getPredictionMarket("eden-haus-hackathon")
+                if (market) {
+                    setLiveMarkets((prevMarkets) =>
+                        prevMarkets.map((m) => {
+                            if (m.id === "Eden Haus-hackathon") {
+                                return {
+                                    ...m,
+                                    yesPercent: Math.round(market.yes_percent),
+                                    noPercent: Math.round(market.no_percent),
+                                    pool: market.total_pool,
+                                }
+                            }
+                            return m
+                        })
+                    )
+                }
+            } catch (error) {
+                console.error("Error fetching market data:", error)
+            }
+        }
+
+        fetchMarketData()
+        // Refresh every 10 seconds
+        const interval = setInterval(fetchMarketData, 10000)
+        return () => clearInterval(interval)
+    }, [])
+
     // Update time and date
     useEffect(() => {
         const timer = setInterval(() => {
@@ -428,11 +465,50 @@ export default function PredictionPage() {
 
     const activeNav = (href: string) => pathname === href
 
-    const addSelection = (market: Market, side: "YES" | "NO", price: number) => {
+    const addSelection = async (market: Market, side: "YES" | "NO", price: number) => {
+        // Add to trade slip
         setTradeSlip((prev) => [
             ...prev,
             { market: market.shortTitle, side, price },
         ])
+
+        // If this is the Eden Haus hackathon market, call the backend API
+        if (market.id === "Eden Haus-hackathon") {
+            setIsVoting(true)
+            setVoteError(null)
+
+            try {
+                const voteRequest: VoteRequest = {
+                    market_id: "eden-haus-hackathon",
+                    choice: side,
+                    amount: 0.01, // Default amount for demo
+                }
+
+                const response = await placeVote(voteRequest)
+
+                // Update the market data with the new pools
+                setLiveMarkets((prevMarkets) =>
+                    prevMarkets.map((m) => {
+                        if (m.id === "Eden Haus-hackathon") {
+                            return {
+                                ...m,
+                                yesPercent: Math.round(response.yes_percent),
+                                noPercent: Math.round(response.no_percent),
+                                pool: response.new_yes_pool + response.new_no_pool,
+                            }
+                        }
+                        return m
+                    })
+                )
+
+                console.log("Vote placed successfully:", response)
+            } catch (error) {
+                console.error("Error placing vote:", error)
+                setVoteError(error instanceof Error ? error.message : "Failed to place vote")
+            } finally {
+                setIsVoting(false)
+            }
+        }
     }
 
     const removeSelection = (index: number) => {
@@ -491,7 +567,7 @@ export default function PredictionPage() {
                                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-2 border border-[#B08D57]/30 bg-[#0A0E0C]/14">
                                     <span className="inline-block h-2 w-2 rounded-full bg-[#C2A14D] shadow-[0_0_18px_rgba(194,161,77,0.40)]" />
                                     <span className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/70">
-                                        {MARKETS.length} markets
+                                        {liveMarkets.length} markets
                                     </span>
                                 </div>
 
@@ -550,7 +626,7 @@ export default function PredictionPage() {
                             </div>
 
                             <div className="mt-5 space-y-3">
-                                {MARKETS.map((market) => (
+                                {liveMarkets.map((market) => (
                                     <MarketCard
                                         key={market.id}
                                         market={market}
@@ -583,7 +659,7 @@ export default function PredictionPage() {
                         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
                             {[
                                 { label: "Total volume", value: "$9.85K", note: "demo" },
-                                { label: "Active markets", value: String(MARKETS.length), note: "live" },
+                                { label: "Active markets", value: String(liveMarkets.length), note: "live" },
                                 { label: "Total bets", value: "142", note: "demo" },
                                 { label: "Unique traders", value: "89", note: "demo" },
                             ].map((stat) => (

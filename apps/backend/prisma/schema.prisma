@@ -1,0 +1,155 @@
+// Prisma Schema for DegenHouse Backend
+// This is a copy of the frontend schema for consistency
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// MARKETS
+// ============================================================================
+
+model Market {
+  id        String   @id @default(cuid())
+  marketId  String   @unique // Smart contract market ID
+  question  String   // The prediction question
+  status    String   @default("ACTIVE") // ACTIVE, CLOSED, RESOLVED
+  winner    String?  // YES or NO (set on resolution)
+
+  yesPool   BigInt   @default(0) // Total USDT bet on YES (6 decimals)
+  noPool    BigInt   @default(0) // Total USDT bet on NO (6 decimals)
+
+  startDate DateTime @default(now())
+  endDate   DateTime // When market closes to new bets
+
+  contractAddress String // PredictionMarket contract address
+  gnosisSafeAddress String // Where deposits go
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  bets      Bet[]
+  history   BetHistory[]
+  snapshots PoolSnapshot[]
+
+  @@index([marketId])
+  @@index([status])
+  @@index([endDate])
+}
+
+// ============================================================================
+// BETS
+// ============================================================================
+
+model Bet {
+  id        String   @id @default(cuid())
+
+  // User & Market
+  walletAddress String // User's wallet address
+  marketId  String   // FK to Market
+
+  // Bet Details
+  choice    String   // YES or NO
+  amount    BigInt   // USDT amount (6 decimals)
+  betNumber Int      // 1-10 (which bet for this wallet)
+
+  // Status
+  status    String   @default("CONFIRMED") // PENDING, CONFIRMED, FLAGGED, CLAWED_BACK
+  txHash    String?  // Transaction hash on-chain
+
+  // Timing
+  createdAt DateTime @default(now())
+
+  // Relations
+  market    Market   @relation(fields: [marketId], references: [marketId], onDelete: Cascade)
+  history   BetHistory[]
+
+  @@unique([marketId, walletAddress, betNumber])
+  @@index([walletAddress])
+  @@index([marketId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([choice])
+}
+
+// ============================================================================
+// BET HISTORY - AUDIT TRAIL
+// ============================================================================
+
+model BetHistory {
+  id        String   @id @default(cuid())
+
+  // References
+  betId     String   // FK to Bet
+  marketId  String   // FK to Market
+  wallet    String   // Wallet address (denormalized)
+
+  // Action Log
+  action    String   // PLACED, CONFIRMED, FLAGGED, CLAWED_BACK, REFUNDED
+  reason    String?  // Why this action
+
+  // Clawback Tracking
+  clawbackAmount BigInt? // Amount returned
+  clawbackTxHash String? // Refund transaction
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  bet       Bet      @relation(fields: [betId], references: [id], onDelete: Cascade)
+  market    Market   @relation(fields: [marketId], references: [marketId], onDelete: Cascade)
+
+  @@index([betId])
+  @@index([marketId])
+  @@index([wallet])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// FLAGGED WALLETS - SYBIL DETECTION
+// ============================================================================
+
+model FlaggedWallet {
+  id        String   @id @default(cuid())
+
+  wallet    String   @unique // Wallet address
+  marketId  String   // Which market
+  reason    String   // Why flagged
+  severity  String   @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+
+  isActive  Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  unflaggedAt DateTime?
+
+  @@index([wallet])
+  @@index([marketId])
+  @@index([isActive])
+}
+
+// ============================================================================
+// POOL SNAPSHOTS - ANALYTICS
+// ============================================================================
+
+model PoolSnapshot {
+  id        String   @id @default(cuid())
+
+  marketId  String   // Which market
+  yesPool   BigInt   // YES pool at snapshot
+  noPool    BigInt   // NO pool at snapshot
+  totalBets Int      // Number of bets
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  market    Market   @relation(fields: [marketId], references: [marketId], onDelete: Cascade)
+
+  @@index([marketId])
+  @@index([createdAt])
+}

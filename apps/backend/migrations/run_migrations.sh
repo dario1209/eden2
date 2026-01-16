@@ -1,0 +1,34 @@
+#!/bin/bash
+# Migration runner script for DegenHouse database
+
+set -e  # Exit on error
+
+echo "🗄️  Running DegenHouse database migrations..."
+
+# Check if DATABASE_URL is set
+if [ -z "$DATABASE_URL" ]; then
+    echo "❌ ERROR: DATABASE_URL environment variable is not set"
+    echo "Please set it to your PostgreSQL connection string:"
+    echo "  export DATABASE_URL='postgresql://user:password@host:port/dbname'"
+    exit 1
+fi
+
+echo "✅ Database URL found"
+echo "📍 Target: ${DATABASE_URL%%@*}@***"  # Hide credentials in output
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Run migrations in order
+echo ""
+echo "📝 Running migration: 001_initial_schema.sql"
+psql "$DATABASE_URL" < "$SCRIPT_DIR/001_initial_schema.sql"
+
+if [ $? -eq 0 ]; then
+    echo "✅ Migrations completed successfully!"
+    echo ""
+    echo "🎉 Database is ready to use"
+else
+    echo "❌ Migration failed!"
+    exit 1
+fi

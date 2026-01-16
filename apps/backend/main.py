@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from app.api.v1 import x402, markets, bets
+from app.api.v1 import x402, markets, bets, predictions
 from app.api.websocket import router as websocket_router
 
 @asynccontextmanager
@@ -40,6 +40,7 @@ app.add_middleware(
 app.include_router(x402.router, prefix="/api/v1/x402", tags=["x402"])
 app.include_router(markets.router, prefix="/api/v1/markets", tags=["markets"])
 app.include_router(bets.router, prefix="/api/v1/bets", tags=["bets"])
+app.include_router(predictions.router, prefix="/api/v1/predictions", tags=["predictions"])
 app.include_router(websocket_router, prefix="/api/v1/ws", tags=["websocket"])
 
 @app.get("/")

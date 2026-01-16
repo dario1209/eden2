@@ -97,10 +97,10 @@ export default function Home() {
                                         alt="Eden Haus - In House Bets"
                                         width={422}
                                         height={633}
-                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
-                                        style={{ backgroundColor: 'transparent' }}
-                                        onClick={handleKnock}
-                                        priority
+                                    className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
+                                    style={{ backgroundColor: 'transparent' }}
+                                    onClick={handleKnock}
+                                    priority
                                     />
 
                                     <div className="mt-5 flex justify-center gap-2">
