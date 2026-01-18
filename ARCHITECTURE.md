@@ -148,7 +148,7 @@ apps/frontend/
 #### 1. Landing Page ([app/page.tsx](apps/frontend/app/page.tsx))
 - **Theme:** Speakeasy-inspired "knock thrice" entrance
 - **Design:** Art Deco with film grain, vignette, smoke effects
-- **Interaction:** Click door 3 times or "Enter the House" button
+- **Interaction:** Click door 3 times or "Enter the Haus" button
 - **Animation:** Framer Motion for smooth transitions
 
 #### 2. Prediction Markets ([app/prediction/page.tsx](apps/frontend/app/prediction/page.tsx))

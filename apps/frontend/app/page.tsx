@@ -64,17 +64,10 @@ export default function Home() {
             {/* Content */}
             <div className="relative z-10 flex h-screen items-center justify-center px-4 py-4">
                 <div className="w-full max-w-[700px]">
-                    {/* Top microline */}
-                    <div className="text-center">
-                        <p className="text-[10px] tracking-[0.38em] uppercase text-[#B08D57]/85">
-                            Eden Haus • Members Only
-                        </p>
-                    </div>
-
                     {/* Plaque */}
                     <div
                         className={[
-                            "mt-3 rounded-[20px] p-4 md:p-6",
+                            "rounded-[20px] p-4 md:p-6",
                             "backdrop-blur-md",
                             "shadow-[0_40px_120px_rgba(0,0,0,0.55)]",
                             "bg-[linear-gradient(135deg,rgba(10,14,12,0.55),rgba(10,14,12,0.22))]",
