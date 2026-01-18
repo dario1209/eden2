@@ -97,7 +97,7 @@ export default function Home() {
                                     />
 
                                     {/* Title inside white container */}
-                                    <div className="-mt-1 text-center">
+                                    <div className="-mt-6 text-center">
                                         <h1 className="font-serif text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
                                             Eden Haus
                                         </h1>
