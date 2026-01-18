@@ -45,7 +45,7 @@ export default function Home() {
     }
 
     return (
-        <main className="relative min-h-screen overflow-hidden">
+        <main className="relative h-screen overflow-hidden">
             {/* Base atmosphere */}
             <div className="absolute inset-0 bg-[#1F3D2B]" />
             <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_35%,rgba(243,235,221,0.10),rgba(31,61,43,0.65),rgba(10,14,12,0.92))]" />
@@ -62,11 +62,11 @@ export default function Home() {
             {smokeEffect && <div className="absolute inset-0 z-50 pointer-events-none smoke" />}
 
             {/* Content */}
-            <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-16">
-                <div className="w-full max-w-[760px]">
+            <div className="relative z-10 flex h-screen items-center justify-center px-4 py-4">
+                <div className="w-full max-w-[700px]">
                     {/* Top microline */}
                     <div className="text-center">
-                        <p className="text-[11px] tracking-[0.38em] uppercase text-[#B08D57]/85">
+                        <p className="text-[10px] tracking-[0.38em] uppercase text-[#B08D57]/85">
                             Eden Haus • Members Only
                         </p>
                     </div>
@@ -74,7 +74,7 @@ export default function Home() {
                     {/* Plaque */}
                     <div
                         className={[
-                            "mt-8 rounded-[28px] p-8 md:p-12",
+                            "mt-3 rounded-[20px] p-4 md:p-6",
                             "backdrop-blur-md",
                             "shadow-[0_40px_120px_rgba(0,0,0,0.55)]",
                             "bg-[linear-gradient(135deg,rgba(10,14,12,0.55),rgba(10,14,12,0.22))]",
@@ -83,32 +83,32 @@ export default function Home() {
                         ].join(" ")}
                     >
                         {/* Brass double border */}
-                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-1 md:p-10">
+                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-1 md:p-4">
                             <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/25" />
 
                             {/* Warm spotlight */}
                             <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(194,161,77,0.22),rgba(194,161,77,0.00)_70%)] blur-2xl" />
 
                             {/* Emblem + knock door */}
-                            <div className="mx-auto flex w-full max-w-[500px] flex-col items-center">
+                            <div className="mx-auto flex w-full max-w-[400px] flex-col items-center">
                                 <div className="rounded-2xl bg-[#FDFBD4] p-1 ring-1 ring-[#B08D57]/25 inline-block">
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - In House Bets"
-                                        width={422}
-                                        height={633}
+                                        width={250}
+                                        height={375}
                                     className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
                                     style={{ backgroundColor: 'transparent' }}
                                     onClick={handleKnock}
                                     priority
                                     />
 
-                                    <div className="mt-5 flex justify-center gap-2">
+                                    <div className="mt-3 flex justify-center gap-2">
                                         {[0, 1, 2].map((i) => (
                                             <span
                                                 key={i}
                                                 className={[
-                                                    "h-2.5 w-2.5 rounded-full transition-all duration-300",
+                                                    "h-2 w-2 rounded-full transition-all duration-300",
                                                     knockSequence[i]
                                                         ? "bg-[#C2A14D] shadow-[0_0_20px_rgba(194,161,77,0.55)]"
                                                         : "bg-[#6B4A32]/35",
@@ -119,28 +119,28 @@ export default function Home() {
                                 </div>
 
                                 {/* Title */}
-                                <div className="mt-10 text-center">
-                                    <h1 className="font-serif text-5xl md:text-6xl tracking-[0.10em] text-[#F3EBDD] drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]">
+                                <div className="mt-4 text-center">
+                                    <h1 className="font-serif text-3xl md:text-4xl tracking-[0.10em] text-[#F3EBDD] drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]">
                                         Eden Haus
                                     </h1>
-                                    <p className="mt-3 text-[11px] tracking-[0.52em] uppercase text-[#B08D57]/90">
+                                    <p className="mt-2 text-[10px] tracking-[0.52em] uppercase text-[#B08D57]/90">
                                         In house bets
                                     </p>
 
-                                    <div className="mx-auto mt-6 h-px w-44 bg-[#B08D57]/35" />
+                                    <div className="mx-auto mt-3 h-px w-32 bg-[#B08D57]/35" />
 
-                                    <p className="mx-auto mt-6 max-w-md text-center text-sm leading-relaxed text-[#D8CFC0]/80">
+                                    <p className="mx-auto mt-3 max-w-md text-center text-xs leading-relaxed text-[#D8CFC0]/80">
                                         A discreet room for those who read the game fast and wager with composure. Knock thrice, or slip in
                                         quietly.
                                     </p>
                                 </div>
 
                                 {/* CTA */}
-                                <div className="mt-10 flex flex-col items-center gap-4">
+                                <div className="mt-4 flex flex-col items-center gap-2">
                                     <button
                                         onClick={handleSlipInside}
-                                        className={`group relative inline-flex items-center justify-center rounded-full px-12 py-4
-text-sm uppercase tracking-[0.35em] text-[#F3EBDD]
+                                        className={`group relative inline-flex items-center justify-center rounded-full px-8 py-2.5
+text-xs uppercase tracking-[0.35em] text-[#F3EBDD]
 border border-[#B08D57]/70
 bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.06))]
 shadow-[0_18px_55px_rgba(0,0,0,0.55)]
@@ -150,14 +150,14 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
                                         Slip Inside
                                     </button>
 
-                                    <p className="text-xs italic text-[#D8CFC0]/45">{knockText}</p>
+                                    <p className="text-[10px] italic text-[#D8CFC0]/45">{knockText}</p>
                                 </div>
 
                                 {/* Optional: text-link entrance (extra elegant) */}
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <Link
                                         href="/prediction"
-                                        className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
+                                        className="text-[10px] tracking-[0.28em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
                                     >
                                         Enter via the side door
                                     </Link>
@@ -165,10 +165,10 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
                             </div>
 
                             {/* Bottom links */}
-                            <div className="mt-12 pt-8">
-                                <div className="mx-auto mb-6 h-px w-full max-w-md bg-[#B08D57]/20" />
+                            <div className="mt-3 pt-3">
+                                <div className="mx-auto mb-3 h-px w-full max-w-md bg-[#B08D57]/20" />
 
-                                <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
+                                <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px]">
                                     <Link
                                         href="/terms"
                                         className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors"
@@ -191,7 +191,7 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
                                     </Link>
                                 </nav>
 
-                                <p className="mt-6 text-center text-[11px] tracking-[0.30em] uppercase text-[#B08D57]/60">
+                                <p className="mt-3 text-center text-[10px] tracking-[0.30em] uppercase text-[#B08D57]/60">
                                     Est. 2026 • By invitation
                                 </p>
                             </div>
