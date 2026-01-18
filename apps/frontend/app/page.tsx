@@ -96,6 +96,16 @@ export default function Home() {
                                         priority
                                     />
 
+                                    {/* Title inside white container */}
+                                    <div className="mt-3 text-center">
+                                        <h1 className="font-serif text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
+                                            Eden Haus
+                                        </h1>
+                                        <p className="mt-1 text-[10px] tracking-[0.52em] uppercase text-[#5F6F52]">
+                                            Members Only
+                                        </p>
+                                    </div>
+
                                     <div className="mt-3 flex justify-center gap-2">
                                         {[0, 1, 2].map((i) => (
                                             <span
@@ -111,16 +121,9 @@ export default function Home() {
                                     </div>
                                 </div>
 
-                                {/* Title */}
+                                {/* Description */}
                                 <div className="mt-4 text-center">
-                                    <h1 className="font-serif text-3xl md:text-4xl tracking-[0.10em] text-[#F3EBDD] drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]">
-                                        Eden Haus
-                                    </h1>
-                                    <p className="mt-2 text-[10px] tracking-[0.52em] uppercase text-[#B08D57]/90">
-                                        Members Only
-                                    </p>
-
-                                    <div className="mx-auto mt-3 h-px w-32 bg-[#B08D57]/35" />
+                                    <div className="mx-auto h-px w-32 bg-[#B08D57]/35" />
 
                                     <p className="mx-auto mt-3 max-w-md text-center text-xs leading-relaxed text-[#D8CFC0]/80">
                                         A discreet room for those who read the game fast and wager with composure. Knock thrice, or slip in
