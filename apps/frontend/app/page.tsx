@@ -94,7 +94,7 @@ export default function Home() {
                                 <div className="rounded-2xl bg-[#FDFBD4] p-1 ring-1 ring-[#B08D57]/25 inline-block">
                                     <Image
                                         src="/EdenEden.png"
-                                        alt="Eden Haus - In House Bets"
+                                        alt="Eden Haus - Members Only"
                                         width={250}
                                         height={375}
                                         className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
@@ -124,7 +124,7 @@ export default function Home() {
                                         Eden Haus
                                     </h1>
                                     <p className="mt-2 text-[10px] tracking-[0.52em] uppercase text-[#B08D57]/90">
-                                        In house bets
+                                        Members Only
                                     </p>
 
                                     <div className="mx-auto mt-3 h-px w-32 bg-[#B08D57]/35" />
