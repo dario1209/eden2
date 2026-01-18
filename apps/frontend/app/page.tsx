@@ -121,10 +121,10 @@ export default function Home() {
 
                                     {/* Title inside white container */}
                                     <div className="mt-2 text-center px-2">
-                                        <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
+                                        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl tracking-[0.10em] text-[#1F3D2B]">
                                             Eden Haus
                                         </h1>
-                                        <p className="mt-1 text-[9px] sm:text-[10px] tracking-[0.52em] uppercase text-[#5F6F52]">
+                                        <p className="mt-1 text-[11px] sm:text-[12px] tracking-[0.52em] uppercase text-[#5F6F52]">
                                             Members Only
                                         </p>
                                     </div>
