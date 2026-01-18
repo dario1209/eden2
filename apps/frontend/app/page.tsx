@@ -84,24 +84,24 @@ export default function Home() {
 
                             {/* Emblem + knock door */}
                             <div className="mx-auto flex w-full max-w-[400px] flex-col items-center">
-                                <div className="rounded-2xl bg-[#FDFBD4] pb-3 pt-1 px-1 ring-1 ring-[#B08D57]/25 inline-block">
+                                <div className="rounded-2xl bg-[#FDFBD4] pb-3 pt-1 px-1 ring-1 ring-[#B08D57]/25 inline-block w-full">
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - Members Only"
                                         width={250}
                                         height={375}
-                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
+                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto w-full h-auto"
                                         style={{ backgroundColor: 'transparent', display: 'block' }}
                                         onClick={handleKnock}
                                         priority
                                     />
 
                                     {/* Title inside white container */}
-                                    <div className="mt-2 text-center">
-                                        <h1 className="font-serif text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
+                                    <div className="mt-2 text-center px-2">
+                                        <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
                                             Eden Haus
                                         </h1>
-                                        <p className="mt-1 text-[10px] tracking-[0.52em] uppercase text-[#5F6F52]">
+                                        <p className="mt-1 text-[9px] sm:text-[10px] tracking-[0.52em] uppercase text-[#5F6F52]">
                                             Members Only
                                         </p>
                                     </div>
