@@ -84,7 +84,7 @@ export default function Home() {
 
                             {/* Emblem + knock door */}
                             <div className="mx-auto flex w-full max-w-[400px] flex-col items-center">
-                                <div className="rounded-2xl bg-[#FDFBD4] p-1 ring-1 ring-[#B08D57]/25 inline-block">
+                                <div className="rounded-2xl bg-[#FDFBD4] pb-3 pt-1 px-1 ring-1 ring-[#B08D57]/25 inline-block">
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - Members Only"
@@ -97,7 +97,7 @@ export default function Home() {
                                     />
 
                                     {/* Title inside white container */}
-                                    <div className="-mt-6 text-center">
+                                    <div className="mt-2 text-center">
                                         <h1 className="font-serif text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
                                             Eden Haus
                                         </h1>
