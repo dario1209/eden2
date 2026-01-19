@@ -20,6 +20,11 @@ export const metadata: Metadata = {
         "A discreet room for those who read the game fast and wager with composure. Slip inside for the prediction market.",
 }
 
+export const viewport = {
+    width: "device-width",
+    initialScale: 1,
+}
+
 export default function RootLayout({
     children,
 }: {
