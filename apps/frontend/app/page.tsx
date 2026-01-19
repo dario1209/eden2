@@ -18,14 +18,9 @@ export default function Home() {
             if (contentRef.current) {
                 const container = contentRef.current
                 const windowHeight = window.innerHeight
-                const windowWidth = window.innerWidth
                 const contentHeight = container.scrollHeight
-                const contentWidth = container.scrollWidth
-
-                const isMobile = windowWidth < 640
                 const scaleY = (windowHeight - 32) / contentHeight
-                const scaleX = (windowWidth - 32) / contentWidth
-                const scale = isMobile ? 1 : Math.min(scaleY, scaleX, 1)
+                const scale = Math.min(scaleY, 1)
 
                 container.style.setProperty('--scale-factor', scale.toString())
             }

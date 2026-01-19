@@ -11,7 +11,7 @@
     },
     "dependencies": {
         "@lucide/lab": "^0.1.2",
-        "@prisma/client": "^6.1.0",
+        "@prisma/client": "^6.19.1",
         "@radix-ui/react-slot": "^1.2.4",
         "@reown/appkit": "^1.4.7",
         "@reown/appkit-adapter-ethers": "^1.4.7",
@@ -42,7 +42,7 @@
         "@types/react-dom": "^19.0.0",
         "eslint": "^9",
         "eslint-config-next": "^15.1.0",
-        "prisma": "^6.1.0",
+        "prisma": "^6.19.1",
         "typescript": "^5.5.3"
     },
     "overrides": {
