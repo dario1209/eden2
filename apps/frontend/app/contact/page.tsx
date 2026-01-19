@@ -108,7 +108,7 @@ export default function ContactPage() {
                                     </h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
                                         If you’re reporting something sensitive, don’t post it publicly. Use a private channel and keep the
-                                        details contained until it’s resolved.
+                                        details contained.
                                     </p>
                                 </section>
 
