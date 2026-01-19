@@ -31,7 +31,7 @@ export default function ContactPage() {
                     {/* Header */}
                     <div className="text-center">
                         <p className="text-[11px] tracking-[0.38em] uppercase text-[#B08D57]/85">
-                            Eden Haus • The Side Door
+                            Eden Haus • Members Only
                         </p>
 
                         <h1 className="mt-6 font-serif text-4xl md:text-5xl tracking-[0.10em] text-[#F3EBDD] drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]">
@@ -39,7 +39,7 @@ export default function ContactPage() {
                         </h1>
 
                         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-[#D8CFC0]/80">
-                            Keep it short. Keep it clean. If it concerns security, lead with the facts and include a timestamp.
+                            If it concerns security, lead with the facts and include a timestamp.
                         </p>
 
                         <div className="mx-auto mt-8 h-px w-52 bg-[#B08D57]/35" />
@@ -60,7 +60,7 @@ export default function ContactPage() {
                                     </h2>
 
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        This page is intentionally minimal. Add your preferred channel(s) below.
+                                        Reach out via email for general inquiries or security concerns. We aim to respond within 3 business days.
                                     </p>
 
                                     <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -69,10 +69,10 @@ export default function ContactPage() {
                                                 Email
                                             </p>
                                             <p className="mt-3 text-sm text-[#F3EBDD]/90">
-                                                contact@eden.haus
+                                                vividvisions.ai@gmail.com
                                             </p>
                                             <p className="mt-2 text-xs text-[#D8CFC0]/60">
-                                                Replace with your real inbox.
+                                                For general inquiries.
                                             </p>
                                         </div>
 
@@ -81,7 +81,7 @@ export default function ContactPage() {
                                                 Security
                                             </p>
                                             <p className="mt-3 text-sm text-[#F3EBDD]/90">
-                                                security@eden.haus
+                                                vividvisions.ai@gmail.com
                                             </p>
                                             <p className="mt-2 text-xs text-[#D8CFC0]/60">
                                                 For vulnerabilities, exploits, or suspicious behavior.
@@ -116,7 +116,7 @@ export default function ContactPage() {
                                     <div className="flex flex-col items-center justify-center gap-4 text-center">
                                         <div className="h-px w-full max-w-md bg-[#B08D57]/20" />
                                         <p className="text-xs italic text-[#D8CFC0]/55">
-                                            “The side door is watched. Knock once, speak plainly.”
+                                            “The vow of discretion”
                                         </p>
 
                                         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
