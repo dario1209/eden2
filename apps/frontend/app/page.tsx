@@ -87,7 +87,11 @@ export default function Home() {
 
             {/* Content */}
             <div className="relative z-10 h-screen p-2 md:p-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div ref={contentRef} className="w-full max-w-[700px]" style={{ transform: 'scale(var(--scale-factor, 1))', transformOrigin: 'center' }}>
+                <div
+                    ref={contentRef}
+                    className="w-full max-w-[92vw] sm:max-w-[700px]"
+                    style={{ transform: 'scale(var(--scale-factor, 1))', transformOrigin: 'center' }}
+                >
                     {/* Plaque */}
                     <div
                         className={[
