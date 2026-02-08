@@ -24,11 +24,24 @@ echo ""
 echo "📝 Running migration: 001_initial_schema.sql"
 psql "$DATABASE_URL" < "$SCRIPT_DIR/001_initial_schema.sql"
 
-if [ $? -eq 0 ]; then
-    echo "✅ Migrations completed successfully!"
-    echo ""
-    echo "🎉 Database is ready to use"
-else
-    echo "❌ Migration failed!"
+if [ $? -ne 0 ]; then
+    echo "❌ Migration 001_initial_schema.sql failed!"
     exit 1
 fi
+
+echo "✅ Migration 001_initial_schema.sql completed"
+
+echo ""
+echo "📝 Running migration: 002_add_votes_table.sql"
+psql "$DATABASE_URL" < "$SCRIPT_DIR/002_add_votes_table.sql"
+
+if [ $? -ne 0 ]; then
+    echo "❌ Migration 002_add_votes_table.sql failed!"
+    exit 1
+fi
+
+echo "✅ Migration 002_add_votes_table.sql completed"
+echo ""
+echo "✅ All migrations completed successfully!"
+echo ""
+echo "🎉 Database is ready to use"
