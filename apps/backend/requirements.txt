@@ -10,3 +10,7 @@ requests==2.32.3
 sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
 alembic==1.13.0
+asyncpg==0.29.0
+
+# WebSocket support
+websockets==12.0

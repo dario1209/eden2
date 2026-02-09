@@ -8,11 +8,13 @@ load_dotenv()
 
 from app.api.v1 import x402, markets, bets, predictions
 from app.api.websocket import router as websocket_router
+from app.services.redis import init_redis
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     print("🚀 Sportsbook Backend starting...")
+    await init_redis()  # ✅ ADD THIS LINE - Initialize Redis on startup
     yield
     # Shutdown
     print("🛑 Backend shutdown")
