@@ -1,10 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from app.models.prediction import PredictionMarket, VoteRequest, VoteResponse
+from app.services.redis import redis_client, publish_vote_update
 from typing import List, Optional
 from datetime import datetime, timedelta
 import uuid
 import asyncpg
 import os
+import json
 
 router = APIRouter()
 
@@ -135,28 +137,66 @@ async def place_vote(vote: VoteRequest):
         # Convert amount to BigInt
         amount_bigint = usdt_to_bigint(vote.amount)
 
-        # Upsert vote (insert or update if wallet already voted)
-        vote_id = str(uuid.uuid4())
-        
-        await conn.execute(
-            '''
-            INSERT INTO "Vote" ("voteId", "marketId", "walletAddress", choice, amount)
-            VALUES ($1, $2, $3, $4, $5)
-            ON CONFLICT ("marketId", "walletAddress") 
-            DO UPDATE SET
-                choice = EXCLUDED.choice,
-                amount = EXCLUDED.amount,
-                "updatedAt" = NOW()
-            ''',
-            vote_id,
-            vote.market_id,
-            vote.wallet or "0x0000000000000000000000000000000000000000",
-            vote.choice,
-            amount_bigint
-        )
+        # Start transaction for atomic operations
+        async with conn.transaction():
+            # Upsert vote (insert or update if wallet already voted)
+            vote_id = str(uuid.uuid4())
+            
+            await conn.execute(
+                '''
+                INSERT INTO "Vote" ("voteId", "marketId", "walletAddress", choice, amount, "createdAt", "updatedAt")
+                VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+                ON CONFLICT ("marketId", "walletAddress") 
+                DO UPDATE SET
+                    choice = EXCLUDED.choice,
+                    amount = EXCLUDED.amount,
+                    "updatedAt" = NOW()
+                ''',
+                vote_id,
+                vote.market_id,
+                vote.wallet or "0x0000000000000000000000000000000000000000",
+                vote.choice,
+                amount_bigint
+            )
 
-        # Fetch updated market (pools auto-updated by trigger)
+            # ✅ FIXED: Manually recalculate pools from ALL votes
+            pool_data = await conn.fetchrow(
+                '''
+                SELECT
+                    COALESCE(SUM(CASE WHEN choice = 'YES' THEN amount ELSE 0 END), 0) as yes_total,
+                    COALESCE(SUM(CASE WHEN choice = 'NO' THEN amount ELSE 0 END), 0) as no_total
+                FROM "Vote"
+                WHERE "marketId" = $1
+                ''',
+                vote.market_id
+            )
+
+            # Update Market table with recalculated pools
+            await conn.execute(
+                '''
+                UPDATE "Market"
+                SET 
+                    "yesPool" = $1,
+                    "noPool" = $2,
+                    "updatedAt" = NOW()
+                WHERE "marketId" = $3
+                ''',
+                pool_data['yes_total'],
+                pool_data['no_total'],
+                vote.market_id
+            )
+
+        # Fetch updated market data
         updated_market = await get_market_from_db(conn, vote.market_id)
+
+        # ✅ Publish vote update to Redis for WebSocket
+        if redis_client:
+            await publish_vote_update(
+                market_id=vote.market_id,
+                choice=vote.choice,
+                amount=vote.amount,
+                wallet=vote.wallet or "anonymous"
+            )
 
         return VoteResponse(
             success=True,
