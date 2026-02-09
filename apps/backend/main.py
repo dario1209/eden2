@@ -14,7 +14,7 @@ from app.services.redis import init_redis
 async def lifespan(app: FastAPI):
     # Startup
     print("🚀 Sportsbook Backend starting...")
-    await init_redis()  # ✅ ADD THIS LINE - Initialize Redis on startup
+    await init_redis()
     yield
     # Shutdown
     print("🛑 Backend shutdown")
@@ -26,23 +26,39 @@ app = FastAPI(
 )
 
 def get_allowed_origins() -> list[str]:
+    """
+    Get CORS allowed origins from environment variable.
+    Supports comma-separated list in ALLOWED_ORIGINS env var.
+    Falls back to common defaults if not set.
+    """
     env_value = os.getenv("ALLOWED_ORIGINS", "").strip()
+    
     if env_value:
-        return [origin.strip() for origin in env_value.split(",") if origin.strip()]
-    return [
+        # Parse comma-separated origins from Railway/Vercel variables
+        origins = [origin.strip() for origin in env_value.split(",") if origin.strip()]
+        print(f"✅ CORS origins from ALLOWED_ORIGINS: {origins}")
+        return origins
+    
+    # Default origins if ALLOWED_ORIGINS not set
+    default_origins = [
         "http://localhost:3000",
+        "http://localhost:3001",
         "https://sportsbook-monorepo-frontend.vercel.app",
         "https://edenhaus.vercel.app",
-        "https://*.vercel.app",
+        "https://sportsbookfrontend-production-7f42.up.railway.app",
     ]
+    
+    print(f"⚠️  ALLOWED_ORIGINS not set, using defaults: {default_origins}")
+    return default_origins
 
-# CORS for Vercel + localhost
+# CORS Configuration - Supports both HTTP and WebSocket
 app.add_middleware(
     CORSMiddleware,
     allow_origins=get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # API Routes
@@ -56,11 +72,23 @@ app.include_router(websocket_router, prefix="/api/v1/ws", tags=["websocket"])
 async def root():
     return {
         "message": "Chainlink Sportsbook Backend",
+        "version": "1.0.0",
         "x402": "ready",
         "chainlink": "ready", 
-        "cronos": "ready"
+        "cronos": "ready",
+        "cors_origins": len(get_allowed_origins())
     }
 
 @app.get("/health")
 async def health():
     return {"status": "healthy"}
+
+@app.get("/debug/cors")
+async def debug_cors():
+    """Debug endpoint to check CORS configuration"""
+    return {
+        "allowed_origins": get_allowed_origins(),
+        "allowed_origins_env": os.getenv("ALLOWED_ORIGINS", "NOT_SET"),
+        "redis_url_set": bool(os.getenv("REDIS_URL")),
+        "database_url_set": bool(os.getenv("DATABASE_URL"))
+    }
